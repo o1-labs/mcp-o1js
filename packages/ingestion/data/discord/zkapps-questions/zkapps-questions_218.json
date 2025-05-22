@@ -1,0 +1,276 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1263949593218121778",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Making use of o1js in multi-thread environment causes error.",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:43:00.9688677+04:00",
+  "messages": [
+    {
+      "id": "1263949593218121778",
+      "type": "Default",
+      "timestamp": "2024-07-20T00:04:26.071+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey all, was trying to run a brute force script in a multithreaded env but I am unable to use any o1js primitives in the the workers.\n\nThe worker logic is :\n```\nimport { Worker, isMainThread, parentPort, workerData } from 'worker_threads';\nimport { PrivateKey } from 'o1js';\n\nconst names = ['525', '567'];\n\nif (isMainThread) {\n  const workerThreads: Worker[] = [];\n\n  for (let i = 0; i < 28; i++) {\n    const worker = new Worker('./build/src/GetAddress.js', {\n      workerData: { names, threadId: i },\n    });\n\n    workerThreads.push(worker);\n\n    worker.on('error', (err) => console.log(err));\n\n    worker.on('message', (message) => {\n      if (message != 'NOT FOUND') {\n        console.log('Match found. Terminating all workers.');\n        console.log('PRIVATE KEY :', message);\n        for (const worker of workerThreads) {\n          worker.terminate();\n        }\n      }\n    });\n  }\n} else {\n  const { names, threadId } = workerData;\n  console.log('THREAD ID :', threadId);\n\n  // while (true) {\n  const privateKey = PrivateKey.random();\n  const publicKey = privateKey.toPublicKey().toBase58();\n  const name = names.find((n: string) => publicKey.endsWith(n));\n\n  if (parentPort != null) {\n    if (name !== undefined) {\n      parentPort.postMessage(privateKey.toBase58());\n    } else {\n      parentPort.postMessage(`NOT FOUND`);\n    }\n  }\n  // }\n}\n```\nAnd the error I get is :\n```\nError [LinkError]: WebAssembly.Instance(): Import #0 module=\"env\" function=\"memory\" error: memory import must be a WebAssembly.Memory object\n    at Object.<anonymous> (/home/vanity-mina/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/plonk_wasm.cjs:9981:22)\n    at Module._compile (node:internal/modules/cjs/loader:1376:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)\n    at Module.load (node:internal/modules/cjs/loader:1207:32)\n    at Module._load (node:internal/modules/cjs/loader:1023:12)\n    at cjsLoader (node:internal/modules/esm/translators:345:17)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:294:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:218:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:329:24)\n    at async loadESM (node:internal/process/esm_loader:34:7)\n```\nNot sure what's going wrong \uD83D\uDE05 , any insights are much appreciated.\n\nThank you!",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1264069979066732555",
+      "type": "Default",
+      "timestamp": "2024-07-20T08:02:48.294+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, I think this is the known behavior with o1js where you can't run more than one job using o1js from the main process. You would need to isolate each job to its own process to avoid this, but there's likely no point in doing this, since o1js uses all the available threads, so there's no difference between running o1js code sequentially or in parallel in the same machine (well, actually it's worse in parallel since you run a new separate process per worker, using more resources).\n\nTo take advantage of parallelization you need to spin up each worker in its own machine.",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1264070823983976519",
+      "type": "Default",
+      "timestamp": "2024-07-20T08:06:09.738+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh, I get it",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1264070850798288918",
+      "type": "Default",
+      "timestamp": "2024-07-20T08:06:16.131+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for clearing it :)",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "823907640357683282",
+            "name": "Mina_Mainnet_Toast",
+            "code": "Mina_Mainnet_Toast",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.discordapp.com/emojis/823907640357683282.png"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1050599472071180389",
+              "name": "chrlyz",
+              "discriminator": "0000",
+              "nickname": "chrlyz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

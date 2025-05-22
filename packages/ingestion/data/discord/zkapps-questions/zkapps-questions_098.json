@@ -1,0 +1,208 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1301549430171762808",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Performance of Hashed<T>?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:28:57.9391684+04:00",
+  "messages": [
+    {
+      "id": "1301549430171762808",
+      "type": "Default",
+      "timestamp": "2024-10-31T18:12:45.772+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "* `Hashed<T>` represents a type `T` by its hash.\n *\n * Since a hash is only a single field element, this can be more efficient in provable code\n * where the number of constraints depends on the number of field elements per value.\n *\n* For example, `Provable.if(bool, x, y)` takes O(n) constraints, where n is the number of field\n * elements in x and y. With Hashed, this is reduced to O(1).\n *\n * The downside is that you will pay the overhead of hashing your values, so it helps to experiment\n * in which parts of your code a hashed representation is beneficial.\n *\n * Usage:\n *\n * ```ts\n * // define a hashed type from a type\n * let HashedType = Hashed.create(MyType);\n *\n * // hash a value\n * let hashed = HashedType.hash(value);\n *\n * // ... operations on hashes, more efficient than on plain values ...\n *\n * // unhash to get the original value\n * let value = hashed.unhash();\n * ```\n */\n\n\"operations on hashes, more efficient than on plain values\"\n\nIs there any resource where it is explained in the deep level how this constraint reduction is done? Also, what does number of field\n elements in x and y even mean? For example, when you use Provable.if(bool, Field(1), Field(2)), it already use one field element, doesn't it?",
+      "author": {
+        "id": "198156712417427456",
+        "name": "chief_oftailorz",
+        "discriminator": "0000",
+        "nickname": "şef",
+        "color": "#B47936",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/198156712417427456/dc51db32a22032b12100afdf9f1981af.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301641195142778891",
+      "type": "Default",
+      "timestamp": "2024-11-01T00:17:24.246+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes this is relevant if the types you're operating on have many field elements. For example, an account update has 150 or so field elements. It's _very_ expensive to do Provable.if() on two account updates. But it's _very_ cheap if you do it on two hashes of AUs.\n\nIn some of the zkapp logic we actually need to perform a lot of conditional selecting of AUs, and there it pays off big time to use a Hashed<AccounUpdate> representation.\n\nThe same could be true if you do lots of conditional logic on other large objects.",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD25",
+            "code": "fire",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f525.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "198156712417427456",
+              "name": "chief_oftailorz",
+              "discriminator": "0000",
+              "nickname": "şef",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/198156712417427456/dc51db32a22032b12100afdf9f1981af.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1301829723009318933",
+      "type": "Reply",
+      "timestamp": "2024-11-01T12:46:32.792+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I seeeee... \nWhere i see this is exactly from AccountUpdateTree source code. It seems there are some wild optimizations running on the source code",
+      "author": {
+        "id": "198156712417427456",
+        "name": "chief_oftailorz",
+        "discriminator": "0000",
+        "nickname": "şef",
+        "color": "#B47936",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/198156712417427456/dc51db32a22032b12100afdf9f1981af.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1301641195142778891",
+        "channelId": "1301549430171762808",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 3
+}

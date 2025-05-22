@@ -1,0 +1,581 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1215020320776527903",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Creating A PublicKey/Mina Address From @method Arguments In Provable Code",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:20:34.4520972+04:00",
+  "messages": [
+    {
+      "id": "1215020320776527903",
+      "type": "Default",
+      "timestamp": "2024-03-06T23:36:58.459+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Good evening, another day another low-level question \uD83D\uDE04\n\nMy goal is to  derive a valid Mina account address based on the method's private inputs. To achieve that goal, I am attempting to derive a PublicKey inside of a smart contract method, based on its private inputs. In other words, my goal is to generate a PublicKey based on private inputs in a predictable manner in provable code. My question pretains to the approach with which this goal can be achieved.\n\nAfter reading the documentation, consulting existing code on GitHub and O1JS implementation, I've employed the following:\n\n* Deriving PrivateKey through a Scalar\n* Manually constructing Scalar with 255 Field elems to derive a PrivateKey\n\nHowever, currently I am focused on provably computing a PublicKey from another PublicKey and a Field, which acts a Nonce. My @method receives 2 arguments: a PublicKey and Field. The goal is then to use those to derive a new PublicKey.\n\nI am currently iterating on the following version, **which I believe to be wrong**:\n\n```\n@method derivePublicKey(\n      funderAddress: PublicKey,\n      bountyId: Field,\n    ) {\n      const publicKeyFields: Field[] = funderAddress.toFields();\n      const newFirstElement: Field = Poseidon.hash([...funderAddress.toFields(), bountyId]);\n\n      const bountyPublicKey: PublicKey = PublicKey.fromFields([newFirstElement, publicKeyFields[1]]);\n      this.myState.set(Poseidon.hash(bountyPublicKey.toFields()));\n}\n```\nI'm exploring how PublicKeys are managed in O1JS, but I'm expecting the 2 Field elements to be the modulo n and the public exponent e. As such, my approach with random values is **wrong**\n\nThe only requirement that I have on the newly generated PublicKey is that it's a valid Mina address that can be used with token accounts. Perhaps there is an easier way of generating valid Mina accounts, without having to derive a PublicKey?\n\nAny feedback, suggestions and answers are highly appreciated.\n\nThank you in advance.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215021940440436827",
+      "type": "Default",
+      "timestamp": "2024-03-06T23:43:24.617+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Update: in the PublicKey,  it's not **n** and **e** \uD83D\uDE04",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215022714801225729",
+      "type": "Default",
+      "timestamp": "2024-03-06T23:46:29.239+04:00",
+      "timestampEdited": "2024-03-06T23:48:33.855+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ummmm... so it appears that this code may indeed generate valid PublicKeys. Is it really that simple? \n\nHere's the code that I have tried running, and it worked succesfully:\n\n```\n    @method derivePublicKey(\n      funderAddress: PublicKey,\n      bountyId: Field, \n    ) {\nhe address of the account which contains the bounty $ZKL amount\n      \n      const publicKeyFields: Field[] = funderAddress.toFields();\n      const newFirstElement: Field = Poseidon.hash([...funderAddress.toFields(), ...bountyId]);\n  \n      const bountyPublicKey: PublicKey = PublicKey.fromFields([newFirstElement, publicKeyFields[1]]);\n\n      this.bountyMapRoot.set(bountyPublicKey);\n\n      Provable.asProver(() => {\n        Provable.log(bountyPublicKey.toFields());\n        Provable.log(bountyPublicKey.toBase58()); // valid Base58! I matched it to a hex\n      });\n    }\n```",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215054031609798727",
+      "type": "Default",
+      "timestamp": "2024-03-07T01:50:55.748+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I would use hashToGroup and PublicKey.fromGroup()\n\nThe approach you show is not guaranteed to create a valid curve point",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215054103323873280",
+      "type": "Default",
+      "timestamp": "2024-03-07T01:51:12.846+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Poseidon.hashToGroup()",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215058438871195658",
+      "type": "Default",
+      "timestamp": "2024-03-07T02:08:26.521+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor Thanks!\n\nBelow is my updated approach based on my understanding:\n\n```\ntype GroupHash = {\n    x: Field;\n    y: {\n        x0: Field;\n        x1: Field;\n    };\n}\n\n\nconst newGroupHash: GroupHash = Poseidon.hashToGroup([...funderAddress.toFields(), ...bountyId.toFields()]);\n      const group: Group  = new Group({x: newGroupHash.x, y: newGroupHash.y}); // PROBLEM HERE\n      const bountyPublicKey: PublicKey = PublicKey.fromGroup(group);\n```\n\nHowever, it has a problem, as I am unable to reconstruct the `Group`  from the `.hashToGroup()` call.  In `.hashToGroup()` , y is composed of two fields, while in `Group`'s constructor both `x`and `y` are `Field`.\n\nHow does one extract a `Group` that I can pass to `PublicKey.fromGroup()`?",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1215058765984825414",
+      "type": "Default",
+      "timestamp": "2024-03-07T02:09:44.511+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah right I forgot that part. Check the nullifier.ts code in o1js. You pick one of them",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215058869995311174",
+      "type": "Default",
+      "timestamp": "2024-03-07T02:10:09.309+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Actually just looking there now! I'll write back if I'm still unable to figure it out. Thank you",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215059108873375874",
+      "type": "Default",
+      "timestamp": "2024-03-07T02:11:06.262+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I believe we have a bingo!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1215059108407812179",
+          "url": "https://cdn.discordapp.com/attachments/1215020320776527903/1215059108407812179/Screenshot_2024-03-06_at_22.10.58.png?ex=680ab6fa&is=6809657a&hm=3f0fef40a9579c854c83ed7d09486b68fc973aac10585eb8c557ec947db88f92&",
+          "fileName": "Screenshot_2024-03-06_at_22.10.58.png",
+          "fileSizeBytes": 93540
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215059278189035591",
+      "type": "Default",
+      "timestamp": "2024-03-07T02:11:46.63+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so y = x0. I don't believe I strictly need to verify if x0.isEven(), right?",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215060965775904809",
+      "type": "Default",
+      "timestamp": "2024-03-07T02:18:28.982+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Updated code with smoke tests passing!\n\n```\n      const newGroupHash: GrupHash = Poseidon.hashToGroup([...funderAddress.toFields(), ...bountyId.toFields()]);\n      // https://github.com/o1-labs/o1js/blob/0ec1c9da8c714298e6088ffa88178abb3961d200/src/lib/nullifier.ts#L64\n      const group: Group  = new Group({x: newGroupHash.x, y: newGroupHash.y.x0});\n      const bountyPublicKey: PublicKey = PublicKey.fromGroup(group);\n```",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 11
+}

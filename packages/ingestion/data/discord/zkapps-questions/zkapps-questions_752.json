@@ -1,0 +1,329 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1126870941411061861",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Adding Leafs To Merkle Tree",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T15:06:16.0197696+04:00",
+  "messages": [
+    {
+      "id": "1126870941411061861",
+      "type": "Default",
+      "timestamp": "2023-07-07T17:42:48.682+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Good afternoon,\n\nI have a question regarding adding leafs to a Merkle Tree. I found the `setLeaf()` method, but could't find examples of using that method to extend an existing Merkle Tree with new leafs.\n\nMy understanding of the solution is as follows.\n\nThe following data will need to be stored on-chain:\n\n1. Merkle tree root\n2. Last Merkle Tree index\n\nAdditionally, I will need the following data to add a new leaf to a Merkle Tree whose root is stored on Mina:\n\n1. The new element to add\n2. The new element's index\n3. Witness\n\nAdding a new element to the tree would involve verifying if the provided witness is correct, adding the new element to the tree, computing the updated root and storing it on-chain.\n\nFrom what I understand, the witness may involve providing the hash of the value of the current index, if the new index is an even number, or only involve intermediary hashes if the new index is odd.\n\nHow exactly do I compute a value that would serve a witness for adding a new value to the tree? Do I need to perform the logic described above manually, or are there utility methods that can assist in this endeavour?\n\nThank you.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1126874377082904638",
+      "type": "Default",
+      "timestamp": "2023-07-07T17:56:27.81+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't think there is a utility method since there's nothing about a `State<Field>` that says it has to be a merkle tree root.  You assign that meaning to it, but it \"doesn't know\".\n\nAlso, merkle trees in snarkyJS are \"sparse\" and fixed in size AFAIK.  So if you have a tree of height 4, then there are 8 leaves whether you set them or not.\n\nWith that in mind, the pattern is:\n\n1. Let's say the last index you set was 2\n2. Assume you have the full merkle tree stored offchain\n3. Calculate the merkle witness at index 3\n4. Use that witness and the new value as method arguments\n5. Compute the root using that witness and the value `Field(0)`\n  a. This is to confirm that the key is empty\n6. Assert that value is equal to the state value\n7. Compute the root using that witness and the new value method arg\n8. Set the state to that value\n\nSomething like this: https://github.com/45930/coinflip-executor-contract/blob/6e25916e73f2bfa0f9e31d3259e3784e346e129d/src/executor.ts#L59",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "coinflip-executor-contract/src/executor.ts at 6e25916e73f2bfa0f9e31...",
+          "url": "https://github.com/45930/coinflip-executor-contract/blob/6e25916e73f2bfa0f9e31d3259e3784e346e129d/src/executor.ts",
+          "timestamp": null,
+          "description": "Contribute to 45930/coinflip-executor-contract development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/lycp9UuzbtGRDvMzmedcdHlUBbu0QOBDLTTZ0cS8uT4/https/opengraph.githubassets.com/ffab11653e8e7fae832a878c815c571ebe5b68feb60f69c84d666970ee66dcc8/45930/coinflip-executor-contract",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1126882482097225889",
+      "type": "Default",
+      "timestamp": "2023-07-07T18:28:40.196+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you very much for the answer! @45930",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "201337099700535297",
+          "name": "45930",
+          "discriminator": "0000",
+          "nickname": "45930",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 3
+}

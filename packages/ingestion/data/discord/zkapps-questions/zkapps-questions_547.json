@@ -1,0 +1,608 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1175364148922691604",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error when deploying a smart contract that uses zk program proofs",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:05:28.9905391+04:00",
+  "messages": [
+    {
+      "id": "1175364148922691604",
+      "type": "Default",
+      "timestamp": "2023-11-18T13:17:30.313+04:00",
+      "timestampEdited": "2023-11-18T13:20:04.553+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The following errors with\n```ts\nimport { Field, SmartContract, State, method, state } from 'o1js';\nimport { GameProof } from './Game';\n\nexport class Game2 extends SmartContract {\n  @state(Field) highScore = State<Field>();\n\n  @method submitScore(proof: GameProof, val: Field) {\n    proof.verify();\n    this.highScore.set(val.add(1));\n  }\n}\n\n$ zk deploy game2\n✔ Build project\n✔ Generate build.json\n✔ Choose smart contract\n  The 'Game2' smart contract will be used\n  for this deploy alias as specified in config.json.\n  Failed to find the \"Game2\" smart contract in your build directory.\n  Please confirm that your config.json contains the name of the smart contract that you want to deploy to this deploy alias.\n```\n\n\nHowever when I remove the usage of the proof in the contracts, then the deploy works successfully\n\n```ts\nimport { Field, SmartContract, State, method, state } from 'o1js';\n\nexport class Game2 extends SmartContract {\n  @state(Field) highScore = State<Field>();\n\n  @method submitScore(val: Field) {\n    this.highScore.set(val.add(1));\n  }\n}\n\n\n$ zk deploy game2\n✔ Build project\n✔ Generate build.json\n✔ Choose smart contract\n  The 'Game2' smart contract will be used\n  for this deploy alias as specified in config.json.\n✔ Generate verification key (takes 10-30 sec)\n  Using the cached verification key\n✔ Build transaction\n? Confirm to send transaction\n\n  ┌─────────────────┬─────────────────────────────────────────────────┐\n  │ Deploy Alias    │ game2                                           │\n  ├─────────────────┼─────────────────────────────────────────────────┤\n  │ Fee Payer Alias │ temp-key                                        │\n  ├─────────────────┼─────────────────────────────────────────────────┤\n  │ URL             │ https://proxy.berkeley.minaexplorer.com/graphql │\n  ├─────────────────┼─────────────────────────────────────────────────┤\n  │ Smart Contract  │ Game2                                           │\n  └─────────────────┴─────────────────────────────────────────────────┘\n  \n  Are you sure you want to send (yes/no)? ›  \n```\n\n\nSo I have narrowed down that the issue I'm facing is due to usage of a zk progam. My smart contract with zk program works in local tests. This issue I am facing only while deploying. Is there something that I need to do to make it work with the zk program verification?",
+      "author": {
+        "id": "529352833439367178",
+        "name": "zemse",
+        "discriminator": "0000",
+        "nickname": "soham",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/529352833439367178/79d5ef7a852bde579c0a540189a62462.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1175365924052815903",
+      "type": "Default",
+      "timestamp": "2023-11-18T13:24:33.537+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think this is related to compiling the zk program as well. In my tests I had to compile the zk program before then only I was able to use the smart contract. How can I do this with the deploy cli of zk",
+      "author": {
+        "id": "529352833439367178",
+        "name": "zemse",
+        "discriminator": "0000",
+        "nickname": "soham",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/529352833439367178/79d5ef7a852bde579c0a540189a62462.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1175366504078913546",
+      "type": "Reply",
+      "timestamp": "2023-11-18T13:26:51.826+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "dear scammer pls dont msg here. everyone is dev here.",
+      "author": {
+        "id": "529352833439367178",
+        "name": "zemse",
+        "discriminator": "0000",
+        "nickname": "soham",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/529352833439367178/79d5ef7a852bde579c0a540189a62462.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "968520356891602965",
+          "name": "danielwilson8414697",
+          "discriminator": "0000",
+          "nickname": "danielwilson8414697",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/968520356891602965/9c6519cb643140865b87d0c4c9236d3c.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1175366224545316864",
+        "channelId": "1175364148922691604",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1175368572919357541",
+      "type": "Default",
+      "timestamp": "2023-11-18T13:35:05.076+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i think zk cli doesnt work with zk program? try searching the forum here i think someone brought it up already",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1175368613654437910",
+      "type": "Default",
+      "timestamp": "2023-11-18T13:35:14.788+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I just came accross https://github.com/o1-labs/o1js/issues/1207. Is there any way to deploy smart contact that depends on zk program",
+      "author": {
+        "id": "529352833439367178",
+        "name": "zemse",
+        "discriminator": "0000",
+        "nickname": "soham",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/529352833439367178/79d5ef7a852bde579c0a540189a62462.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Issues · o1-labs/o1js",
+          "url": "https://github.com/o1-labs/o1js/issues/1207.",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/o1js development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/2yhkuBWGdsMqQN6wWFVz0CM1r0XL46_fhXC1gRlv-ZU/https/opengraph.githubassets.com/fc8faa8627f6bc5c5c3918713b1172fb5b42ba34ae7115f6c3b24a89279b8bd6/o1-labs/o1js",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1175368650056806490",
+      "type": "Default",
+      "timestamp": "2023-11-18T13:35:23.467+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "for the hackathon - don’t worry too much about deployment! make it work locally sir",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1175368699268571136",
+      "type": "Default",
+      "timestamp": "2023-11-18T13:35:35.2+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "features > deployment",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1175369857739530292",
+      "type": "Reply",
+      "timestamp": "2023-11-18T13:40:11.401+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do you know who it was?",
+      "author": {
+        "id": "496781174954393611",
+        "name": "marc.nl",
+        "discriminator": "0000",
+        "nickname": "Marc",
+        "color": "#1ABC9C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "903130973582004274",
+            "name": "Moderator",
+            "color": "#1ABC9C",
+            "position": 139
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "849712902709313547",
+            "name": "node-working-group",
+            "color": "#99AAB5",
+            "position": 94
+          },
+          {
+            "id": "1246045923654762496",
+            "name": "berkeley-pre-release",
+            "color": "#98C79F",
+            "position": 84
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "807079219691257886",
+            "name": "spp",
+            "color": null,
+            "position": 76
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1204127049657360444",
+            "name": "UMT-Support",
+            "color": "#1ABC9C",
+            "position": 38
+          },
+          {
+            "id": "1161352609064558642",
+            "name": "TW2-Support",
+            "color": "#B9F506",
+            "position": 32
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1263420553184677889",
+            "name": "Role Manager",
+            "color": null,
+            "position": 13
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/496781174954393611/803ed6ce16d03f760b0e0319f0cc8dc7.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "529352833439367178",
+          "name": "zemse",
+          "discriminator": "0000",
+          "nickname": "soham",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/529352833439367178/79d5ef7a852bde579c0a540189a62462.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1175366504078913546",
+        "channelId": "1175364148922691604",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 8
+}

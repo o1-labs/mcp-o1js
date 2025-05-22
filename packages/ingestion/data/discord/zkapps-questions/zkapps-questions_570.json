@@ -1,0 +1,1020 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1172472799156260914",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Is possible from fields to string ?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:18:48.4715252+04:00",
+  "messages": [
+    {
+      "id": "1172472799156260914",
+      "type": "Default",
+      "timestamp": "2023-11-10T13:48:18.81+04:00",
+      "timestampEdited": "2023-11-10T13:51:45.248+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello There !\n\n```typescript\n// Message.ts\n....\n\nexport class M extends SmartContract {\n\u00A0 // On-chain state definitions\n\u00A0 @state(Field) message = State<Field>()\n\u00A0 @state(Field) messageHistoryHash = State<Field>()\n\u00A0 @state(PublicKey) user1 = State<PublicKey>()\n\u00A0 @state(PublicKey) user2 = State<PublicKey>()\n\u00A0 @state(PublicKey) user3 = State<PublicKey>()\n\n\u00A0 @method init() {\n\u00A0 \u00A0 // Define initial values of on-chain state\n\u00A0 \u00A0 this.user1.set(users['Bob'].toPublicKey())\n\u00A0 \u00A0 this.user2.set(users['SuperBob'].toPublicKey())\n\u00A0 \u00A0 this.user3.set(users['MegaBob'].toPublicKey())\n\u00A0 \u00A0 // this.message.set(Field(0))\n\u00A0 \u00A0 this.messageHistoryHash.set(Field(0))\n\u00A0 }\n\n\u00A0 @method publishMessage(message: Field /*, signerPrivateKey: PrivateKey*/) {\n\u00A0 \u00A0 this.message.set(message)\n\u00A0 }\n}\n```\n\n```typescript\n// Message.spec.ts\n...\n\ndescribe('Message.ts', () => {\n\u00A0 const payload = 'Hello'\n\u00A0 const Local = Mina.LocalBlockchain({\n\u00A0 \u00A0 proofsEnabled: true,\n\u00A0 \u00A0 enforceTransactionLimits: false,\n\u00A0 })\n\u00A0 const [{ publicKey: feePayerAddress }] = Local.testAccounts\n\u00A0 it('Match string Fields', () => {\n\u00A0 \u00A0 const m = new M(feePayerAddress)\n\u00A0 \u00A0 m.init()\n\u00A0 \u00A0 const message = Encoding.stringToFields(payload)\n\u00A0 \u00A0 console.log('to string > ', Encoding.Bijective.Fp.toString(message))\n\u00A0 \u00A0 const h = Poseidon.hash(message)\n\u00A0 \u00A0 expect(Encoding.Bijective.Fp.toString(message)).toMatch(payload)\n\u00A0 \u00A0 m.publishMessage(h /*, users.Bob*/)\n\u00A0 \u00A0 console.log(\n\u00A0 \u00A0 \u00A0 'Encoding to string > ',\n\u00A0 \u00A0 \u00A0 Encoding.Bijective.Fp.toString([m.message.fromAppState([h])])\n\u00A0 \u00A0 )\n\u00A0 })\n})\n```\n\n```typescript\n// Test results\n\u00A0console.log\n\u00A0 \u00A0 to string > \u00A0Hello\n\n\u00A0 \u00A0 \u00A0 at Object.<anonymous> (src/composables/Message.spec.ts:14:13)\n\n\u00A0 console.log\n\u00A0 \u00A0 Encoding to string > \u00A0P��?��m��%�I���պ�&#�g������\n\n\u00A0 \u00A0 \u00A0 at Object.<anonymous> (src/composables/Message.spec.ts:18:13)\n\n\u00A0PASS \u00A0src/composables/Message.spec.ts (20.851 s)\n\u00A0 Message.ts\n\u00A0 \u00A0 ✓ Match string Fields (257 ms)\n```\n\nI want to convert Fields to string from app state but something goes wrong. How to handle this ?",
+      "author": {
+        "id": "341655885145178115",
+        "name": "god.ai",
+        "discriminator": "0000",
+        "nickname": "X",
+        "color": "#72BE86",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172475627912306718",
+      "type": "Reply",
+      "timestamp": "2023-11-10T13:59:33.238+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It is impossible - you hash this message: const h = Poseidon.hash(message). It would be possible without hashing",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "341655885145178115",
+          "name": "god.ai",
+          "discriminator": "0000",
+          "nickname": "X",
+          "color": "#72BE86",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1093206126817968280",
+              "name": "TW2-Operator",
+              "color": "#72BE86",
+              "position": 28
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1172472799156260914",
+        "channelId": "1172472799156260914",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1172493380283015219",
+      "type": "Reply",
+      "timestamp": "2023-11-10T15:10:05.733+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But when I try `console.log('user1 > ', this.user1.get().assertEquals(users['Bob'].toPublicKey()))`, then getting `getAccount: Could not find account for public key B62qkCkKQ5vSRkTQyEEj22vnHH4hVKfp4pc3QYd4GPSv7u6S4aBE4Fx` error.\n\nAlso I see Bob's public key with `console.log('signerPublicKey > ', signerPublicKey.toBase58())` and then its pretty print this => `signerPublicKey >  B62qkCkKQ5vSRkTQyEEj22vnHH4hVKfp4pc3QYd4GPSv7u6S4aBE4Fx`",
+      "author": {
+        "id": "341655885145178115",
+        "name": "god.ai",
+        "discriminator": "0000",
+        "nickname": "X",
+        "color": "#72BE86",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1172475627912306718",
+        "channelId": "1172472799156260914",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1172493469898510416",
+      "type": "Default",
+      "timestamp": "2023-11-10T15:10:27.099+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It seems so weird",
+      "author": {
+        "id": "341655885145178115",
+        "name": "god.ai",
+        "discriminator": "0000",
+        "nickname": "X",
+        "color": "#72BE86",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172495807686127646",
+      "type": "Reply",
+      "timestamp": "2023-11-10T15:19:44.471+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "RPC is unstable now, try later",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "341655885145178115",
+          "name": "god.ai",
+          "discriminator": "0000",
+          "nickname": "X",
+          "color": "#72BE86",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1093206126817968280",
+              "name": "TW2-Operator",
+              "color": "#72BE86",
+              "position": 28
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1172493380283015219",
+        "channelId": "1172472799156260914",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1172497157698363392",
+      "type": "Reply",
+      "timestamp": "2023-11-10T15:25:06.339+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But I'm working on local only. That's mean even not connect to Berkeley. Is it affected to my work?",
+      "author": {
+        "id": "341655885145178115",
+        "name": "god.ai",
+        "discriminator": "0000",
+        "nickname": "X",
+        "color": "#72BE86",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1172495807686127646",
+        "channelId": "1172472799156260914",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1172498226528661534",
+      "type": "Reply",
+      "timestamp": "2023-11-10T15:29:21.168+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Are you sure you've selected each member of `users` from `Local.testAccounts`?",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "341655885145178115",
+          "name": "god.ai",
+          "discriminator": "0000",
+          "nickname": "X",
+          "color": "#72BE86",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1093206126817968280",
+              "name": "TW2-Operator",
+              "color": "#72BE86",
+              "position": 28
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1172497157698363392",
+        "channelId": "1172472799156260914",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1172498420422946896",
+      "type": "Default",
+      "timestamp": "2023-11-10T15:30:07.396+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```ts\nconst users = {\n  bob: Local.testAccounts[0].privateKey,\n  marley: Local.testAccounts[1].privateKey,\n}\n```",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172498531509075979",
+      "type": "Default",
+      "timestamp": "2023-11-10T15:30:33.881+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So they will have funds which makes them be stored in the ledger.",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172498609850306560",
+      "type": "Default",
+      "timestamp": "2023-11-10T15:30:52.559+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "On Berkeley network it was like this.",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172498649993977876",
+      "type": "Default",
+      "timestamp": "2023-11-10T15:31:02.13+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Local networks might be similar.",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172506429844881479",
+      "type": "Default",
+      "timestamp": "2023-11-10T16:01:56.991+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks, it work this method, but I think may has bugs as not sure",
+      "author": {
+        "id": "341655885145178115",
+        "name": "god.ai",
+        "discriminator": "0000",
+        "nickname": "X",
+        "color": "#72BE86",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 12
+}

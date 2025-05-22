@@ -1,0 +1,1901 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1096150907869208686",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "What should an universal approval method for various AU layouts look like?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T16:19:32.3829176+04:00",
+  "messages": [
+    {
+      "id": "1096150907869208686",
+      "type": "Default",
+      "timestamp": "2023-04-13T23:12:21.935+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm still working on a token standard, and currently trying to design a versatile enough approval method for AUs.\n\nSo far i've came up with the following (not saying it works):\n\n```\ninterface Approvable {\n  approveTransfer: (from: AccountUpdate, to: AccountUpdate) => void;\n  approveDeploy: (deploy: AccountUpdate) => void;\n}\n\n@method\npublic approveDeploy(deploy: AccountUpdate): void {\n  this.assertHasNoBalanceChange([deploy]);\n  this.approve(deploy, AccountUpdate.Layout.NoChildren);\n}\n\n@method\npublic approveTransfer(from: AccountUpdate, to: AccountUpdate): void {\n  this.assertHasNoBalanceChange([from, to]);\n  this.approve(from, AccountUpdate.Layout.NoChildren);\n  this.approve(to, AccountUpdate.Layout.NoChildren);\n}\n```\n\nDepending on how the `from` / `to` account updates for balance change of the Token accounts are created, they might end up having various children.\n\nIn the case of a deployment as long as the `self` account update of the deployed contract stays simple => we can use `NoChildren` as a layout and things are just fine.\nHowever i wonder in what cases would this break? I think adding an extra manual AU into init() could break it, since it will add another child AU with `callDepth: 1` and then the approval method will run into trouble since it expects/asserts no children?\n\nFor the transfer approval, i've decided to go with the path of standalone from/to AUs, so that i can support arbitrarily proven AUs on both ends. Reasoning behind this was to support custom token accounts with permissions set to `receive: proof, send: proof`. However i also can't find an easy way to reason about the children layout of the from/to account updates.\n\nDo you have any ideas how to generalise this? @gregor @rpanic @Florian @evan \uD83D\uDC40",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "998715320883761204",
+              "name": "hgedia",
+              "discriminator": "0000",
+              "nickname": "hgedia",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/998715320883761204/02043a2344354ac80c67b2a646286aa0.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "138034851872899081",
+          "name": "rpanic",
+          "discriminator": "0000",
+          "nickname": "rpanic",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1093206126817968280",
+              "name": "TW2-Operator",
+              "color": "#72BE86",
+              "position": 28
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+        },
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        },
+        {
+          "id": "227173927712063508",
+          "name": "trivo",
+          "discriminator": "0000",
+          "nickname": "Florian",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1300439738003619890",
+              "name": "o1 Engineering",
+              "color": "#00368B",
+              "position": 130
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "918156487434596374",
+              "name": "MinaResearch Founding Member",
+              "color": "#A5BEF3",
+              "position": 108
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+        },
+        {
+          "id": "484098399969476609",
+          "name": "evan02048",
+          "discriminator": "0000",
+          "nickname": "evan",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "621112916862828556",
+              "name": "partners-taskforce",
+              "color": null,
+              "position": 69
+            },
+            {
+              "id": "1308126741033648159",
+              "name": "SP-LA",
+              "color": null,
+              "position": 47
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/484098399969476609/7598bb38403f41cf737d2e73b76a5550.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1096151169140785183",
+      "type": "Default",
+      "timestamp": "2023-04-13T23:13:24.227+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "One observation is that any account update beyond self automatically becomes a child account update, so depending on the logic of the approved account update, it might contain balance changes to the 'self' account, even in a nested account update.",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096152594507894934",
+      "type": "Default",
+      "timestamp": "2023-04-13T23:19:04.061+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Should the approval method traverse all different kinds of AU layouts, collect balance changes from accounts with the relevant tokenId (is this even available in the AU?) and check if the overall balance change is 0? (no mint or burn from children for transfers)",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096152834107519006",
+      "type": "Default",
+      "timestamp": "2023-04-13T23:20:01.186+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Would this mean that the only semi tangible solution would be to write or generate quite a few layout approval methods? Keeping in mind that the method code must be compilable as a circuit - must be static",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096155337482043433",
+      "type": "Default",
+      "timestamp": "2023-04-13T23:29:58.037+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "WIP work can be found here:\n**Token**\nhttps://github.com/stove-labs/mip-token-standard/blob/develop/packages/token/src/token.ts\n\n**Admin**\nhttps://github.com/stove-labs/mip-token-standard/blob/develop/packages/token/src/Admin.ts\n\n**Token Account**\nhttps://github.com/stove-labs/mip-token-standard/blob/develop/packages/token/src/TokenAccount.ts",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096339926443900958",
+      "type": "Default",
+      "timestamp": "2023-04-14T11:43:27.475+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "One approach i can think of is to flatten the AU tree, look for AUs with a matching tokenId, accumulate all balance changes and check that they are 0 in total",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096340040931627058",
+      "type": "Default",
+      "timestamp": "2023-04-14T11:43:54.771+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Then, we can implement methods for various lenghts of the flattened tree, like `.approve2(...)` `.approve3(...)`",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096340255105363979",
+      "type": "Default",
+      "timestamp": "2023-04-14T11:44:45.834+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "or we can have a universal approve method with a fixed amount of AUs to approve, like up to 8-ish? since thats about the limit of how much you can fit into a TX anyways? so probably less than 8.",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096340674112126976",
+      "type": "Default",
+      "timestamp": "2023-04-14T11:46:25.733+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this way the flattening could be done outside of the token contract, which means *interoperability* does not suffer",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096341753952481370",
+      "type": "Default",
+      "timestamp": "2023-04-14T11:50:43.187+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor can you please point me in the right direction re: AU tree flattening? I've looked here so far `Types.AccountUpdate.toFields`, trying to figure out how to flatten the tree and then reconstruct individual AUs to access `tokenId` and `balanceChange` on them",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1096356697850794004",
+      "type": "Default",
+      "timestamp": "2023-04-14T12:50:06.09+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Okay so the way I think this would be possible (implemented it myself for Njord):\nYour approve method can receive one AccountUpdates with arbitrary Layout. You then flatten this AU into a list as a Witness. Then you do your balance change checks against this list. After that, you have to link this list (which is esentially just a witness) to the actual public input, to check that you didn't swap out any of the flattened AccountUpdates. How I would do that is by bascially implementing `CallForest.hashChildren` inside your circuit (you need to bend your mind a bit to do that but I managed it in the end). If you want I can give you some hints on that",
+      "author": {
+        "id": "138034851872899081",
+        "name": "rpanic",
+        "discriminator": "0000",
+        "nickname": "rpanic",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096356910560718869",
+      "type": "Default",
+      "timestamp": "2023-04-14T12:50:56.804+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "After that, you'd have to link into `addMissingProofs` somehow to assert the publicInput against your computed calls value",
+      "author": {
+        "id": "138034851872899081",
+        "name": "rpanic",
+        "discriminator": "0000",
+        "nickname": "rpanic",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1096678597298749511",
+      "type": "Reply",
+      "timestamp": "2023-04-15T10:09:12.899+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do you have a full test of the standard?  I would like to integrate your standard within our wallet",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1096155337482043433",
+        "channelId": "1096150907869208686",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1096725341931851816",
+      "type": "Reply",
+      "timestamp": "2023-04-15T13:14:57.688+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "separate thread for that here https://discord.com/channels/484437221055922177/1096393501404573797",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "625988499056754688",
+          "name": "iamdev",
+          "discriminator": "0000",
+          "nickname": "IaM [ZK] <DEV>",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1096678597298749511",
+        "channelId": "1096150907869208686",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 14
+}

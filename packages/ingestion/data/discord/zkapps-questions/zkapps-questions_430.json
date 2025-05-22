@@ -1,0 +1,189 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1201602929208066211",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Weird SmartContract class behaviour (potential bug?).",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:00:31.660884+04:00",
+  "messages": [
+    {
+      "id": "1201602929208066211",
+      "type": "Default",
+      "timestamp": "2024-01-29T23:01:03.026+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have a smart contract.\nWhen i add this to its code:\n```\n  @method init() {\n    super.init();\n  }\n\n  deploy() {\n    super.deploy();\n  }\n```\nMy tests will fail, because state updates (zkapp.state1.set(..)) are not 'recorded'.\nWhat am I doing wrong. I want to understand what is happing under the hood, I have wasted multiple hours on weird workarounds in order to get things work.\nThanks!",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1201623975013396651",
+      "type": "Default",
+      "timestamp": "2024-01-30T00:24:40.737+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Code looks ok, except that it's removing an optional argument from deploy() (which should be ok if you're not using the argument). Also your overriding deploy() with itself which seems unnecessary.\n\nThe main change introduced here is to make init() an @method so that it uses a proof\n\nYou'll have to share more details to help with debugging",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1201624323513921588",
+      "type": "Default",
+      "timestamp": "2024-01-30T00:26:03.826+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Making init an @method also means that it will get a separate account update from deploy()\n\nAnd it sets the state to all zeroes",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1201624379717603359",
+      "type": "Default",
+      "timestamp": "2024-01-30T00:26:17.226+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Which sounds related to what you're describing",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

@@ -1,0 +1,3633 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1298526066394140672",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Protokit vs Custom Rollup",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:30:59.5156163+04:00",
+  "messages": [
+    {
+      "id": "1298526066394140672",
+      "type": "Default",
+      "timestamp": "2024-10-23T09:58:59.676+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey Everyone!\n\nI am beginning to explore the various architectural options available for building out zkUSD. \n\nAt a high level, the app has two main components, the orchestrator and the token contract. The users interact with the orchestrator which then handles the minting/burning logic with the token contract. zkUSD has a strong requirement for interoperability (which should influence any architectural decisions). This is why we are using the Mina Fungible Token standard as the contract that handles the zkUSD itself. \n\nEach user action with the app requires a state transition. The order in which these state transitions occur is important which means the Action/Reducer model is not appropriate, even without its current limitations (32 max actions).\n\nThat leaves us with two possible options as far as I see it - Protokit vs Custom Rollup.\n\nProtokit does a fantastic job of abstracting all of the complexity involved with building out a rollup to manage the state transition / concurrency issues. It handles the private mempool, the sequencer and the settlement all for you. However the downside that I see is the lack of interoperability. Protokit app-chains live in isolation which means that any integration with the MFT token contract wouldnt be possible in its current form. As a stablecoin’s utility is dependent on high degrees of interoperability this is far from ideal.\n\nIm not sure if its possible but the perfect solution would be to handle the various user actions on the orchestrator in a sequencer / custom rollup. Then when each settlement happens on-chain the balances of the zkUSD token contract are updated accordingly, which gives us the best of both worlds. i.e Any state transitions (actions on the orchestrator) would happen on the l2 rollup that when settled to l1, the result of those actions would execute - zkUSD minted/burnt.\n\nIs my understanding correct here or is there something missing?",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298633712329691137",
+      "type": "Default",
+      "timestamp": "2024-10-23T17:06:44.467+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "\"However the downside that I see is the lack of interoperability. Protokit app-chains live in isolation which means that any integration with the MFT token contract wouldnt be possible in its current form.\"\n\nAbout this, the protokit is actively working towards the L1 <-> Protokit settlement and afaik they have the estimated deadline of EOY.\n\nI do believe creating your custom rollup might not be ideal since that would mean re-inveting the wheel and probably repeating a lot of things already covered by Zeko and Protokit. \n\nI would probably recommend waiting for them for the bridge and until then work around the POC implementation :) \nYou can always port between protokit <-> zeko <-> mina mainnet since they overlap a lot with each in terms of syntax (having their own edge over the other though)",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD25",
+            "code": "fire",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f525.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "138034851872899081",
+              "name": "rpanic",
+              "discriminator": "0000",
+              "nickname": "rpanic",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1298692066519285791",
+      "type": "Default",
+      "timestamp": "2024-10-23T20:58:37.19+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The issue with building on Zeko is that you are limiting the stablecoin to that specific L2 ecosystem which is not the right choice in my opinion. For zkUSD’s usefulness and success as a DeFi product on Mina, it has to be available at the base layer and built from the bottom up rather than the top down.\n\nI think Protokit might also be less than ideal, for the reasons above, but also because the system needs collateral in order to issue debt which means it needs to lock up Mina. I’m not sure whether Protokit will have the functionality to allow users to send Mina to a L2 App chain and then settle a token back out the other side. It seems like this is not the kind of use case they are building for.",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298696992834326558",
+      "type": "Default",
+      "timestamp": "2024-10-23T21:18:11.715+04:00",
+      "timestampEdited": "2024-10-23T21:18:46.008+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I remember Mahtorz or Raphael talking about having \"messages between Mina mainnet and Protokit\" and in that sense you can have the collateral and everything on L1 and do the computation over L2 for a faster state. Since we will be allowed to send messages to and fro, with some hit and try we can have the logic on protokit but assets held on L1, but I do understand your dilemma since I am working on one implementation myself, the way I see it to have the core infra on Mina itself the way it has always been and then later have an experimental faster version deployed as a v2 of the original protocol for better speeds. But as a side note : true decentralization can only exist on L1.",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298697671254478859",
+      "type": "Default",
+      "timestamp": "2024-10-23T21:20:53.463+04:00",
+      "timestampEdited": "2024-10-23T21:22:22.113+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The problem with L1 is of having outdated pricing information and that can easily create arbitrage opportunities.",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298698348043173989",
+      "type": "Default",
+      "timestamp": "2024-10-23T21:23:34.822+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and not to mention the state management can get a bit wonky here and there. Although the recent OffchainState is a sigh of relief (I love it lol).",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298718890146402355",
+      "type": "Default",
+      "timestamp": "2024-10-23T22:45:12.441+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> even without its current limitations (32 max actions)\n@Charlie this is no longer a limitation since ~July, there is an alternative reducer `Experimental.BatchReducer` which handles any number of pending actions",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "267659707697594368",
+          "name": "charlie_mack",
+          "discriminator": "0000",
+          "nickname": "Charlie",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1298719430733336710",
+      "type": "Default",
+      "timestamp": "2024-10-23T22:47:21.327+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> The order in which these state transitions occur is important which means the Action/Reducer model is not appropriate\nI'm actually curious to learn the specifics of this! Because I don't see how actions would be different than Protokit",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298743088529014897",
+      "type": "Reply",
+      "timestamp": "2024-10-24T00:21:21.785+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So please correct my if I’m wrong but its my understanding that Protokit will sequentially process the transactions and associated state transitions such that if  transaction X required state A and was submitted under state A, then another transaction was processed that moved it to state B transaction X would no longer be valid. As in the race condition is managed by the consecutive processing of transactions, first come first served.\n\nWith actions:\n```\nThere is one interesting nuance here when compared to traditional Elm Architecture/Redux/useReducer instantiations: Because multiple actions are handled concurrently in an undefined order, it is important that actions\u00A0[commute](https://en.wikipedia.org/wiki/Commutative_property)\u00A0against any possible state to prevent race conditions in your zkApp. Given any two actions a1 and a2 applying to some state s,\u00A0`s * a1 * a2`\u00A0means the same as\u00A0`s * a2 * a1`.\n```\n\nIt seems like the order should not be significant when it comes to actions.\n\nTo give a concrete example in the context of zkUSD. Alice’s position might suddenly become under collateralised by a price drop and so to rebalance she deposits more collateral. At the same moment Bob sees an opportunity to liquidate her position and submits the liquidation action. Both of these are actions are dispatched to be reduced at the next block. My question would be, does the reducer guarantee the order and what would be the result of Bobs liquidation action if Alices was completed first and her position was healthy again",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1298719430733336710",
+        "channelId": "1298526066394140672",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1298776705405685912",
+      "type": "Default",
+      "timestamp": "2024-10-24T02:34:56.673+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> does the reducer guarantee the order\nwhich order is it supposed to guarantee? as you said they are submitted at the same time.\n\nthe answer is that when transactions (which include actions) are sent to a node, they are basically unordered, and upon creating a block the block producer will decide on a tx order. actions will then be put in the same order as the txs that they are part of. this order is committed to by computing an 'action state' (a hash) that is part of the state of that account.\n\nwhen you reduce actions, you are forced to do it in the same order, such that you derive the same hash. so, yes, reducer guarantees that actions are processed in the same order as they were accepted into a block",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298777054304534650",
+      "type": "Default",
+      "timestamp": "2024-10-24T02:36:19.857+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> what would be the result of Bobs liquidation action if Alices was completed first and her position was healthy again\nthat depends on the reducer logic that you write. same in protokit, where it depends on the runtime module logic that you write",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298777377727320176",
+      "type": "Default",
+      "timestamp": "2024-10-24T02:37:36.967+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the model for reducer is: you get a list of actions in some predetermined order, and now you can process them one by one, using whatever logic you want. this logic can handle cases of invalidation by earlier actions etc",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298777904859185254",
+      "type": "Default",
+      "timestamp": "2024-10-24T02:39:42.645+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the docs say that 'actions have to commute' but I don't think this is a helpful way to describe it. you can just as well have logic that differs depending on which order actions were received. it may just be better for _some_ applications if it can be achieved that reordering doesn't change the outcome.",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298778828025368577",
+      "type": "Default",
+      "timestamp": "2024-10-24T02:43:22.745+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "based on the context I have so far @Charlie, it doesn't seem a bad idea to me to try to write your zkapp using `BatchReducer`.\n\nexample of using it here: https://github.com/o1-labs/o1js/blob/main/src/lib/mina/actions/batch-reducer.unit-test.ts",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "267659707697594368",
+          "name": "charlie_mack",
+          "discriminator": "0000",
+          "nickname": "Charlie",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1298780435077398568",
+      "type": "Default",
+      "timestamp": "2024-10-24T02:49:45.896+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I assume protokit offer faster blocks, thus more temporal granularity.  If alice submits her extra collateral, then 2 minutes later bob issues a zkapp command to liquidate, then they still happened “at the same time” according to Mina.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1298875547396345866",
+      "type": "Default",
+      "timestamp": "2024-10-24T09:07:42.44+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is the transaction order in a block determined by the fee?\n\nI imagine this is what you alluded to previously @45930 when you were talking about MEV opportunities.  \n\nWith such a large window of 3 mins, the moment a debt position becomes undercollateralised a massive incentive to liquidate exists, which would become a bidding war.\n\nAnother consideration here is the price, should we consider that as part of the reducer as well as the action. \n\nThanks for the clarification @gregor, this has been super helpful.",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "201337099700535297",
+          "name": "45930",
+          "discriminator": "0000",
+          "nickname": "45930",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+        },
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1298950331270434836",
+      "type": "Default",
+      "timestamp": "2024-10-24T14:04:52.305+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "MEV can exist on Mina??? I thought we were only submitting proofs??",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298959085491851336",
+      "type": "Default",
+      "timestamp": "2024-10-24T14:39:39.474+04:00",
+      "timestampEdited": "2024-10-24T14:39:53.103+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I dont think its as clear cut as EVM but as  a transaction is a series of account updates where the label is generally `contract.method()`  then some form of MEV exists, if transactions are ordered based on fee by the block producer (Im not sure about this)\n\nFor example: If I know that there are currently three undercollateralised positions at the current price and I see that a user has submitted a transaction with 3 account updates liquidating those positions with a certain fee, then I know I need to submit a new transaction with a higher fee to liquidate them myself",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298992857428004885",
+      "type": "Default",
+      "timestamp": "2024-10-24T16:53:51.331+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "My understanding is that there is no enforced order.  Block builders can decide which transactions they’d like to include and in which order.  Therefore there is MEV if 2 transactions are competing for the same economic opportunity, they are incentivized to pay the block builder to prioritize their transaction within the block.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1298993077050150922",
+      "type": "Default",
+      "timestamp": "2024-10-24T16:54:43.693+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "A higher fee will help you get included in a block sooner, but for order within a block, fee shouldn’t make a difference.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1300501624371810384",
+      "type": "Reply",
+      "timestamp": "2024-10-28T20:49:09.402+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So I've been looking at building this a few different ways but haven't found a good one yet.\n\nIt seems I cant use the batch reducer because all the different types of users interactions distill into a batch of \"actions\", these actions are then processed in a loop. As each user interaction requires different code to be executed, which might require burning/minting of a token, or the withdrawing of Mina. \n\nAs there is no way to execute code conditionally based on an action type then all the code gets executed. I guess it would be possible if I just do 0 burns/mints/sends but that doesn't seem the right thing to do?\n\nI also looked into offchain state, which seems like the best option and has a really great api but the issue here is that I can't link the state transitions to account updates. (i.e. minting the stablecoin) which means that an attacker could submit many transactions on a state that is valid and continuously mint the stablecoin before the state is updated if those transactions are processed before the settle.\n\nIf I can find a way to use a nonce, or fail a transaction if the Collateralised Debt Position has a pending state update then that would be best. Can you think if that is possible?",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1298778828025368577",
+        "channelId": "1298526066394140672",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1300524954995134534",
+      "type": "Default",
+      "timestamp": "2024-10-28T22:21:51.856+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Charlie I think it's totally possible to do different things depending on the type of action. You don't even have to do 0 mints / burns, you can conditionally do a mint/burn because you can conditionally create an account update.\n(The example I shared above does that) \n\nYes, all code gets executed, but that doesn't mean you can't do complex conditional logic",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "267659707697594368",
+          "name": "charlie_mack",
+          "discriminator": "0000",
+          "nickname": "Charlie",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1300805464430215198",
+      "type": "Reply",
+      "timestamp": "2024-10-29T16:56:30.517+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "With this design I wont be able to use the Mina Fungible Token standard as I can't mint new tokens on that contract by manually constructing the account update, right?\n\nI'll have to implement my Orchestrator contract as its own Token Contract to mint/burn from Account updates Ill create from the actions.\n\nAlso are you able to reduce actions in a batch asynchronously? I tried interacting with another contract with `await` and that gives me this error:\n\n```\nError: The global context managed by o1js reached an inconsistent state.\n```",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1300524954995134534",
+        "channelId": "1298526066394140672",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1300813604777492481",
+      "type": "Default",
+      "timestamp": "2024-10-29T17:28:51.327+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The global context error usually just means you're missing an await somewhere",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1300816036383166505",
+      "type": "Default",
+      "timestamp": "2024-10-29T17:38:31.067+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I can't remember all details but afair the token standard defines a minimal interface that your token has to support. All other actions are mediated through an admin contract where you can have custom logic.\n\nSo I think the answer to your question depends on how flexible that admin interface currently is.\n\nAnyway, if you can bypass the need to mint tokens, then the interface is very flexible, there's an approveBase method which accepts an arbitrary number of (non minting) account updates.",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1300855340522537084",
+      "type": "Reply",
+      "timestamp": "2024-10-29T20:14:41.904+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Has the `batchReducer.processBatch()` been tested with with async code?\n\nI just tried to do a super simple example with it:\n\n```\n    // process claims by reducing actions\n    batchReducer.processBatch({ batch, proof }, async (address, isDummy) => {\n      const token = new FungibleToken(this.tokenAddress.getAndRequireEquals());\n      await token.mint(address, UInt64.from(AMOUNT));\n    });\n```\n\nWith this:\n\n```\nbatches.flatMap(({ batch, proof }, i) => [\n  Mina.transaction({ sender: deployer }, async () => {\n    await airdropContract.settleClaims(batch, proof);\n  })\n    .prove()\n    .sign([deployer.key]).send,\n]);```\n\nAnd I get the global context error. \n\nIf I stick the same mint call just outside of the `processBatch()` it works fine.",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1300813604777492481",
+        "channelId": "1298526066394140672",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1300868083023614023",
+      "type": "Default",
+      "timestamp": "2024-10-29T21:05:19.953+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah it probably doesn't await the callback, we have to fix that",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "267659707697594368",
+              "name": "charlie_mack",
+              "discriminator": "0000",
+              "nickname": "Charlie",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1301098768749559890",
+      "type": "Reply",
+      "timestamp": "2024-10-30T12:21:59.716+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The issue with the approach of combined reducer/actions/AUs is that you'll inevitably end up re-building what Protokit does, since you'll run into AU per tx limit (6-9 AUs per tx i think) So if you want to reduce 50 actions, and each results into a mint/burn/transfer or whatever on the base layer L1, you'd have to issue 50 AUs, which wont work. So you'll have to either separate reducing and AU emission like we do at Protokit. Or you'll have to process your actions in batches to fit into the AU limit, which wont work either since you won't be able to satisfy the historical action state precondition exhaustively",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "⬆️",
+            "code": "arrow_up",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2b06.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "810793675033673730",
+              "name": "br0wn_d3v",
+              "discriminator": "0000",
+              "nickname": "br0wnD3v",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "267659707697594368",
+          "name": "charlie_mack",
+          "discriminator": "0000",
+          "nickname": "Charlie",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1300501624371810384",
+        "channelId": "1298526066394140672",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1301099677164240908",
+      "type": "Default",
+      "timestamp": "2024-10-30T12:25:36.299+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "let alone to mention if you want to be working with offchain state, and using actions, you're effectively building an app-chain, we've built protokit to optimise for this use case and provide quite a few bells and whistles that are not available in the raw reducer & OCS APIs today. One of the examples would be separating state proving operations from business logic, unproven/staged blocks for improved latency, private/hybrid/actions mempool  - effectively introducing based rollups with native DA & shared sequencing. And a lot more, happy to chat more if necessary",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301110164040056845",
+      "type": "Default",
+      "timestamp": "2024-10-30T13:07:16.565+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> Or you'll have to process your actions in batches to fit into the AU limit, which wont work either since you won't be able to satisfy the historical action state precondition exhaustively\n\n@maht0rz solving this is actually the point of batch reducer. it will create several batches of actions (batch size defined by the user), which are designed to be passed in as inputs of several consecutive transactions. so if you're (say) emitting at most one AU per action, then you make your batch size = 5 or 6, and the AUs for one batch will fit the tx\n\nImplementation detail: It's getting around the action state precondition by creating a proof as part of the first batch which reverses the current pending actions and stores it in an additional state variable. the batches then pop actions from that reversed stack one by one",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "374663548174991362",
+              "name": "maht0rz",
+              "discriminator": "0000",
+              "nickname": "maht0rz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1301114680626118679",
+      "type": "Default",
+      "timestamp": "2024-10-30T13:25:13.403+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```ts\nconst token = new FungibleToken(this.tokenAddress.getAndRequireEquals());\nawait token.mint(address, UInt64.from(AMOUNT));\n```\n@Charlie doing this ^^ kind of stuff conditionally on the `isDummy` flag will actually be hard. under the hood, method calls like `token.mint()` are just fancy wrappers around creating an account update, so _in principle_ we can do a method call like that conditionally.\n\nHowever, the current o1js implementation wasn't designed to support conditional function calls. So to achieve that, you'd have to plunge into the low-level and implement conditional function calls yourself.\n\nI think this is an oversight and added this issue: https://github.com/o1-labs/o1js/issues/1889",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "267659707697594368",
+              "name": "charlie_mack",
+              "discriminator": "0000",
+              "nickname": "Charlie",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "267659707697594368",
+          "name": "charlie_mack",
+          "discriminator": "0000",
+          "nickname": "Charlie",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1301116767170461736",
+      "type": "Default",
+      "timestamp": "2024-10-30T13:33:30.874+04:00",
+      "timestampEdited": "2024-10-30T13:36:19.054+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for the info @maht0rz!\n\nI did think this with the batch reducer, I think we could fit in maybe 1/2, max 3 actions into the transaction before we hit the AU limit. One single mint action has about 5 AU’s in it. Which means we would almost have to process as many batches as we have actions.\n\nPlease correct me if I am wrong but from what I can tell, I would have the same issue here as with vanilla tx’s on L1. We can only perform one `settleClaims()` per block because each transaction sets the root / length which means if another one was to run in the same block the precondition would be invalidated.\n\nThe off-chain state to me seems like it would work perfectly if I could somehow only have one pending action per leaf at a time, and for that I would have to be able to fetch the pending offchain state actions in the contract but I havent been able to find a way to do that.\n\nIn regards to Protokit, the reason I am barking up the L1 tree at the moment is because of the nature of my app. When a user wants to interact with zkUSD they have to deposit collateral, which is in Mina, which would involve a L1 transaction. Once they have deposited Mina they can then choose to mint some zkUSD based off that collateral. That minted zkUSD is also a token on L1. The other user actions also require this L1 interaction,  redeeming collateral, burning their zkUSD etc.\n\nWith my limited understanding, I wasn’t sure how I would build that message bridge into a runtime module that can have Mina deposited into it and a runtime method that can signal to a L1 token contract to mint some zkUSD for an account. \n\nIf this is all possible with Protokit then I’d be happy to build on it, if you guys have already dealt with the headaches then thats great!",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1301117602600325212",
+      "type": "Default",
+      "timestamp": "2024-10-30T13:36:50.056+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Charlie i'm working on a lightnet integration for starter kit, where token bridging & custom message bridging will come with an out of the box example \uD83D\uDE02 but in the meantime let me ping @rpanic so we can show you some internal framework code / tests that demonstrate how this works",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "267659707697594368",
+          "name": "charlie_mack",
+          "discriminator": "0000",
+          "nickname": "Charlie",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+        },
+        {
+          "id": "138034851872899081",
+          "name": "rpanic",
+          "discriminator": "0000",
+          "nickname": "rpanic",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1093206126817968280",
+              "name": "TW2-Operator",
+              "color": "#72BE86",
+              "position": 28
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1301118549699334145",
+      "type": "Default",
+      "timestamp": "2024-10-30T13:40:35.862+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "regardless of if Protokit or not, you can run the framework with the same assumptions as you would run a batch reducer or OCS, its just a matter of how you orchestrate the execution in the end - which is what the framework does for you",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301118927966961706",
+      "type": "Default",
+      "timestamp": "2024-10-30T13:42:06.048+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "same limitations will apply for the batch reducer as for the protokit sequencer, so the decision in the end should be on developer UX or on other auxiliary tools that we provide. For example your users might want to do something fancy for your stablecoin, such as some form of staking or idk... with the Protokit sequencer you get access to on-chain execution and shared global state, which is something you don't get with the OCS api (which works mostly for UTXO like applications)",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1301119733256683551",
+      "type": "Default",
+      "timestamp": "2024-10-30T13:45:18.044+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I agree with that: my gut says offchain storage is too limited for what you need",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "⬆️",
+            "code": "arrow_up",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2b06.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "810793675033673730",
+              "name": "br0wn_d3v",
+              "discriminator": "0000",
+              "nickname": "br0wnD3v",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1301128132253712414",
+      "type": "Default",
+      "timestamp": "2024-10-30T14:18:40.521+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think I need to get my head out of pure decentralised land, coming from an EVM background.\n\nIt seems like the trade off with Mina right now is centralisation vs concurrency. In order to manage the state transitions effectively you need to be able to coordinate user transactions on that state so you can have more than one state transition per block. Which means you have to rollup one way or another. \n\nThe offchain state is really close and I like the fact that it is already decentralised out of the box (as in the state lives on the archive nodes) \n\nHowever thinking about it now, whatever design I choose simply can't have the minting tied to any state transition because that means you are always going to be capped at the max amount of AU's you can have in a transaction that affects that state causing the next precondition to fail \n\nI'll start playing around with Protokit in any case",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301128831305908245",
+      "type": "Default",
+      "timestamp": "2024-10-30T14:21:27.188+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you can stay in the decentralized land with protokit too, all you need is to use actions exclusively as your mempool, adjust the settlement contract to accept a settlement by anyone and you're good to go.. ofc some small goodies such as re-boostraping the app-chain/tree state from actions is neccessary",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301213855439126609",
+      "type": "Default",
+      "timestamp": "2024-10-30T19:59:18.521+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor Is it possible to get account information inside provable code?\n\nfor example would I be able to do something akin to this inside my smart contract?\n\n```\n  //how can we see what the state of Alice is now?\n  let aliceAccount = Mina.getAccount(alice);\n  console.log('Alice Account', aliceAccount.zkapp?.appState[0].value);\n```\n\nIm thinking of a workaround to potentially utilise the zkapp app state available on end user accounts to perform state updates that don't interfere with the smart contracts state. \nThis way I could set a flag on the users account via an account update to ensure that they only perform one action per offchainState root commitment.",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1301222975340544123",
+      "type": "Default",
+      "timestamp": "2024-10-30T20:35:32.875+04:00",
+      "timestampEdited": "2024-10-30T20:35:47.35+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yes @Charlie that's possible! you can fetch and introduce the value to provable code with `Provable.witnessAsync()`:\n```ts\nlet state = await Provable.witnessAsync(Field, async () => {\n   let { account } = await fetchAccount({ publicKey: alice });\n   return aliceAccount.zkapp?.appState[0].value;\n});\n```\n(also works with `Provable.witness()` + `Mina.getAccount()` but `Mina.getAccount()` is unreliable, it relies on cached values when fetching)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD25",
+            "code": "fire",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f525.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "267659707697594368",
+              "name": "charlie_mack",
+              "discriminator": "0000",
+              "nickname": "Charlie",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "267659707697594368",
+          "name": "charlie_mack",
+          "discriminator": "0000",
+          "nickname": "Charlie",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1301223488257790002",
+      "type": "Default",
+      "timestamp": "2024-10-30T20:37:35.164+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you should add a precondition on the state after introducing it though:\n```ts\nlet aliceAU = AccountUpdate.create(alice);\naliceAU.body.preconditions.account.appState[0].isSome = Bool(true);\naliceAU.body.preconditions.account.appState[0].value = state;\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301223658450321490",
+      "type": "Default",
+      "timestamp": "2024-10-30T20:38:15.741+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so that it's guaranteed you're actually using the value from onchain state and not some entirely different value",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301445478847746048",
+      "type": "Default",
+      "timestamp": "2024-10-31T11:19:41.845+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Amazing. This Provable.witness is pretty powerful. I've actually found a better solution that doesn't require an AU.\n\nI simply check whether there are any pending actions since the most recent actionState commitment for this CDP Id which ensures that only one action can be taken at a time against a position while allowing us to use offchain state to manage the state transitions\n\n```javascript\n\nlet pendingAction = await Provable.witnessAsync(Field, async () => {\n      const commitments = this.offchainState.commitments().get();\n      const actionStates: ActionStates = {\n        fromActionState: commitments.actionState,\n      };\n\n      const actions = await Mina.fetchActions(this.address, actionStates);\n\n      // Check if actions exist and contains items\n      if (!Array.isArray(actions) || actions.length === 0) {\n        return Field(0);\n      }\n\n      // Look for cdpId in all action items\n      const hasPendingAction = actions.some((action) =>\n        action.actions?.some(\n          (actionItem) =>\n            // First element of actionItem array is the cdpId\n            Array.isArray(actionItem) && actionItem[0] === cdpId.toString()\n        )\n      );\n\n      return Field(hasPendingAction ? 1 : 0);\n    });\n\n\n    pendingAction.assertEquals(\n      Field(0),\n      'There is already a pending action on this cdp'\n    );\n\n```\n\nIm using Mina.fetchActions for my local blockchain, when I move onto lightnet I will update this to use fetchActions against the graphQL endpoint.",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301446111264899122",
+      "type": "Default",
+      "timestamp": "2024-10-31T11:22:12.625+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is there anything I need to know in regards to the current limitations with offchain state? such as the number of actions that can be pending at a time / processed in a block etc.",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301516517577330709",
+      "type": "Default",
+      "timestamp": "2024-10-31T16:01:58.798+04:00",
+      "timestampEdited": "2024-10-31T16:02:11.825+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Uhh.. I have to warn you at this point @Charlie. `Provable.witness()` code is not part of the proof, so it's not really proper smart contract code (malicious users could run different code in there). So I wouldn't put any app logic in there which you seem to do. \nIt's cool for getting any values into your provable code but at that point, the provable part of the code \"knows\" nothing about those values. Any logic you want to encode in your contract about those values need to be added outside the `witness()` block.\n\nWhen auditing your code snippet, I would read it as follows:\n\n```ts\nlet pendingAction = anyValueChosenByTheProver();\npendingAction.assertEquals(0);\n```\nSo right now the actual contract logic is just checking that some random field element is equal to 0. Which is probably not enough! (Depending on what you use it for)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE4F",
+            "code": "pray",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f64f.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "138034851872899081",
+              "name": "rpanic",
+              "discriminator": "0000",
+              "nickname": "rpanic",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "267659707697594368",
+          "name": "charlie_mack",
+          "discriminator": "0000",
+          "nickname": "Charlie",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1301516836919181324",
+      "type": "Default",
+      "timestamp": "2024-10-31T16:03:14.935+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "From the circuit point of view, this would be fully equivalent code:\n```ts\nlet pendingAction = Field(0);\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301534358225682543",
+      "type": "Default",
+      "timestamp": "2024-10-31T17:12:52.34+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Damn @gregor why did you have to tease me like that!\n\nI was so happy I had found a good solution haha.\n\nBack to the drawing board...",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 47
+}

@@ -1,0 +1,2772 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1222618862147604543",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Unable To Transfer Custom Token From Account A to Account B using Account C",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T10:48:01.6464298+04:00",
+  "messages": [
+    {
+      "id": "1222618862147604543",
+      "type": "Default",
+      "timestamp": "2024-03-27T22:50:51.896+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Good afternoon,\n\nI am attempting to transfer a custom token from Account A to Account B using a transaction created by Account C. I have spent quite some time on this problem, and tried different approaches. As such, I am writing this question.\n\n\nConsider the following code:\n\n```\n        const claimBountyTxn: Mina.Transaction = await Mina.transaction(\n          interactor2PublicKey, () => {\n            AccountUpdate.fundNewAccount(interactor2PublicKey, 1);\n            bbbSC.claimBounty(interactor1PublicKey);\n          });\n\n        await claimBountyTxn.prove();\n        claimBountyTxn.sign([interactor2PrivateKey]);\n        await claimBountyTxn.send();\n```\n\nIn this code, a token managed by `bbbSC` should be transferred from the `interactor1PublicKey` (Account A) to `interactor2PrivateKey.toPublicKey()` (Account B). In this case, Account C = Account B, but it could've been a different account. Account A is always different from account B and it cannot participate in the signing of data.\n\nCurretnly, I am getting the following error:\n\n```\n\n    Transaction failed with errors:\n    - Check signature: Invalid signature on account_update 5 for key B62qmHhLqZSxyRcYDbG33PqYZ9x1E42TCD3CGuhNVPQpRPmdtnmCKmY\n\n    > 356 |         await claimBountyTxn.send();\n```\n\n`B62qmHhLqZSxyRcYDbG33PqYZ9x1E42TCD3CGuhNVPQpRPmdtnmCKmY`  = Account A, i.e. the account from which the custom token is being tranferred to.\n\n(CHARACTER LIMIT! CONTINUING IN COMMENTS)",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1022794550357532692",
+              "name": "crxptoboss247",
+              "discriminator": "0000",
+              "nickname": "crxptoboss247",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/3.png"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1222618887447646228",
+      "type": "Default",
+      "timestamp": "2024-03-27T22:50:57.928+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Below is the relevant code of the token owner smart contract:\n\n```\nexport class BountyBulletinBoardContract extends TokenContract {\n\n\n  deploy(args: DeployArgs) {\n    super.deploy(args);\n    // Temporarily all set to proof, will be refined later\n    this.account.permissions.set({\n      ...Permissions.default(),\n      editState: Permissions.proof(),\n      setTokenSymbol: Permissions.proof(),\n      send: Permissions.none(),\n      receive: Permissions.none(),\n      access: Permissions.proofOrSignature(),\n    });\n\n  }\n\n  @method approveBase(forest: AccountUpdateForest) {\n    // Purposefully a condition that evaluates to True. This is by desing (for now).\n    forest.isEmpty().assertFalse();\n  }\n\n  @method sendFromTo(\n    senderAddress: PublicKey,\n    receiverAddress: PublicKey,\n    amount: UInt64\n  ) {\n\n    let accountUpdate = this.internal.send({\n      from: senderAddress,\n      to:receiverAddress,\n      amount: amount,\n    });\n\n    this.approveAccountUpdate(accountUpdate); // I don't believe this is needed!\n  }\n\n  @method claimBounty(\n    funderAddress: PublicKey\n  ) {\n    let au = AccountUpdate.create(funderAddress, this.deriveTokenId());\n    let balance: UInt64 = au.account.balance.getAndRequireEquals();\n    this.sendFromTo(bountyPublicKey, this.sender, balance);\n  }\n```\n\nWhat am I doing wrong here and how can the problem be solved? Am I misunderstanding how account updates should be authorized?\n\nThank you!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1222619156445401138",
+      "type": "Default",
+      "timestamp": "2024-03-27T22:52:02.062+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(NOTE: I simplified the code slightly. In the real version, the \"funderAddress\" is derived from the combination of a public key and a Field, in the method of the zkApp)",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1222621391937867779",
+      "type": "Default",
+      "timestamp": "2024-03-27T23:00:55.045+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here a snippet of the the failing account update:\n\n```\n\"body\": {\n        \"publicKey\": \"B62qoSmesNDDCx61zCpdoWWheaLteTA2yTRLzGWyvXjqrfZuF43Dgng\",\n        \"tokenId\": \"xtMCsQWRBe5pJsaykYbyM8i76LF5FfncT8NKAU1165wRgrRWF4\",\n        \"update\": {\n          ..\n        \"balanceChange\": {\n          \"magnitude\": \"10\",\n          \"sgn\": \"Negative\"\n        },\n        \"incrementNonce\": false,\n        ..\n        \"mayUseToken\": {\n          \"parentsOwnToken\": true,\n          \"inheritFromParent\": false\n        },\n        \"authorizationKind\": {\n          \"isSigned\": true,\n          \"isProved\": false,\n          \"verificationKeyHash\": \"3392518251768960475377392625298437850623664973002200885669375116181514017494\"\n        }\n      },\n      \"authorization\": {\n        \"proof\": null,\n        \"signature\": \"7mWxjLYgbJUkZNcGouvhVj5tJ8yu9hoexb9ntvPK8t5LHqzmrL6QJjjKtf5SgmxB4QWkDw7qoMMbbNGtHVpsbJHPyTy2EzRQ\"\n      }\n```\n\nIt appears that a proof is not attached? The signature is there, but it wouldn't be the one from Account A (the account from which the tokens are being sent).",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1224686687779688509",
+      "type": "Default",
+      "timestamp": "2024-04-02T15:47:39.945+04:00",
+      "timestampEdited": "2024-04-02T15:51:44.739+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You are trying to allow sending of tokens without signature. For this to work you need:\n1. set the permission of send to none\n2. make sure it will be properly authorised using token owner account\n\nIt might seem counter-intuitive that we are not setting the authorisation permission to proof, however keep in mind that proof is being verified against the verification key in the corresponding account. In your case that would be token account of `interactor2PrivateKey` (which has no verification key) and not the verification key of the smart contract. It is okay that the permission will be none, since for the token account update to succeed, it needs to be approved by the token owner account. \n\nFor this you might need to create account updates manually. You need to create sender and receiver account updates with no authorisation and approve both of them.",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "790135754411343882",
+              "name": "coldstar1993",
+              "discriminator": "0000",
+              "nickname": "coldStar1993",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+            },
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1224843515713032233",
+      "type": "Default",
+      "timestamp": "2024-04-03T02:10:50.638+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, and tahnk you very much for your answer! I will write a detailed reply soon.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1228503124050706514",
+      "type": "Default",
+      "timestamp": "2024-04-13T04:32:49.258+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, coming with further answers:\n\n> 1.set the permission of send to none\nThe permission of send is already set to Permissions.none(). The relevant code is included in the messages above.\n\n> For this you might need to create account updates manually. You need to create sender and receiver account updates with no authorisation and approve both of them. \n\nIsn't this what I'm already doing for the sender in `sendFromTo()`? How would I create an account update for the receiver?\n\nI'm currently studying the Wrapped Token examples from https://github.com/o1-labs/docs2/tree/main/examples/zkapps/11-advanced-account-updates and have re-read all of the updated documentation on tokens, but things are still not the clearest.\n\nThank you.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "docs2/examples/zkapps/11-advanced-account-updates at main · o1-labs...",
+          "url": "https://github.com/o1-labs/docs2/tree/main/examples/zkapps/11-advanced-account-updates",
+          "timestamp": null,
+          "description": "Docs website for the Mina Protocol. Contribute to o1-labs/docs2 development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/H6lB4XJLcmFq5N4-d32LbUyHvZFB9B-VZ53J4mVPfs0/https/opengraph.githubassets.com/673864a3fd7a0274d97bac5c354612c08eee7241fcf9ac023ac21c66685b41b1/o1-labs/docs2",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1228522901603483688",
+      "type": "Default",
+      "timestamp": "2024-04-13T05:51:24.594+04:00",
+      "timestampEdited": "2024-04-13T05:51:50.531+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I also have this version, which. results in `update_not_permitted_balance` error. From what I understand, this is due to the fact that I'm not signing the transaction with `Account A`'s private key, but my goal is to avoid doing exactly that.\n\nHere is the version in question:\n\n```\n@method claimBounty(\n    funderAddress: PublicKey,\n    bountyId: UInt64,\n  ) {\n    // 1. Derive the  a PublicKey, which will represent the address of the account \n    // which contains the bounty to be claimed\n    const bountyPublicKey: PublicKey = this.deriveBountyAccountAddressMethod(funderAddress, bountyId);\n\n    let au = AccountUpdate.create(bountyPublicKey, this.deriveTokenId());\n    let balance: UInt64 = au.account.balance.getAndRequireEquals();\n    au.balance.subInPlace(balance);\n    au.body.mayUseToken = AccountUpdate.MayUseToken.ParentsOwnToken;\n    this.approve(au);\n\n    let au2 = AccountUpdate.create(this.sender, this.deriveTokenId());\n    au2.balance.addInPlace(balance);\n    au2.body.mayUseToken = AccountUpdate.MayUseToken.ParentsOwnToken;\n    this.approve(au2);   \n  }\n```\n\nWhile we're on the topic, it's not fully clear to me  what `au2.body.mayUseToken = AccountUpdate.MayUseToken.ParentsOwnToken;` is supposed to do.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229424332372185168",
+      "type": "Default",
+      "timestamp": "2024-04-15T17:33:22.437+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> The permission of send is already set to Permissions.none(). The relevant code is included in the messages above.\nYou are setting the permission of token owner account. Beware that's not a good idea, if there would be any funds in the smart contract anybody could withdraw that.\n\nWhat you want to do instead, set the permission of the user's token account when it's created.\n\n> Isn't this what I'm already doing for the sender in sendFromTo()? How would I create an account update for the receiver?\nThis sets the authorisation to the signature, which you are trying to avoid.",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229495296158072933",
+      "type": "Default",
+      "timestamp": "2024-04-15T22:15:21.522+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, and thanks for replying @Faserisko .\n\n\n> What you want to do instead, set the permission of the user's token account when it's created.\nI will need to deploy a new smart contract for that, correct? Is there any way not to deploy an extra contract? Isn't the user's token account the (public key, token ID) pair? How would I set permissions on that?\n\n> This sets the authorisation to the signature, which you are trying to avoid.\nDoes that mean that this.internal.send() sets the auth to signature? How would one transfer without it? I tried manual account updates, and it didn't work. When I try to do account updates from the outside (2 Account Updates: one from the sender, one from the receiver), it repots that the Transaction is too expensive:\n\n```\n        const claimBountyTxn: Mina.Transaction = await Mina.transaction(\n          interactor2PublicKey, () => {\n            AccountUpdate.fundNewAccount(interactor2PublicKey, 1);\n            \n            let au1 = AccountUpdate.create(confirmedFundedPubKey, bbbSC.deriveTokenId());\n            \n            let balance: UInt64 = au1.account.balance.getAndRequireEquals();\n            au1.balance.subInPlace(balance);\n            bbbSC.approveUpdate(au1);\n\n            let au2 = AccountUpdate.create(interactor2PublicKey, bbbSC.deriveTokenId());\n            au2.balance.addInPlace(balance);\n            bbbSC.approveUpdate(au2);\n          });\n```\n\nThank you again, any feedback on this is extremely valuable, as I've run of available resources on this: already ready through all of the existing GitHub code, but none of it appears to be doing what I need to do \uD83D\uDE04",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "141272134633783297",
+          "name": "faseris",
+          "discriminator": "0000",
+          "nickname": "Faserisko",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1229517992329482250",
+      "type": "Default",
+      "timestamp": "2024-04-15T23:45:32.711+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Maybe this example that sets authorizations to token accounts can be of little help:\nhttps://github.com/dfstio/minanft-lib/blob/master/src/contract/names.ts#L164",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229518151910162503",
+      "type": "Default",
+      "timestamp": "2024-04-15T23:46:10.758+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@DFST Thank you, will check it our right now!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1229518534279823360",
+      "type": "Default",
+      "timestamp": "2024-04-15T23:47:41.922+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So do essentially I set the permissions on the account before transfering for the first time?",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229519751693209791",
+      "type": "Reply",
+      "timestamp": "2024-04-15T23:52:32.176+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In my understanding yes, you should set the permissions on the token account when you are creating it. Additionally, you can set the verification key to the token account to implement any additional logic that is required for transfer or any other operation, see for example\nhttps://github.com/dfstio/minanft-lib/blob/master/experimental/payment.v2.test.ts#L289\n\nIn this example I do not transfer the token to other account, instead I change the owner PublicKey field in the token account that allows to control the token account, but the same technique can be used probably with token transfers to other accounts.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1229518534279823360",
+        "channelId": "1222618862147604543",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1229520221195210752",
+      "type": "Default",
+      "timestamp": "2024-04-15T23:54:24.114+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@DFST a HUGE MASSIVE thank you on this! Going to refactor in that direction now. I will write with updates",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1229521672701214721",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:00:10.18+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> Additionally, you can set the verification key to the token account to implement any additional logic that is required for transfer or any other operation\n@DFST Could you please expand a little on where I should be looking for this? The link that you sent is to `nft.sell()`. I'm assuming I should be looking here:\n\n```\nasync internalSell(params: SellParams, fee: UInt64) {\n    const { address, price } = params;\n    const sender = this.sender.getAndRequireSignature();\n    const ownerUpdate = AccountUpdate.createSigned(sender);\n    ownerUpdate.send({ to: wallet, amount: fee });\n    const tokenId = this.deriveTokenId();\n    const nft = new NFTContract(address, tokenId);\n    await nft.sell(price);\n  }\n```\nI also checked the code of `NFTContract`:\n\n```\n\n  async deploy(args: DeployArgs) {\n    super.deploy(args);\n    this.account.permissions.set({\n      ...Permissions.default(),\n      editState: Permissions.proof(),\n    });\n  }\n```\n\nWhere is the verification key set?",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1229522541853544550",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:03:37.402+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think you mean this part, in the first link:\n\n```\nupdate.body.update.verificationKey = {\n      isSome: Bool(true),\n      value: data.verificationKey,\n    };\n```",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229526182513348658",
+      "type": "Reply",
+      "timestamp": "2024-04-16T00:18:05.403+04:00",
+      "timestampEdited": "2024-04-16T00:20:29.577+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, exactly.\nIt is https://github.com/dfstio/minanft-lib/blob/master/experimental/payment.v2.test.ts#L195 in second\nand more complicated rollup example:\nhttps://github.com/zkcloudworker/domain-name-contract/blob/main/src/contract/domain-contract.ts#L276",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1229522541853544550",
+        "channelId": "1222618862147604543",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1229527327344689192",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:22:38.352+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It appears that in order to set permission on an account in the form of:\n\n```\n\n    const au: AccountUpdate = AccountUpdate.createSigned(<pub_key>, this.deriveTokenId());\n    au.body.update.permissions = {\n      isSome: Bool(true),\n      value: {\n        ...Permissions.default(),\n        send: Permissions.none(),\n      }\n    }\n```\n\nThe tranasction must be signed with the private key corresponding to `<pub_key>`, is that correct?\n\nWhen I try to use AccountUpdate.create(...) it gives me `Update_not_permitted_permissions` error",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229527793491120159",
+      "type": "Reply",
+      "timestamp": "2024-04-16T00:24:29.49+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, it is correct:\nhttps://github.com/dfstio/minanft-lib/blob/master/experimental/payment.v2.test.ts#L485",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1229527327344689192",
+        "channelId": "1222618862147604543",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1229528563988824075",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:27:33.191+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you, I see now! The problem is that in my case `<pub_key>` is a derived public key. The tokens in the possession of that `<pub_key>` should not be usable by the owner of the corresponding private key. The balances in `<pub_key>` are to be managed by the smart contract that defines the token (extends TokenContract).\n\nI know you're also hacking around with balances for storage. In my case it's similar, but the private key cannot be used to control those funds.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229530382903414855",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:34:46.854+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's not a problem as the token accounts cannot be managed without main SmartContract that creates the token, so you can put any logic there - see for example KYC logic in my example.\nYou cannot editState of the token account directly - only thru main contract.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229532112424538175",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:41:39.204+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Perhaps I'm misunderstanding something, but what I am trying to do is:\n\n```\n  async internalSell(params: SellParams, fee: UInt64) {\n    const { address, price } = params;\n    const sender = generateRandomPublicKey(); // <<<------------- here\n    const ownerUpdate = AccountUpdate.createSigned(sender);\n    ownerUpdate.send({ to: wallet, amount: fee });\n    const tokenId = this.deriveTokenId();\n    const nft = new NFTContract(address, tokenId);\n    await nft.sell(price);\n  }\n```\n\nEssentially, the send logic should transfer funds from a random public key, without having the corresponding private key to sign the transaction.\n\nImagine that `generateRandomPublicKey()` generates a random public key on every invocation [I'm not generating them randomly per se, but rather by hashing a Field value]",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229532834407120956",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:44:31.338+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Well, this random account should have MINA, otherwise the tx will fail, and this transaction should be signed by private key.\n\nDo you mean actually transferring your token and not MINA?",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229532907715035196",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:44:48.816+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, my token",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229534554247790792",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:51:21.38+04:00",
+      "timestampEdited": "2024-04-16T00:51:50.77+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Then you can create the token account for every user, the user should have private key for creation of the account, and the balance of the user should be written in some UInt64 field on the token account.\nThe main contract then will manage this field by decreasing or increasing it - in this way the private key of the user cannot made transfers without following main contract logic and mainly used to confirm sender identity by using `this.sender.getAndRequireSignature()`\nIt is not a standard way to do it, so I'm not sure that it is a best way - maybe it makes sense to return to your original idea and make transfers of the tokens setting authorizations right and approveBase()",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229536107654283275",
+      "type": "Default",
+      "timestamp": "2024-04-16T00:57:31.741+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Actually..... I think I could just deploy a new smart contract for each one of those `<public_key>`s, and use them for balance storage like you described. This could actually simplify things a lot! I would still only need to pay 1 account creation fee (for the deployment of the smart contract, instead of creation of a new token accout). These are some great ideas, thank you!\n\nI'm still wondering if I wanted to do initially is possible (not a quetion to you, but anyone reading after)",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229536826646200380",
+      "type": "Reply",
+      "timestamp": "2024-04-16T01:00:23.162+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You are going to pay 1 MINA fee anyways to create token account. When making decision token accounts vs usual accounts you should also take into account how you will upgrade the contract in the future. With token accounts, it is one tx, with usual accounts - ${number_of_users} txs",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1229536107654283275",
+        "channelId": "1222618862147604543",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1229561199222460430",
+      "type": "Default",
+      "timestamp": "2024-04-16T02:37:14.037+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The upgrade point is a very valid one, but I don't think it will be necessary on those accounts.\n\nThe question that I'm exploring now, is how to obtain the address of the deployer of a smart contract, or at least how to achieve the equivalent of checking whether a smart contract was deployed via another smart contract; or rahter for a smart contract A to verify whether the smart contract B that it's interacting with  it has been deployed by the smart contract A.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229563907635679332",
+      "type": "Reply",
+      "timestamp": "2024-04-16T02:47:59.773+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't think it is possible in general, the only possibility is to put some flag into the B's state.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1229561199222460430",
+        "channelId": "1222618862147604543",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1229564132391649331",
+      "type": "Default",
+      "timestamp": "2024-04-16T02:48:53.359+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do you know any way of ensuring that that flag was indeed set by Smart Contract A, without having access to Smart Contract A's key?",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229565677300355116",
+      "type": "Default",
+      "timestamp": "2024-04-16T02:55:01.694+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, you can keep MerkleTree/Map root on the A state, and put into this Tree/Map { flag (number) : B PublicKey hash or PublicKey.x}. Although updating this Map/Tree is difficult. \nIn case of token accounts, it is automatic - there is 100% guarantee that the contract is deployed by A",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229566781639757856",
+      "type": "Default",
+      "timestamp": "2024-04-16T02:59:24.989+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks. The reason I went with this \"token hack\" is to avoid using off-chain storage. Looks like the solution is still not quite there, but I'm sure that it's coming!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229567304581513228",
+      "type": "Default",
+      "timestamp": "2024-04-16T03:01:29.668+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can use events and actions also for off-chain storage",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229690265371938907",
+      "type": "Default",
+      "timestamp": "2024-04-16T11:10:05.805+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Given what you're trying to achieve, I see only 3 variants for now:\n1) Use token accounts. You will need private key once to create this account. Then, this private key will not be able to control the funds. This private key can be a) the private key of A account b) Temporarily private key being discarded after token account creation, with public key of A different from public key of token account\n2) Use actions storage. You can see examples\nhttps://github.com/o1-labs/o1js/pull/1475\nhttps://github.com/o1-labs/o1js/pull/1300\nBe aware of \nhttps://github.com/o1-labs/o1js/issues/1426\nhttps://github.com/o1-labs/o1js/issues/1427\n3) Classic case with storing MerkleMap root on-chain and keeping the data off-chain, for example in IPFS or in Events.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1229862841310384200",
+      "type": "Default",
+      "timestamp": "2024-04-16T22:35:51.115+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks! What if I do something like this (draft code):\n\n```\nclass SmartContractA extends SmartContract {\n  @method deploySmartContractB(smartContractBAddress: PublicKey) {\n    // Create an instance of SmartContractB\n    const smartContractB = new SmartContractB(smartContractBAddress);\n    \n    // Deploy SmartContractB\n    smartContractB.deploy();\n    \n    // Retrieve the account update of SmartContractB\n    const smartContractBUpdate = smartContractB.self;\n    \n    // Approve the account update of SmartContractB\n    this.approve(smartContractBUpdate, AccountUpdate.Layout.AnyChildren);\n    \n    // Additional checks can be added here to verify the specific type or properties of SmartContractB\n    // E.g.: check the verification key of SmartContractB\n    const expectedVerificationKey = \"...\"; // verification key of SmartContractB\n    const actualVerificationKey = smartContractB.getVerificationKey();\n    actualVerificationKey.assertEquals(expectedVerificationKey, \"SmartContractB has an unexpected verification key\");\n  }\n}\n```\n\nIn this way, I believe I can ensure that the Smart Contract B is deployed. \n\nNow, let's say I also set the the .deployer state var of SmartContract B to this.sender. If I understand correctly, no matter who deploys Smart Contract B, the verification key must always be the same. So, wouldn't it be enough to just check for a hardcoded verification key of Smart Contract B, in the methods of Smart Contract A?",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1230091178100133918",
+      "type": "Reply",
+      "timestamp": "2024-04-17T13:43:10.848+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "What keeps anyone from deploying smart contract B outside of your method with custom verification key?",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1229862841310384200",
+        "channelId": "1222618862147604543",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1230091470766342207",
+      "type": "Default",
+      "timestamp": "2024-04-17T13:44:20.625+04:00",
+      "timestampEdited": "2024-04-17T13:44:38.833+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For this to work how you want, it needs to be a token account of smart contract A",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 38
+}

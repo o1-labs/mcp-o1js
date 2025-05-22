@@ -1,0 +1,4677 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1162426564936466542",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "o1js RangeError: offset is out of bounds error when adding a function to the contract",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:54:13.114093+04:00",
+  "messages": [
+    {
+      "id": "1162426564936466542",
+      "type": "Default",
+      "timestamp": "2023-10-13T20:28:09.922+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I encountered a strange error today and was able to find the change that caused it:\n\nThe error appears after I add the new function updatePrivateMap to my MinaNFTContract (src/contract/minanft.ts, lines  187-199). This function is not being called in the code, and the error appears when I call the function of ANOTHER contract MinaNFTMap=Experimental.ZkProgram,  that does NOT use MinaNFTContract (src/minanft.ts:183:27).\n\nTo reproduce the error, one can clone the repo https://github.com/dfstio/minanft-lib, use the RangeError branch, and execute \n```\nyarn test update.test\n```\nIf one comments the lines 187-199  on src/contract/minanft.ts thus removing the function updatePrivateMap from the contract MinaNFTContract , the test runs without error.\n\nSeems like the size limitation of the contract or the bug in o1js as the code that throws this error does not use at all the function being added or the contract to which the function is being added.\n\nI've tested it on o1js 0.13.1, local blockchain, node 20.8.0, MacBook Pro M2 Max 32 GB, Sonoma 14.0\n\nAny ideas on how to avoid this error?\n\nThe text of the error is below:\n\n```\n    RangeError: offset is out of bounds\n        at Uint32Array.set (<anonymous>)\n\n      at passArray32ToWasm0 (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/plonk_wasm.cjs:560:24)\n      at new WasmFqPlonkVerificationEvals (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/plonk_wasm.cjs:6659:22)\n...\n      at Object.prove_ [as merge] (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:11712:18)\n      at Function.generateProof (src/minanft.ts:183:27)\n      at MinaNFT.commit (src/minanft.ts:133:49)\n      at Object.<anonymous> (test/update.test.ts:35:5)\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "653233526556327946",
+              "name": ".huyminh",
+              "discriminator": "0000",
+              "nickname": "huyminh",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/653233526556327946/042e54a15df541567d5ac2333aa0688a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1162427297240993832",
+      "type": "Default",
+      "timestamp": "2023-10-13T20:31:04.517+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor , could you please look at it?",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1162435181043519609",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:02:24.162+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Update:\nIf I keep the updatePrivateMap function but remove a few other functions from MinaNFTContract, the error throws later in the code, but also at prover. If I remove another few functions from the MinaNFTContract, the error disappears. Although the contract successfully compiles, it seems like the prover cannot handle this number of constraints. \n\nIs there any tool or function that allows us to see the number of constraints of the compiled contract, and what are the limitations?",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162435801284616232",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:04:52.039+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\n    RangeError: offset is out of bounds\n        at Uint32Array.set (<anonymous>)\n\n      at passArray32ToWasm0 (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/plonk_wasm.cjs:560:24)\n      at new WasmFqPlonkVerificationEvals (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/plonk_wasm.cjs:6659:22)\n      at verificationEvalsToRust (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:2420:12)\n      at Object.verifierIndexToRust (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:2511:19)\n      at fq_oracles_create (src/lib/snarkyjs/src/bindings/kimchi/js/bindings.js:877:7)\n      at create (src/lib/crypto/kimchi_backend/common/plonk_dlog_oracles.ml:35:14)\n      at expand_proof (src/lib/pickles/step.ml:320:9)\n      at handler$0 (src/lib/pickles/step.ml:623:9)\n      at run$2 (src/lib/snarky/src/base/request.ml:33:17)\n      at run$4 (src/lib/snarky/src/base/as_prover0.ml:66:17)\n      at ../../../../../../workspace_root/src/lib/snarky/src/base/checked_runner.ml:260:15\n      at ../../../../../../workspace_root/src/lib/snarky/src/base/checked_runner.ml:54:30\n      at exists (src/lib/snarky/src/base/snark0.ml:1213:11)\n      at ../../../../../../workspace_root/src/lib/pickles/step_main.ml:309:9\n      at with_label (src/lib/snarky/src/base/snark0.ml:1253:15)\n      at ../../../../../../workspace_root/src/lib/pickles/step.ml:842:43\n      at handle (src/lib/snarky/src/base/snark0.ml:1237:15)\n      at _ixK_ (src/lib/pickles/step.ml:841:21)\n      at mark_active (src/lib/snarky/src/base/snark0.ml:1167:19)\n      at _o8t_ (src/lib/snarky/src/base/snark0.ml:1302:52)\n      at as_stateful (src/lib/snarky/src/base/snark0.ml:755:15)\n      at ../../../../../../workspace_root/src/lib/snarky/src/base/runners.ml:82:22\n      at ../../../../../../workspace_root/src/lib/snarky/src/base/runners.ml:305:34\n      at ../../../../../../workspace_root/src/lib/snarky/src/base/snark0.ml:1302:19\n      at finalize_is_running (src/lib/snarky/src/base/snark0.ml:1272:15)\n      at generate_witness_conv (src/lib/snarky/src/base/snark0.ml:1301:7)\n      at prove (src/lib/snarkyjs/src/bindings/ocaml/lib/pickles_bindings.ml:499:7)\n      at .yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:11855:59\n      at withThreadPool (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:2677:20)\n      at prettifyStacktracePromise (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:3636:12)\n      at .yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:15229:14\n      at Object.run (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:12051:16)\n      at createZkappProof (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:15222:21)\n      at addProof (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:15215:15)\n      at addMissingProofs (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:15187:42)\n      at Object.prove (o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:15517:38)\n      at MinaNFT.commit (src/minanft.ts:165:5)\n      at Object.<anonymous> (test/update.test.ts:35:5)\n\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162435868619964486",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:05:08.093+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "functions as in methods, or functions you call within methods? try analyzeMethods() on your zkprogram/smart contract to see the amount of constraints you are using , the limit is 2^16",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162436239660699679",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:06:36.556+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "number of @methods in your contract/program shouldnt affect circuit size like this afaik",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1162438527523496117",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:15:42.025+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and the 2^16 is per method for both zkprogram / smart contract, methods are then a part of a ‘wrap circuit’ and there you shouldnt be hitting limitstions afaik",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1162446203720564816",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:46:12.173+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks a lot, I've got two methods with 8160 and 7888 rows, as analyzeMethods()  shows, and  several others are 300, 400, or 800, so even the total is lower than 2^16 = 65536\n\nupdatePrivateMap that I'm adding is a @method:\n```typescript\n  @method updatePrivateMap(secret: Field, proof: MinaNFTMapProof) {\n    this.account.provedState.assertEquals(this.account.provedState.get());\n    this.account.provedState.get().assertTrue();\n\n    const pwdHash = this.pwdHash.get();\n    this.pwdHash.assertEquals(pwdHash);\n    this.pwdHash.assertEquals(Poseidon.hash([secret]));\n\n    const root = this.privateMapRoot.get()\n    this.verifyMapProof(root, proof)\n\n    this.privateMapRoot.set( proof.publicInput.latestRoot) \n  }\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162447393816584232",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:50:55.914+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so if your @method code is below 2^16, you should be fine",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162447761560571944",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:52:23.591+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i'd say lets try an isolate the error, by proving a single @method within a `Mina.transaction`, is the method above the one that fails to prove?",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162448531655757854",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:55:27.196+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "can you point me to `updatePrivateMap` in your repo?",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162448655157035068",
+      "type": "Reply",
+      "timestamp": "2023-10-13T21:55:56.641+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No, it's different, even not from this contract. I've removed the method with 7888 rows that was written just to experiment with MerkleMapWitness on-chain and was not needed for business logic. now everything is working fine!",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1162447761560571944",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1162448898120495197",
+      "type": "Reply",
+      "timestamp": "2023-10-13T21:56:54.568+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/dfstio/minanft-lib/blob/RangeError/src/contract/minanft.ts#L187",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "minanft-lib/src/contract/minanft.ts at RangeError · dfstio/minanft-...",
+          "url": "https://github.com/dfstio/minanft-lib/blob/RangeError/src/contract/minanft.ts",
+          "timestamp": null,
+          "description": "MinaNFT TypeScript/JavaScript integration library. Contribute to dfstio/minanft-lib development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1162448531655757854",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1162449067146739842",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:57:34.867+04:00",
+      "timestampEdited": "2023-10-13T22:00:19.868+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks a lot @maht0rz for help, much appreciated!",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1162449218556936342",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:58:10.966+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "can you also point me to where updatePrivateMap was called?",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162449326568636446",
+      "type": "Reply",
+      "timestamp": "2023-10-13T21:58:36.718+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It is not called or used at all",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1162449218556936342",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1162449410354065478",
+      "type": "Default",
+      "timestamp": "2023-10-13T21:58:56.694+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok so just having it defined as part of the contract, made your proving not work?",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162449460673122354",
+      "type": "Reply",
+      "timestamp": "2023-10-13T21:59:08.691+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Exactly",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1162449410354065478",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1162449756530937926",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:00:19.229+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i dont see anything obvious from the get go when looking at the implementation",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162449870003638352",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:00:46.283+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you could be hitting the memory limit or something, i heard that 10 @methods per contract is the limit of the wasm prover",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162449945907961917",
+      "type": "Reply",
+      "timestamp": "2023-10-13T22:01:04.38+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Agree, also think so",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1162449870003638352",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1162450046088913047",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:01:28.265+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "but you have like 16 methods, we'll see what @gregor says i dont see any reason for the error",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162451211698573402",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:06:06.168+04:00",
+      "timestampEdited": "2023-10-13T22:07:12.253+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It looks like an undocumented limit (or I have missed this part of the documentation) without proper error checking in o1js or some bug with memory or array handling in o1js. \n\nFrom the test, it is clear that the error appears due to increasing the contract size. \n\nLooking forward to @gregor  opinion",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1162451569208479955",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:07:31.405+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "wouldnt happen with Protokit \uD83E\uDD28 or it would \uD83D\uDE04 we're suspectible to the same errors",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162451632601186324",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:07:46.519+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "do you need to be proving at this stage of development btw?",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162451688741941348",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:07:59.904+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's normal, math is complicated))",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162451727795097660",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:08:09.215+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "like.. is all of your logic implemented and you're now switching to proving? i think its pretty inefficient to wait to compile & prove during development",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162452964301082724",
+      "type": "Reply",
+      "timestamp": "2023-10-13T22:13:04.021+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I want to make sure that recursive proofs are working in my setup. I've implemented only half of the logic, starting from easier part, and now, as the code is working, I will add more logic still testing proofs on regular basis to make sure that proofs are not broken by my changes. \n\nCompiling + proofs generation + merging proofs + verifying + deploying + transactions on local blockchain takes 5 minutes, but I'm just writing the next chunk of the code during this time, so it is in parallel",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1162451727795097660",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1162453191087108237",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:13:58.091+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you should be able to use mock proofs as well, same as snarky does during development for account updates. Back in the day i was able to use dummyBase64Proof API but last time i checked i couldnt figure it out",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162454380440731719",
+      "type": "Default",
+      "timestamp": "2023-10-13T22:18:41.655+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No, don't want, I use local blockchain with proofs on purpose. Actually, on Polygon I didn't use at all local blockchain and did testing on Mumbai during development (and still on Polygon mainnet there are execution problems that are not present on Mumbai testnet), but with Mina, it is unfeasible due to 3 minutes block. Still, the next plan is to test on Berkeley, it will take probably 30 min for the test, but some new bugs can be caught.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162471184571564084",
+      "type": "Default",
+      "timestamp": "2023-10-13T23:25:28.072+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey, I'm not surprised, we had this issue with many methods raised internally. It's something that started being observed a couple of weeks ago. Used to work with over 20 methods, now we're seeing problems with something like 10. Will need to be investigated",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "374663548174991362",
+              "name": "maht0rz",
+              "discriminator": "0000",
+              "nickname": "maht0rz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1162471842028716184",
+      "type": "Reply",
+      "timestamp": "2023-10-13T23:28:04.822+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks @gregor ! I've found how to make it working by removing some functions, and will wait now for the resolution of the problem, Please ping me when it will be fixed, I will test again my repo",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1162471184571564084",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1164927175963705354",
+      "type": "Default",
+      "timestamp": "2023-10-20T18:04:42.05+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm also getting a new error: \"TypeError: The encoded data was not valid for encoding utf-8\" in addition to the previous \"RangeError: offset is out of bounds\" when I'm trying to compile several contracts referencing each other:\n```\nTypeError: The encoded data was not valid for encoding utf-8\n\n      at getStringFromWasm0 (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/plonk_wasm.cjs:56:30)\n      at Object.<anonymous>.module.exports.caml_pasta_fp_plonk_circuit_serialize (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/plonk_wasm.cjs:1009:16)\n      at caml_pasta_fp_plonk_circuit_serialize (../../../../../../workspace_root/src/lib/snarkyjs/src/bindings/kimchi/js/bindings.js:341:5)\n      at _bv9_ (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/snarky_js_node.bc.cjs:162536:34)\n      at caml_call2 (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/snarky_js_node.bc.cjs:6797:28)\n      at to_json (../../../../../../workspace_root/src/lib/crypto/kimchi_backend/common/plonk_constraint_system.ml:1087:29)\n      at caml_call1 (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/snarky_js_node.bc.cjs:6795:28)\n      at constraint_system$3 (../../../../../../workspace_root/src/lib/snarkyjs/src/bindings/ocaml/lib/snarky_bindings.ml:53:9)\n      at caml_call_gen (../../../../../../builtin/+stdlib.js:32:12)\n      at caml_call_gen (../../../../../../builtin/+stdlib.js:34:12)\n      at Object.constraintSystem (../../../../../../builtin/+jslib.js:289:12)\n      at Object.constraintSystem (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:3771:45)\n      at analyzeMethod (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:11868:19)\n      at Function.analyzeMethods (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:13730:49)\n      at Function.compile (.yarn/cache/o1js-npm-0.13.1-c58323a2b2-50d802acc5.zip/node_modules/o1js/dist/node/index.cjs:13348:10)\n      at Function.compile (src/minanft.ts:243:55)\n      at Object.<anonymous> (test/update.test.ts:14:3)\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1164927928769974353",
+      "type": "Default",
+      "timestamp": "2023-10-20T18:07:41.533+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Like last time, if I remove some functions or one contract from compilation, everything is working as expected",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE4F",
+            "code": "pray",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f64f.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1164974762699804752",
+      "type": "Default",
+      "timestamp": "2023-10-20T21:13:47.612+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hi, @DFST   I ever met it before:\nhttps://github.com/o1-labs/o1js/issues/1088",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "circuit compilation fail by some errors · Issue #1088 · o1-labs/o1js",
+          "url": "https://github.com/o1-labs/o1js/issues/1088",
+          "timestamp": null,
+          "description": "Background: My Machine: 36c, 128GB. My two circuits' size are not small. When I compile them (with node --experimental-wasm-memory64 ), got the errors respectively as blow: TypeError:The encode...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/UsdCfRYpG_PwXQ4QVAKE_ae1X6vzeDDb4Y-ksuK3VvM/https/opengraph.githubassets.com/ad65d38b70562979300a2fcaf2a253f500186686d8559b02dbc30ac1fd3a133c/o1-labs/o1js/issues/1088",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD25",
+            "code": "fire",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f525.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1164976387443146852",
+      "type": "Reply",
+      "timestamp": "2023-10-20T21:20:14.981+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You're using Merkle Trees, which consume thousands of constraints. Have you tried to move Trees to ZKProgram and feed to the SmartContract proof from ZKProgram? \n\nI'm planning to do it, and I would like to learn from your experience if you have done it already",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "790135754411343882",
+          "name": "coldstar1993",
+          "discriminator": "0000",
+          "nickname": "coldStar1993",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1164974762699804752",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1164977404654129224",
+      "type": "Reply",
+      "timestamp": "2023-10-20T21:24:17.503+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Interesting discussion re 32-bit  kimchi, thank you @coldStar1993 for this",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "790135754411343882",
+          "name": "coldstar1993",
+          "discriminator": "0000",
+          "nickname": "coldStar1993",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1164974762699804752",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166093200763650048",
+      "type": "Reply",
+      "timestamp": "2023-10-23T23:18:04.026+04:00",
+      "timestampEdited": "2023-10-23T23:22:36.134+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I got a third type of compilation error today: \n```\n    thrown: Array [\n      248,\n      MlBytes {\n        \"c\": \"Stack_overflow\",\n        \"l\": 14,\n        \"t\": 0,\n      },\n      -9,\n    ]\n```\nIt occurs only if I compile the ZKProgram contract from https://github.com/dfstio/minanft-lib/blob/master/src/contract/redactedmap.ts  first.\nIf I compile any other contract before it, everything works as expected.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "minanft-lib/src/contract/redactedmap.ts at master · dfstio/minanft-...",
+          "url": "https://github.com/dfstio/minanft-lib/blob/master/src/contract/redactedmap.ts",
+          "timestamp": null,
+          "description": "MinaNFT TypeScript/JavaScript integration library. Contribute to dfstio/minanft-lib development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/jVIS1E4D6DAQzU-LI6CGiosk2SKgEeLZkW2w7JGcc6Q/https/opengraph.githubassets.com/4702e386266a5beeb560f1fe88c93b281879c6a2cf128b968395e9ab3c60ef56/dfstio/minanft-lib",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1162471184571564084",
+        "channelId": "1162426564936466542",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166094582619045948",
+      "type": "Default",
+      "timestamp": "2023-10-23T23:23:33.486+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There are no memory issues here; the contract is relatively small and is being compiled first in this case.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166495822305828904",
+      "type": "Default",
+      "timestamp": "2023-10-25T01:57:56.482+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for reporting!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 40
+}

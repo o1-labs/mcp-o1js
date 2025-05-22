@@ -1,0 +1,2679 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1166232213977833492",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Reading Struct from JSON",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:19:20.6511635+04:00",
+  "messages": [
+    {
+      "id": "1166232213977833492",
+      "type": "Default",
+      "timestamp": "2023-10-24T08:30:27.359+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "When I persist an instance of my Struct in a JSON, and then I load it, it seems like the types of the Struct properties are lost, even though I'm indicating the type and my code editor (VS Code) shows the properties properly typed, but when I access a method on runtime, I get the following error:\n\n```post.allPostsCounter.assertEquals(1);\n                     ^\n\nTypeError: post.allPostsCounter.assertEquals is not a function\n    at file:///home/chrlyz/proof_of_events/build/src/read.js:3:22\n```\n\nWhat would be the proper way to do something like this?",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1050599472071180389",
+              "name": "chrlyz",
+              "discriminator": "0000",
+              "nickname": "chrlyz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1166232229081514024",
+      "type": "Default",
+      "timestamp": "2023-10-24T08:30:30.96+04:00",
+      "timestampEdited": "2023-10-24T23:00:04.529+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here is an example using my Struct:\n\n```ts\nimport { Struct, PublicKey, CircuitString, Field, Poseidon, PrivateKey } from \"o1js\";\nimport fs from 'fs/promises';\n\nexport class PostState extends Struct({\n  posterAddress: PublicKey,\n  postContentID: CircuitString,\n  allPostsCounter: Field,\n  userPostsCounter: Field,\n  postBlockHeight: Field,\n  deletionBlockHeight: Field,\n}) {\n  hash(): Field {\n    return Poseidon.hash(\n      this.posterAddress\n        .toFields()\n        .concat([\n          this.postContentID.hash(),\n          this.allPostsCounter,\n          this.userPostsCounter,\n          this.postBlockHeight,\n          this.deletionBlockHeight,\n        ])\n    );\n  }\n}\n\nconst key = PrivateKey.random();\nconst address = key.toPublicKey();\n\nconst post = new PostState({\n    posterAddress: address,\n    postContentID: CircuitString.fromString(\n        'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'\n      ),\n      allPostsCounter: Field(1),\n      userPostsCounter: Field(1),\n      postBlockHeight: Field(777),\n      deletionBlockHeight: Field(0)\n});\n\nconst postJSON = JSON.stringify(post);\nawait fs.writeFile('./build/src/post.json', postJSON, 'utf-8');\n```\n\n```ts\nimport fs from 'fs/promises';\nimport { PostState } from './write';\nimport { Field } from 'o1js';\n\nconst post: PostState = JSON.parse(\n    await fs.readFile('./build/src/post.json', 'utf8')\n);\n\n// post.allPostsCounter.assertEquals(1); // Throws error\n\nField(post.allPostsCounter).assertEquals(1); // This works\n```",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166305831600529431",
+      "type": "Default",
+      "timestamp": "2023-10-24T13:22:59.168+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This way it works:\n```typescript\nimport {\n  Struct,\n  PublicKey,\n  CircuitString,\n  Field,\n  Poseidon,\n  PrivateKey,\n} from \"o1js\";\nimport fs from \"fs/promises\";\n\nexport class PostState extends Struct({\n  posterAddress: PublicKey,\n  postContentID: CircuitString,\n  allPostsCounter: Field,\n  userPostsCounter: Field,\n  postBlockHeight: Field,\n  deletionBlockHeight: Field,\n}) {\n  hash(): Field {\n    return Poseidon.hash(\n      this.posterAddress\n        .toFields()\n        .concat([\n          this.postContentID.hash(),\n          this.allPostsCounter,\n          this.userPostsCounter,\n          this.postBlockHeight,\n          this.deletionBlockHeight,\n        ])\n    );\n  }\n  toJSON(): any {\n    return {\n      posterAddress: this.posterAddress.toBase58(),\n      postContentID: this.postContentID.toString(),\n      allPostsCounter: this.allPostsCounter.toJSON(),\n      userPostsCounter: this.userPostsCounter.toJSON(),\n      postBlockHeight: this.postBlockHeight.toJSON(),\n      deletionBlockHeight: this.deletionBlockHeight.toJSON(),\n    };\n  }\n  static fromJSON(data: any): PostState {\n    return new PostState({\n      posterAddress: PublicKey.fromBase58(data.posterAddress),\n      postContentID: CircuitString.fromString(data.postContentID),\n      allPostsCounter: Field.fromJSON(data.allPostsCounter),\n      userPostsCounter: Field.fromJSON(data.userPostsCounter),\n      postBlockHeight: Field.fromJSON(data.postBlockHeight),\n      deletionBlockHeight: Field.fromJSON(data.deletionBlockHeight),\n    });\n  }\n}\n\nasync function main() {\n  const key = PrivateKey.random();\n  const address = key.toPublicKey();\n\n  const post = new PostState({\n    posterAddress: address,\n    postContentID: CircuitString.fromString(\n      \"bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi\"\n    ),\n    allPostsCounter: Field(1),\n    userPostsCounter: Field(1),\n    postBlockHeight: Field(777),\n    deletionBlockHeight: Field(0),\n  });\n\n  const writeData = JSON.stringify(post.toJSON(), (_, v) =>\n    typeof v === \"bigint\" ? v.toString() : v\n  )\n    .replaceAll(\"},\", \"},\\n\")\n    .replaceAll(\"[\", \"[\\n\")\n    .replaceAll(\"]\", \"\\n]\");\n  await fs.writeFile(\"post.json\", writeData);\n}\n\nmain();\n```\n\n```typescript\nimport { PostState } from \"./struct\";\nimport { Field } from \"o1js\";\nimport json from \"../post.json\";\n\nconst post: PostState = PostState.fromJSON(json);\n\nconsole.log(post.allPostsCounter.toJSON());\npost.allPostsCounter.assertEquals(1); // This works\n\nField(post.allPostsCounter).assertEquals(1); // This works\n```\n\nHowever, if you use fs.readFile instead of import, it throws an error.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166479530656018472",
+      "type": "Default",
+      "timestamp": "2023-10-25T00:53:12.25+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey, @DFST. Thanks for your response!\n\nDid you add `resolveJsonModule\": true` in your `tsconfig.json`? I needed to add the option to be able to import the json, but now I'm getting the following error:\n\n```shell\nnode:internal/errors:496\n    ErrorCaptureStackTrace(err);\n    ^\n\nTypeError [ERR_IMPORT_ASSERTION_TYPE_MISSING]: Module \"file:///home/chrlyz/proof_of_events/build/post.json\" needs an import assertion of type \"json\"\n    at new NodeError (node:internal/errors:405:5)\n    at validateAssertions (node:internal/modules/esm/assert:95:15)\n    at defaultLoad (node:internal/modules/esm/load:86:3)\n    at nextLoad (node:internal/modules/esm/loader:163:28)\n    at ESMLoader.load (node:internal/modules/esm/loader:603:26)\n    at ESMLoader.moduleProvider (node:internal/modules/esm/loader:457:22)\n    at new ModuleJob (node:internal/modules/esm/module_job:64:26)\n    at #createModuleJob (node:internal/modules/esm/loader:480:17)\n    at ESMLoader.getModuleJob (node:internal/modules/esm/loader:434:34)\n    at async ModuleWrap.<anonymous> (node:internal/modules/esm/module_job:79:21) {\n  code: 'ERR_IMPORT_ASSERTION_TYPE_MISSING'\n}\n\nNode.js v18.17.1\n```",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1166480199878180864",
+      "type": "Default",
+      "timestamp": "2023-10-25T00:55:51.805+04:00",
+      "timestampEdited": "2023-10-25T00:56:23.132+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If I import it like:\n\n```ts\nimport json from \"../post.json\" with { type: \"json\" };\n```\n\nCode editor complains:\n\n`'with' statements are not allowed in strict mode.`\n\nAnd if I import it like this:\n\n```ts\nImport assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'\n```\n\nCode editor complains:\n\n`Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'`",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166480484415586435",
+      "type": "Default",
+      "timestamp": "2023-10-25T00:56:59.644+04:00",
+      "timestampEdited": "2023-10-25T00:57:17.016+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Not sure how I should proceed",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166480613860188241",
+      "type": "Reply",
+      "timestamp": "2023-10-25T00:57:30.506+04:00",
+      "timestampEdited": "2023-10-25T00:57:49.293+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You are welcome! Yes, it's my tsconfig.json:",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1166480608592134205",
+          "url": "https://cdn.discordapp.com/attachments/1166232213977833492/1166480608592134205/tsconfig.json?ex=680b4e79&is=6809fcf9&hm=a9432b3deaa182639eff5c5720c186f9e35f44ec736e04e05178f625226152a8&",
+          "fileName": "tsconfig.json",
+          "fileSizeBytes": 1316
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166479530656018472",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166483153708396564",
+      "type": "Reply",
+      "timestamp": "2023-10-25T01:07:36.053+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks again, I'll look into the ts configuration. Just one more question. Why did you use this condition in the replacer function in stringify:\n\n```ts\ntypeof v === \"bigint\" ? v.toString() : v\n```\n\nWe don't have any bigints in this Struct, right? \uD83E\uDD14",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166480613860188241",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166485685163806842",
+      "type": "Reply",
+      "timestamp": "2023-10-25T01:17:39.599+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It’s just my standard template that I use",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166483153708396564",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166485840231399534",
+      "type": "Reply",
+      "timestamp": "2023-10-25T01:18:16.57+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Got it \uD83D\uDC4D",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166485685163806842",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166496461735862363",
+      "type": "Default",
+      "timestamp": "2023-10-25T02:00:28.934+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@chrlyz every Struct has a built-in fromJson method. With that it should work. You don't have to write your own as @DFST suggested",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        },
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1166496745648308345",
+      "type": "Default",
+      "timestamp": "2023-10-25T02:01:36.624+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "PostState.fromJson(JSON.parse(...))",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166512494043463750",
+      "type": "Reply",
+      "timestamp": "2023-10-25T03:04:11.334+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey, @gregor, neat! Thanks for responding! When I do this:\n\n```ts\nconst post: PostState = JSON.parse(\n    await fs.readFile('./build/src/post.json', 'utf8')\n);\n```\n\nThe code editor shows:\n\n```shell\nProperty 'hash' is missing in type '{ posterAddress: PublicKey; postContentID: any; allPostsCounter: Field; userPostsCounter: Field; postBlockHeight: Field; deletionBlockHeight: Field; }' but required in type 'PostState'.\n```\n\nShould I do the following instead to fully restore the type of my Struct (including its hash method)?\n\n```ts\nconst post = JSON.parse(\n    await fs.readFile('./build/src/post.json', 'utf8')\n);\n\nconst fullyTypedPost = new PostState(post);\n```\nOr am I missing something?",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166496745648308345",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166512806120673310",
+      "type": "Reply",
+      "timestamp": "2023-10-25T03:05:25.739+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You're missing that I gave you a code snippet \uD83D\uDE05",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166512494043463750",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166513634348896327",
+      "type": "Reply",
+      "timestamp": "2023-10-25T03:08:43.204+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Lol, but do you think doing something like this would be the way to go here?\n\n```ts\nconst post = JSON.parse(\n    await fs.readFile('./build/src/post.json', 'utf8')\n);\n\nconst fullyTypedPost = new PostState(post);\n```",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166512806120673310",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166513799797424208",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:09:22.65+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No, you do need PostState.fromJSON",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166513984543932476",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:10:06.697+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, sorry, I copied the wrong snippet. I meant this:\n\n```ts\n  const post1 = PostState.fromJSON(\n    JSON.parse(await fs.readFile('./build/src/post1.json', 'utf8'))\n  );\n\n  const p: PostState = new PostState(post1);\n```",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166514261141500008",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:11:12.643+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Isn't post1 already a PostState, so you don't need the constructor?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166514633272741970",
+      "type": "Reply",
+      "timestamp": "2023-10-25T03:12:41.366+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I get an error saying that it is missing its \"hash\" property, which is the only method I define in PostState",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166514261141500008",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166514792245235742",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:13:19.268+04:00",
+      "timestampEdited": "2023-10-25T03:13:46.24+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's like if I'm only recovering the object with its values",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166514944959840306",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:13:55.678+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hm that's frustrating. If you ignore TS and override the type, does it work?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166515102455959572",
+      "type": "Reply",
+      "timestamp": "2023-10-25T03:14:33.228+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Not sure what you mean by this \uD83D\uDE05",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166514944959840306",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166515196404191333",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:14:55.627+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is the hash() method present at runtime?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166515252784013332",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:15:09.069+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, let me see",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166515707677257748",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:16:57.524+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah I remember this. There's no way for the Struct type to know the type of the class that extends it. That's why it can't give you the correct type",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166515781400543292",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:17:15.101+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But I think at runtime it should be correct",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166515987366031400",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:18:04.207+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It doesn't compile. I can't fool ts \uD83D\uDE06",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166516448785617066",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:19:54.218+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Lol come on \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166516559112572950",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:20:20.522+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I remember having this issue a long time ago, while reading actions and trying to access the method of the actionType, and just opted for instantiating a new object from the recovered action",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1166516575197745152",
+      "type": "Default",
+      "timestamp": "2023-10-25T03:20:24.357+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So anyway I think passing it to the constructor is the way to go!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166516730407952394",
+      "type": "Reply",
+      "timestamp": "2023-10-25T03:21:01.362+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yep, thanks for the help!",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166516575197745152",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166651224163106867",
+      "type": "Reply",
+      "timestamp": "2023-10-25T12:15:27.172+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Agree. This is the amended code:\n```typescript\nimport {\n  Struct,\n  PublicKey,\n  CircuitString,\n  Field,\n  Poseidon,\n  PrivateKey,\n} from \"o1js\";\nimport fs from \"fs/promises\";\n\nexport class PostState extends Struct({\n  posterAddress: PublicKey,\n  postContentID: CircuitString,\n  allPostsCounter: Field,\n  userPostsCounter: Field,\n  postBlockHeight: Field,\n  deletionBlockHeight: Field,\n}) {\n  hash(): Field {\n    return Poseidon.hash(\n      this.posterAddress\n        .toFields()\n        .concat([\n          this.postContentID.hash(),\n          this.allPostsCounter,\n          this.userPostsCounter,\n          this.postBlockHeight,\n          this.deletionBlockHeight,\n        ])\n    );\n  }\n}\n\nasync function main() {\n  const key = PrivateKey.random();\n  const address = key.toPublicKey();\n\n  const post = new PostState({\n    posterAddress: address,\n    postContentID: CircuitString.fromString(\n      \"bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi\"\n    ),\n    allPostsCounter: Field(1),\n    userPostsCounter: Field(1),\n    postBlockHeight: Field(777),\n    deletionBlockHeight: Field(0),\n  });\n\n  const writeData = JSON.stringify(post);\n  await fs.writeFile(\"post.json\", writeData);\n}\n\nmain();\n```\n\n```typescript\nimport { PostState } from \"./struct\";\nimport { Field } from \"o1js\";\nimport json from \"../post.json\";\n\nconst post: PostState = PostState.fromJSON(json) as PostState;\n\nconsole.log(post.allPostsCounter.toJSON());\npost.allPostsCounter.assertEquals(1); // This works\n\nField(post.allPostsCounter).assertEquals(1); // This works\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166496745648308345",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1166652113393287190",
+      "type": "Default",
+      "timestamp": "2023-10-25T12:18:59.181+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Working variant with fs.readFile:\n```typescript\nimport { PostState } from \"./struct\";\nimport { Field } from \"o1js\";\nimport fs from \"fs/promises\";\n\nasync function main() {\n  const post: PostState = PostState.fromJSON(\n    JSON.parse(await fs.readFile(\"post.json\", \"utf-8\"))\n  ) as PostState;\n\n  console.log(post.allPostsCounter.toJSON());\n  post.allPostsCounter.assertEquals(1); // This works\n\n  Field(post.allPostsCounter).assertEquals(1); // This works\n}\n\nmain();\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1166652846272413758",
+      "type": "Default",
+      "timestamp": "2023-10-25T12:21:53.913+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@chrlyz , does it solve your issue?",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1166812420963053598",
+      "type": "Reply",
+      "timestamp": "2023-10-25T22:55:59.484+04:00",
+      "timestampEdited": "2023-10-25T22:56:13.374+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes! It looks like adding `as PostState` after loading the object using `.fromJSON()` does the trick, and it's not necessary to instantiate another object. Thanks \uD83D\uDE4C",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            },
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1166652846272413758",
+        "channelId": "1166232213977833492",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 35
+}

@@ -1,0 +1,446 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1298295141299392543",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Proving a Bytes is a subarray of another Bytes",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:30:22.021458+04:00",
+  "messages": [
+    {
+      "id": "1298295141299392543",
+      "type": "Default",
+      "timestamp": "2024-10-22T18:41:22.843+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/egemengol/o1-questions/blob/f3f380d10b0ea00b497e2f04775025195dae8abd/src/subarray.ts\n\nThe idea here is, giving the needle, haystack, and the offset and let the circuit only check that slice.\n\nHowever, since we cannot use Fields for indexing, I tried masking the subarray via Provable.if\n\nMasking is working but I cannot describe `haystack[i] === needle[i-offset]`, since i is number and offset is field.\n\nIs this possible? For the zkPassport grant, we seem to need this subarray equality functionality.\n\nBest,\nEgemen",
+      "author": {
+        "id": "263230286274232320",
+        "name": "egemengol",
+        "discriminator": "0000",
+        "nickname": "Egemen",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/263230286274232320/2f773cd494bae4a2e74841b8b3f64bd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "o1-questions/src/subarray.ts at f3f380d10b0ea00b497e2f04775025195da...",
+          "url": "https://github.com/egemengol/o1-questions/blob/f3f380d10b0ea00b497e2f04775025195dae8abd/src/subarray.ts",
+          "timestamp": null,
+          "description": "Contribute to egemengol/o1-questions development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/Qn3eXOb4NFkDiEaRgjyL7VZ5kQB2Y5XAy41YC8rjgL8/https/opengraph.githubassets.com/09175ba91a482441aa811fd4104bcacaaf7532c7eabb0a6aa3bdb522e9cabb4a/egemengol/o1-questions",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298993630324719686",
+      "type": "Default",
+      "timestamp": "2024-10-24T16:56:55.604+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Maybe the question got lost in the question list, since all but one newer questions have seen activity.\n\nWould love to discuss this with anyone interested \uD83D\uDE42",
+      "author": {
+        "id": "263230286274232320",
+        "name": "egemengol",
+        "discriminator": "0000",
+        "nickname": "Egemen",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/263230286274232320/2f773cd494bae4a2e74841b8b3f64bd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1299005950358716458",
+      "type": "Default",
+      "timestamp": "2024-10-24T17:45:52.929+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah, that's an interesting question! I started implementing a DynamicArray type, also with zk passport in mind, here: https://github.com/zksecurity/mina-credentials/pull/25\n\nI think a possible strategy is to get a shifted version of one of the arrays first, say you compute\n```\nhaystackShifted = [haystack[offset], haystack[offset + 1], ..., haystack[needle.maxLength-offset-1]]\n```\nwhere the length equals the max length of `needle`.\n\nhowever, you do that computation with masking techniques in a circuit instead of code like I wrote.\n\nwill think about it more, I also want to add this operation to my DynamicArray.\n\n(note, we're kinda working together on zk passport since it's needed for both of our grants \uD83D\uDE4C )",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1299043819169513574",
+      "type": "Default",
+      "timestamp": "2024-10-24T20:16:21.557+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this is what I came up with, it works: https://github.com/zksecurity/mina-credentials/pull/46\n(depends on a small fix to o1js that I will make)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Substring circuit by mitschabaude · Pull Request #46 · zksecurity/m...",
+          "url": "https://github.com/zksecurity/mina-credentials/pull/46",
+          "timestamp": null,
+          "description": "",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/t31TXHcV7bHCbDWgObiDWBpJzsvdfetjYpVz6Xr1VVc/https/opengraph.githubassets.com/7438a10c571b278859451191dfca90cebfb208ab2ebd668f6490bc3ec700e4f3/zksecurity/mina-credentials/pull/46",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1299048250900484151",
+      "type": "Default",
+      "timestamp": "2024-10-24T20:33:58.164+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "there are other ways to do it as well. For example, you could go through all indices i and check if the subarray is contained at i.\nI picked my approach with witnessing the index because it's suitable to be made more efficient with array lookups, which o1Labs is working on atm",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1299293138816340070",
+      "type": "Default",
+      "timestamp": "2024-10-25T12:47:03.993+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If the byte length of the needle and haystack are static, you can use zk-regex for substring searches without requiring an offset.\nhttps://github.com/Shigoto-dev19/zk-regex-o1js",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - Shigoto-dev19/zk-regex-o1js: A library for verifying zero-...",
+          "url": "https://github.com/Shigoto-dev19/zk-regex-o1js",
+          "timestamp": null,
+          "description": "A library for verifying zero-knowledge regular expressions on the Mina blockchain. - Shigoto-dev19/zk-regex-o1js",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/w6aFG3p1YoXTLaCXO1UUQq9mm8TUIhxhrn_BFBoKxKs/https/opengraph.githubassets.com/b8886e9cedb673cf84d40b2cdecce332e13b5486441e1e252d2bf0c678049c95/Shigoto-dev19/zk-regex-o1js",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1301560680721285254",
+      "type": "Default",
+      "timestamp": "2024-10-31T18:57:28.112+04:00",
+      "timestampEdited": "2024-10-31T18:59:09.389+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @MahmoudK19 \nI feel like using regex for substring search for a needle that I know the offset of, is a bit overkill. It would work though, thanks \uD83D\uDE42\n\n@gregor I think that would be the correct approach in the general case, after thinking about the problem I realized my inputs are not general, in fact they are quite regular. \nFor the simple case, I know the offset on compile time, for the complex case I know the offset can be one of at most 16 places in the haystack.\n\nI will \"brute force\" search between them using the \"try all, see if one fits\" approach.\n\nThank you guys though, at least I know \"bruteforcing\" is the idiomatic approach here, instead of the offset idea that I had\n\nThanks \uD83D\uDE42",
+      "author": {
+        "id": "263230286274232320",
+        "name": "egemengol",
+        "discriminator": "0000",
+        "nickname": "Egemen",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/263230286274232320/2f773cd494bae4a2e74841b8b3f64bd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        },
+        {
+          "id": "418492902088507403",
+          "name": "creepyk19",
+          "discriminator": "0000",
+          "nickname": "MahmoudK19",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 7
+}

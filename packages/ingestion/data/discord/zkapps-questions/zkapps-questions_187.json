@@ -1,0 +1,544 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1273194686210637824",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Token Standard how to create a transfer only with the account update ?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:23:47.3188719+04:00",
+  "messages": [
+    {
+      "id": "1273194686210637824",
+      "type": "Default",
+      "timestamp": "2024-08-14T12:21:08.006+04:00",
+      "timestampEdited": "2024-08-14T12:22:07.15+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello,\nI tried to execute a simple transfer from an account to an other in my contract, actually I use this method (I want to replace it) :\n```const addressA = this.tokenA.getAndRequireEquals();\n\nlet tokenContractA = new TokenA(addressA);\nlet dexX = AccountUpdate.create(this.address, tokenContractA.deriveTokenId());\n\nlet sender = this.sender.getUnconstrained();\nawait tokenContractA.transfer(sender, dexX, amount);\n```\n\nI tried this but I think it's missing something :\n```    @method async deposit(amount: UInt64) {\n        const addressA = this.tokenA.getAndRequireEquals();\n\n        amount.assertGreaterThan(UInt64.zero, \"No amount A supplied\");\n\n        let tokenAccount = AccountUpdate.default(addressA);\n        let tokenId = TokenId.derive(addressA, tokenAccount.tokenId);\n\n        let sender = this.sender.getUnconstrained();\n        // await tokenContractA.transfer(sender, dexX, amount);\n\n        let from = AccountUpdate.default(sender, tokenId);\n        from.requireSignature();\n        from.label = `${this.constructor.name}.transfer() (from)`;\n\n        let to = AccountUpdate.default(this.address, tokenId);\n        from.balanceChange = Int64.from(amount).negV2();\n        to.balanceChange = Int64.from(amount);\n        to.label = `${this.constructor.name}.transfer() (to)`;\n\n        let forest = this.toForest([from, to]);\n        let totalBalanceChange = from.balanceChange.add(to.balanceChange);\n\n        // prove that the total balance change is zero\n        totalBalanceChange.assertEquals(0);\n        tokenAccount.approve(forest);\n\n    }```",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1275703272941948960",
+      "type": "Default",
+      "timestamp": "2024-08-21T10:29:21.69+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hey @Youtpout so one thing I'm noticing is that you're missing `await` in front of `tokenAccount.approve(forest)`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1275703684696903701",
+      "type": "Default",
+      "timestamp": "2024-08-21T10:30:59.86+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "another small nit: this logic to assert that the total balance change is 0 is unnecessary\n> let totalBalanceChange = from.balanceChange.add(to.balanceChange);\n> \n>         // prove that the total balance change is zero\n>         totalBalanceChange.assertEquals(0);\n\nyou are creating the `to` and `from` balance changes right above by adding / subtracting the same `amount`, which already ensures they sum to zero",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1275703816184008725",
+      "type": "Reply",
+      "timestamp": "2024-08-21T10:31:31.209+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I discuss with Philipp, it seems I need to call explicitly contract.approve function",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1275703272941948960",
+        "channelId": "1273194686210637824",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1275703871129387068",
+      "type": "Default",
+      "timestamp": "2024-08-21T10:31:44.309+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yes but with `await`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1275704219869118498",
+      "type": "Default",
+      "timestamp": "2024-08-21T10:33:07.455+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I will check that but finally I will just use tokenstandard implementations et don’t deal with account updates",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1275704371556126765",
+      "type": "Default",
+      "timestamp": "2024-08-21T10:33:43.62+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "makes sense, the token standard method `transfer()` does really the same thing as you do here",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1275704678197362709",
+      "type": "Default",
+      "timestamp": "2024-08-21T10:34:56.729+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "apart from the missing `await` your deposit code looks good to me btw",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1275704812750635059",
+      "type": "Reply",
+      "timestamp": "2024-08-21T10:35:28.809+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I used transfer before, but if the token didn’t use token standard the proof generation failed, so I would deal with account updates to check if I can transfer token independantly of theirs implementation code",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1275704371556126765",
+        "channelId": "1273194686210637824",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1275705385193574431",
+      "type": "Default",
+      "timestamp": "2024-08-21T10:37:45.29+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "got it, I'm glad you got it working with the token standard, using the standard is the way to go",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "295757910691151873",
+              "name": "youtpout",
+              "discriminator": "0000",
+              "nickname": "Youtpout",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 10
+}

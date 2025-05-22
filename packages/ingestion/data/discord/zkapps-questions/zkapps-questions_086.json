@@ -1,0 +1,1869 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1305961498895454209",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error: @method decorator was applied to [object Object], which is not a function.    at method (/pa",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:21:45.2044316+04:00",
+  "messages": [
+    {
+      "id": "1305961498895454209",
+      "type": "Default",
+      "timestamp": "2024-11-12T22:24:44.928+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm deploying a Mina zkApp server-side using o1js and encountering this error:\nError: @method decorator was applied to [object Object], which is not a function.\n    at method (/path/to/zkapp.ts:118:11)\n    ...\nHere's my setup:\n\n1. Game Contract Code:\n\nimport { SmartContract, method, state, State, PublicKey, UInt64 } from 'o1js';\n\nexport class GameContract extends SmartContract {\n  @state(PublicKey) player1 = State<PublicKey>();\n  @state(PublicKey) player2 = State<PublicKey>();\n  @state(UInt64) totalAmount = State<UInt64>();\n\n  @method async initGame(player1Address: PublicKey, player2Address: PublicKey) {\n    this.player1.set(player1Address);\n    this.player2.set(player2Address);\n    this.send({ to: this.address, amount: UInt64.from(1_000_000_000) });\n  }\n  .....\n}\n2. Contract Deployment (Server-Side):\n\nimport { PrivateKey, PublicKey, UInt64, Mina, AccountUpdate } from \"o1js\";\nimport { GameContract } from \"../../contracts/src/Game\";\n\nasync function deployGameContract(\n  deployerKey: PrivateKey,\n  players: PublicKey[]\n): Promise<{ zkAppAddress: string; txId: string }> {\n  const zkAppPrivateKey = PrivateKey.random();\n  const zkAppAddress = zkAppPrivateKey.toPublicKey();\n  const zkAppInstance = new GameContract(zkAppAddress);\n\n  const Network = Mina.Network(\"https://api.minascan.io/node/devnet/v1/graphql\");\n  Mina.setActiveInstance(Network);\n\n  const deployTransaction = await Mina.transaction(\n    {\n      sender: deployerKey.toPublicKey(),\n      fee: UInt64.from(1_000_000),\n    },\n    async () => {\n      AccountUpdate.fundNewAccount(deployerKey.toPublicKey());\n      zkAppInstance.deploy(); // Deploy zkApp\n      zkAppInstance.initGame(players[0], players[1]);\n    }\n  );\n\n...\n}\n\nAdditional Information:\n\nThis code is executed server-side.\nNode version: 22.3.0.\nCould the issue be due to my TypeScript setup or Node version compatibility with o1js? Any guidance would be appreciated!",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1305969188359376987",
+      "type": "Default",
+      "timestamp": "2024-11-12T22:55:18.239+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "use await\n```\nawait zkAppInstance.deploy();\nawait zkAppInstance.initGame(players[0], players[1]);\n```",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1305979211730649109",
+      "type": "Default",
+      "timestamp": "2024-11-12T23:35:07.997+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Make sure that your tsconfig.json has\n```\n\"experimentalDecorators\": true, // needed for decorators\n\"emitDecoratorMetadata\": true, // needed for decorators\n\"useDefineForClassFields\": false, // ensure correct behaviour of class fields with decorators\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306138058327851008",
+      "type": "Default",
+      "timestamp": "2024-11-13T10:06:19.977+04:00",
+      "timestampEdited": "2024-11-13T10:09:38.388+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I added both suggestions above into the code  and i unfortunately still have the same problem.\n1. Smart COntract\nimport { SmartContract, method, state, State, PublicKey, UInt64 } from 'o1js';\n\nexport class GameContract extends SmartContract {\n  @state(PublicKey) player1 = State<PublicKey>();\n  @state(PublicKey) player2 = State<PublicKey>();\n  @state(UInt64) totalAmount = State<UInt64>();\n\n  @method async initGame(player1Address: PublicKey, player2Address: PublicKey) {\n    this.player1.set(player1Address);\n    this.player2.set(player2Address);\n\n    this.send({ to: this.address, amount: UInt64.from(1_000_000_000) });\n  }\n\n  @method async distributeReward(winnerAddress: PublicKey) {\n    const p1 = this.player1.get();\n    const p2 = this.player2.get();\n\n    const isWinnerValid = winnerAddress.equals(p1).or(winnerAddress.equals(p2));\n    isWinnerValid.assertTrue('Winner must be one of the two players');\n\n    this.send({ to: winnerAddress, amount: UInt64.from(2_000_000_000) });\n  }\n}",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306138124258381855",
+      "type": "Default",
+      "timestamp": "2024-11-13T10:06:35.696+04:00",
+      "timestampEdited": "2024-11-13T10:07:02.34+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "2. Deploy Contract function in server side\n\n\nimport { PrivateKey, PublicKey, UInt64, Mina, AccountUpdate } from \"o1js\";\nimport { GameContract } from \"../../contracts/src/Game\";\n\n/**\n * Helper function to deploy the GameContract smart contract\n * @param {PrivateKey} deployerKey - The private key for the deployer account\n * @param {PublicKey[]} players - Array of public keys for players (2 players)\n * @returns {Promise<{ zkAppAddress: string; txId: string }>} - Returns the zkApp address and transaction ID\n */\nasync function deployGameContract(\n  deployerKey: PrivateKey,\n  players: PublicKey[]\n): Promise<{ zkAppAddress: string; txId: string }> {\n  const zkAppPrivateKey = PrivateKey.random();\n  const zkAppAddress = zkAppPrivateKey.toPublicKey();\n  const zkAppInstance = new GameContract(zkAppAddress);\n\n  const Network = Mina.Network(\n    \"https://api.minascan.io/node/devnet/v1/graphql\"\n  );\n  Mina.setActiveInstance(Network);\n\n  const deployTransaction = await Mina.transaction(\n    {\n      sender: deployerKey.toPublicKey(),\n      fee: UInt64.from(1_000_000),\n    },\n    async () => {\n      AccountUpdate.fundNewAccount(deployerKey.toPublicKey());\n      await zkAppInstance.deploy();\n      await zkAppInstance.initGame(players[0], players[1]);\n    }\n  );\n\n  await deployTransaction.sign([deployerKey, zkAppPrivateKey]);\n  const pendingTransaction = await deployTransaction.send();\n  const txId = pendingTransaction.hash;\n\n  return { zkAppAddress: zkAppAddress.toBase58(), txId };\n}\n\nexport { deployGameContract };",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306138366646947900",
+      "type": "Default",
+      "timestamp": "2024-11-13T10:07:33.486+04:00",
+      "timestampEdited": "2024-11-13T10:10:19.641+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "3. tsconfig in server side\n{\n  \"compilerOptions\": {\n    \"outDir\": \"./dist\",\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"Bundler\",\n    \"target\": \"ES2020\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"allowJs\": true,\n    \"resolveJsonModule\": true,\n    \"experimentalDecorators\": true,\n    \"emitDecoratorMetadata\": true,\n    \"useDefineForClassFields\": false\n  },\n  \"include\": [\"**/*.ts\"],\n  \"exclude\": [\"node_modules\", \"dist\"]\n}",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306155476555141151",
+      "type": "Default",
+      "timestamp": "2024-11-13T11:15:32.806+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you share your package.json?",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306172829682761751",
+      "type": "Default",
+      "timestamp": "2024-11-13T12:24:30.114+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've tried to run your code inside my next.js project, and it works (with some corrections).\nYou can check my configuration at\nhttps://github.com/zkcloudworker/minatokens-ui/blob/main/next.config.mjs\nhttps://github.com/zkcloudworker/minatokens-ui/blob/main/tsconfig.json\nsee the corrected code at\nhttps://github.com/zkcloudworker/minatokens-ui/blob/main/src/pages/api/v1/test1.ts#L40\nand run it today (I will disable the endpoint tomorrow) by\n```\ncurl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  https://minatokens.com/api/v1/test1\n```\nthat gives\n```\n{\"zkAppAddress\":\"B62qk35LU5nT86MBYB79SCt7qG1jUKAWynMXiV1sMDKpL3ue3KpPi63\",\"txId\":\"5JuGhbQr5WpYG2emRzVGipzJEPiK57Jrkgmy1nmnMfUi9oXhBusP\"}\n```\nand tx on devnet\nhttps://minascan.io/devnet/tx/5JuGhbQr5WpYG2emRzVGipzJEPiK57Jrkgmy1nmnMfUi9oXhBusP?type=zk-tx",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306205611616243825",
+      "type": "Reply",
+      "timestamp": "2024-11-13T14:34:45.936+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sure, the package json for serverside is as below\n{\n  \"type\": \"module\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"prebuild\": \"rm -rf dist\",\n    \"dev\": \"nodemon --exec tsx index.ts\",\n    \"build\": \"tsc\",\n    \"start\": \"node dist/index.js\"\n  },\n  \"dependencies\": {\n    \"@types/express\": \"^5.0.0\",\n    \"@types/node\": \"^22.9.0\",\n    \"@types/socket.io\": \"^3.0.2\",\n    \"express\": \"^4.21.1\",\n    \"o1js\": \"^2.0.0\",\n    \"socket.io\": \"^4.8.1\"\n  },\n  \"devDependencies\": {\n    \"nodemon\": \"^3.1.7\",\n    \"tsx\": \"^4.19.2\",\n    \"@types/express\": \"^4.17.15\",\n    \"@types/node\": \"^20.16.5\"\n  }\n}",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "401088306210799616",
+          "name": "borays",
+          "discriminator": "0000",
+          "nickname": "boray",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1306155476555141151",
+        "channelId": "1305961498895454209",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1306206056405401651",
+      "type": "Reply",
+      "timestamp": "2024-11-13T14:36:31.982+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you, I am looking into it now.",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1306172829682761751",
+        "channelId": "1305961498895454209",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1306208030039212054",
+      "type": "Default",
+      "timestamp": "2024-11-13T14:44:22.533+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and this is my repo\nhttps://github.com/SerkanToraman/zkApp-tileMatch",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - SerkanToraman/zkApp-tileMatch",
+          "url": "https://github.com/SerkanToraman/zkApp-tileMatch",
+          "timestamp": null,
+          "description": "Contribute to SerkanToraman/zkApp-tileMatch development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306208944921772053",
+      "type": "Default",
+      "timestamp": "2024-11-13T14:48:00.658+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do you intend to run the server 24/7 instead of using \"use server\" functions? You will need the server with 8GB of RAM for proving to work that should be restarted a few times a day to run o1js proving reliably",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306211540755808266",
+      "type": "Default",
+      "timestamp": "2024-11-13T14:58:19.553+04:00",
+      "timestampEdited": "2024-11-13T15:09:48.53+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I dont understand  what you meant above. I am new to SmartContracts.\nI have been thinking to make a multiplayer game with socket io  and the server will run 24/7.\nAdditionally, i wanted to initilise the contract in the serverSide.  So will this require  8gb ram useage?",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306218443598598214",
+      "type": "Reply",
+      "timestamp": "2024-11-13T15:25:45.319+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, for compiling and proving, it is better to have 8 GB (I use 10 GB). 3 GB will work, but only with proper caching of provers keys and some manual/automatic server restarts when it hangs on low memory conditions.\n\"use server\" are serverless next.js functions that have max 3 GB RAM, they are not optimal for proving, but can do it. It is better to use serverless functions with more memory.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "438592997609701377",
+          "name": "strader6495",
+          "discriminator": "0000",
+          "nickname": "serkan",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1306211540755808266",
+        "channelId": "1305961498895454209",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1306219583895633951",
+      "type": "Default",
+      "timestamp": "2024-11-13T15:30:17.187+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am using express for my server. So i think i will not be limited by memory constraints.",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306220476208644196",
+      "type": "Default",
+      "timestamp": "2024-11-13T15:33:49.931+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "My main problem for the time being,  the code throws this error below when i run the server.\n\n \n/Mina/zkApp-tileGame/contracts/node_modules/o1js/src/lib/mina/zkapp.ts:118\n    throw Error(\n          ^\n\n\nError: @method decorator was applied to `[object Object]`, which is not a function.\n    at method (/Mina/zkApp-tileGame/contracts/node_modules/o1js/src/lib/mina/zkapp.ts:118:11)\n    at __decorateElement (f/Mina/zkApp-tileGame/contracts/src/Game.ts:1:2161)\n    at <anonymous> (/Mina/zkApp-tileGame/contracts/src/Game.ts:16:11)\n    at ModuleJob.run (node:internal/modules/esm/module_job:262:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:474:24)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:109:5)",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306220586569039913",
+      "type": "Default",
+      "timestamp": "2024-11-13T15:34:16.243+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I updated the tsconfig.json but it seems it didnt help",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306237983900307537",
+      "type": "Default",
+      "timestamp": "2024-11-13T16:43:24.09+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've managed to build server with the tsconfig.json below\n```json\n{\n  \"compilerOptions\": {\n    \"outDir\": \"./dist\",\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"Bundler\",\n    \"target\": \"ES2020\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"allowJs\": true,\n    \"resolveJsonModule\": true,\n    \"experimentalDecorators\": true,\n    \"emitDecoratorMetadata\": true,\n    \"useDefineForClassFields\": true,\n    \"allowSyntheticDefaultImports\": true,\n    \"sourceMap\": true,\n    \"declaration\": true,\n    \"skipLibCheck\": true\n  },\n  \"include\": [\"**/*.ts\"],\n  \"exclude\": [\"node_modules\", \"dist\"]\n}\n```",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306239982834552913",
+      "type": "Default",
+      "timestamp": "2024-11-13T16:51:20.673+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can also start your zkApp from the existing template https://github.com/DeMonkeyCoder/scaffold-mina\n@TheMonkeyCoder can help you learn it",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "453866498482503681",
+          "name": "themonkeycoder",
+          "discriminator": "0000",
+          "nickname": "TheMonkeyCoder",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/453866498482503681/bba17e0086be6d7fad6156f613fc8fa2.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1306246090080784454",
+      "type": "Reply",
+      "timestamp": "2024-11-13T17:15:36.754+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi\nThanks for your mention!",
+      "author": {
+        "id": "453866498482503681",
+        "name": "themonkeycoder",
+        "discriminator": "0000",
+        "nickname": "TheMonkeyCoder",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/453866498482503681/bba17e0086be6d7fad6156f613fc8fa2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1306239982834552913",
+        "channelId": "1305961498895454209",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1306246349959725148",
+      "type": "Default",
+      "timestamp": "2024-11-13T17:16:38.714+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm outdoors right now but will check your issue in a few hours @serkan",
+      "author": {
+        "id": "453866498482503681",
+        "name": "themonkeycoder",
+        "discriminator": "0000",
+        "nickname": "TheMonkeyCoder",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/453866498482503681/bba17e0086be6d7fad6156f613fc8fa2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "438592997609701377",
+          "name": "strader6495",
+          "discriminator": "0000",
+          "nickname": "serkan",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+        }
+      ]
+    },
+    {
+      "id": "1306250380107317290",
+      "type": "Default",
+      "timestamp": "2024-11-13T17:32:39.576+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Many thanks \uD83D\uDE4F",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306263098570834021",
+      "type": "Reply",
+      "timestamp": "2024-11-13T18:23:11.894+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Does this config work for you?",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1306237983900307537",
+        "channelId": "1305961498895454209",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1306322301045837835",
+      "type": "Default",
+      "timestamp": "2024-11-13T22:18:26.864+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "no, it didn't unfortunately",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306329320205193267",
+      "type": "Reply",
+      "timestamp": "2024-11-13T22:46:20.362+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Since I am new to zkApps, I am not sure but it seems the approach in this repo is not the same.\nI think smart contract is already deployed and zkAppAddress is being passed to the Context Provider in the client side as below.\n <QuestContractProvider\n      zkappPublicKey={PublicKey.fromBase58(\n        \"B62qjDnppFhY5tsEmLbCDRniCoJcYqLmHpEeXVfwM4Ej18uJFhTrmBb\"\n      )}\n    >\nBut what i want is to deploy the contract in the server side  and pass the zkappPublicKey to client side. and I recieve the error I mentioned before.",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1306239982834552913",
+        "channelId": "1305961498895454209",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1306334070912847983",
+      "type": "Reply",
+      "timestamp": "2024-11-13T23:05:13.019+04:00",
+      "timestampEdited": "2024-11-13T23:14:03.009+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You already have three working examples of how to handle SmartContract code. \n\nYou can take any of those examples as the template for your code, or you can work on your repo by changing the configuration in the package.json and tsconfig.json to make it work, using the info from the examples. \n\nIf you want to do this, you first need to put in order your package.json, which now uses incompatible versions of the same packages in the different parts of the package.json.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "438592997609701377",
+          "name": "strader6495",
+          "discriminator": "0000",
+          "nickname": "serkan",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1306329320205193267",
+        "channelId": "1305961498895454209",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1306393857222639648",
+      "type": "Default",
+      "timestamp": "2024-11-14T03:02:47.186+04:00",
+      "timestampEdited": "2024-11-14T03:03:04.616+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I couldn't understand your issue completely @serkan \nIf you can share your complete usecase and repository, maybe we can help better.\n\nDoes this tutorial help you?\nhttps://docs.minaprotocol.com/zkapps/tutorials/interacting-with-zkapps-server-side",
+      "author": {
+        "id": "453866498482503681",
+        "name": "themonkeycoder",
+        "discriminator": "0000",
+        "nickname": "TheMonkeyCoder",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/453866498482503681/bba17e0086be6d7fad6156f613fc8fa2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Mina Documentation",
+          "url": "https://docs.minaprotocol.com/zkapps/tutorials/interacting-with-zkapps-server-side",
+          "timestamp": null,
+          "description": "Website for documentation about Mina Protocol",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/_PJlmeDNad-_70g7jbEdYnu0Z3mezgosb1bPK642OJE/https/docs.minaprotocol.com/img/common/mina-logo.png",
+            "width": 1120,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "438592997609701377",
+          "name": "strader6495",
+          "discriminator": "0000",
+          "nickname": "serkan",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+        }
+      ]
+    },
+    {
+      "id": "1306507055250804756",
+      "type": "Default",
+      "timestamp": "2024-11-14T10:32:35.699+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I encountered issues integrating SmartContract deployment within the Express.js setup due to unresolved tsconfig and package.json configuration errors. After searching for solutions without success, I reluctantly moved the deployment logic to Next.js's API folder, where the initial errors no longer appear. However, I'm now facing the following error:\n\n\"- You are missing an 'await' somewhere, which causes a new global context to be entered before we finished the last one.\n\nYou are importing two different instances of o1js, which leads to inconsistent tracking of the global context in one of those instances.\n\nThis is a common problem in projects that use o1js as part of a UI!\n\nYou are running multiple async operations concurrently, which conflict in using the global context.\n\nRunning async o1js operations (like proving) in parallel is not supported! Try running everything serially.\"\n\nI will need to investigate further to address this issue.\n\nFor the multiplayer game I am planning, the phase 1 use case involves:\n\n1. Two users logging into the game.\n2. Deploying a smart contract on the server side, with the zkAppAddress sent to the client (a new smart contract is deployed for each game).\n3. Using ZKProgram to prove each move.\n4. Sending relevant game-end information to the smart contract.\n\nIt seems I may have missed some details in the SmartContract deployment process, so I plan to review additional repositories and documentation to resolve these challenges.\n\nhttps://github.com/SerkanToraman/zkApp-tileMatch",
+      "author": {
+        "id": "438592997609701377",
+        "name": "strader6495",
+        "discriminator": "0000",
+        "nickname": "serkan",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/2.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - SerkanToraman/zkApp-tileMatch",
+          "url": "https://github.com/SerkanToraman/zkApp-tileMatch",
+          "timestamp": null,
+          "description": "Contribute to SerkanToraman/zkApp-tileMatch development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/mX0Ee61XFzPHRmi5Cc8oWnH1TcxKvfgg-P5N9DVaACE/https/opengraph.githubassets.com/46688d6600e328908b39f0cbba1f440e3d6a49f6c25031c94e3b03a891cfb6c6/SerkanToraman/zkApp-tileMatch",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1306515968582881320",
+      "type": "Default",
+      "timestamp": "2024-11-14T11:08:00.803+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You should also update your next.js config as in the example I have shared:\nhttps://github.com/zkcloudworker/minatokens-ui/blob/main/next.config.mjs\nand ensure that you use await everywhere in the contract and Mina.transaction.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 29
+}

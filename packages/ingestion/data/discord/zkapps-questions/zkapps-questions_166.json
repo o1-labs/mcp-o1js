@@ -1,0 +1,763 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1287076778644475914",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Handle multiple contract instances with offchainState",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:11:41.8430822+04:00",
+  "messages": [
+    {
+      "id": "1287076778644475914",
+      "type": "Default",
+      "timestamp": "2024-09-21T19:43:36.759+04:00",
+      "timestampEdited": "2024-09-21T19:54:59.034+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am trying to handle multiple contract instances of same contract as\n```ts\nMina.setActiveInstance(localChain);\n\nconst DRMPk = PrivateKey.random();\nconst DRMAddr = DRMPk.toPublicKey();\nconst DRMPk2 = PrivateKey.random();\nconst DRMAddr2 = DRMPk2.toPublicKey();\n\nconst DRMInstance = new DRM(DRMAddr);\nconst DRMInstance2 = new DRM(DRMAddr2);\n\noffchainState.setContractInstance(DRMInstance);\n\nawait offchainState.compile();\nawait DRM.compile();\n\n// deploy DRM ...\noffchainState.setContractInstance(DRMInstance2);\n// deploy DRM2 ... \noffchainState.setContractInstance(DRMInstance);\n// register to DRM ...\n// settle ...\noffchainState.setContractInstance(DRMInstance2);\noffchainState.compile();\n// Try to register to DRM2 -> Error: root mismatch\n```\nI tried with/without compiling offchainState after change instance but still same, how should I handle multiple offchain for multiple contracts factoring or any better way.  I'll need switch between different contrat instances in ui web worker",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1287768341573926932",
+      "type": "Default",
+      "timestamp": "2024-09-23T17:31:38.21+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey, it's not possible in the simple way you describe.  One offchain state is used for one smart contract.  You can't just re-assign it to a different one.\n\nBut I think you can change your file that defines `offchainState` and `DRM` to export a function that returns instances of those classes, instead of the objects themselves.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1287817869937082470",
+      "type": "Reply",
+      "timestamp": "2024-09-23T20:48:26.692+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I made a factory like function but now I have another problem,\ndeployed my contracts to `https://api.minascan.io/node/devnet/v1/graphql` they uses offchainState as you know. When I tried to update offchain state with method I get\n```\nError: fetchActions: Specified GraphQL endpoint is undefined. When using actions, you must set the archive node endpoint in Mina.Network(). Please ensure your Mina.Network() configuration includes an archive node endpoint.\n```\nThen changed my api endpoint to `https://api.minascan.io/archive/devnet/v1/graphql` but now it gives. `Error: Could not fetch action state`.",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "201337099700535297",
+          "name": "45930",
+          "discriminator": "0000",
+          "nickname": "45930",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1287768341573926932",
+        "channelId": "1287076778644475914",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1287818208299974760",
+      "type": "Default",
+      "timestamp": "2024-09-23T20:49:47.364+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Then I think maybe I should deploy contracts to `https://api.minascan.io/archive/devnet/v1/graphql` endpoint but this time gives me\n```\nError: getAccount: Could not find account for public key B62qrtguuhSTmDWvB5Aa6QFZCW8N5Q15SnKd9QyKLkAsbBmLqyoRQv3\n```\nerror for my feePayer account (It has 300 Mina on devnet) so I couldn't deploy with archive endpoint",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1287818904831397928",
+      "type": "Default",
+      "timestamp": "2024-09-23T20:52:33.43+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Deploy Script: https://github.com/DRM-Mina/drm-mina-web-client/blob/main/contracts/src/scripts/deployDRM.ts\nOffchainState Script: https://github.com/DRM-Mina/drm-mina-web-client/blob/main/contracts/src/scripts/buyAndRegisterDevice.ts",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1287823148208619631",
+      "type": "Default",
+      "timestamp": "2024-09-23T21:09:25.13+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also when I fetch contract state with node endpoint it gives me states normally but archive endpoint gives me undefined",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1287823308208865322",
+      "type": "Default",
+      "timestamp": "2024-09-23T21:10:03.277+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Does `https://api.minascan.io/node/devnet/v1/graphql` and `https://api.minascan.io/archive/devnet/v1/graphql` different chains?",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1287836508241268736",
+      "type": "Default",
+      "timestamp": "2024-09-23T22:02:30.41+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The archive node and mina node are completely different things.  You'll need to explore both to understand better how to use them.  The mina node stores current state and a proof of the state.  The archive node stores historical data and is not proved anywhere.  You can't expect the same query to work on either node.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "406082843878359041",
+              "name": "duldulosman",
+              "discriminator": "0000",
+              "nickname": "Düldül Osman",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1287837172451246111",
+      "type": "Default",
+      "timestamp": "2024-09-23T22:05:08.77+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "To that extent, you need to deploy your contract on the node, and fetch actions from the archive.  \n\nA valid config for the mina network would look like this\n\n```\nMina.Network({\n  mina: 'https://api.minascan.io/node/devnet/v1/graphql',\n  archive: 'https://api.minascan.io/archive/devnet/v1/graphql',\n});\n```",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "406082843878359041",
+              "name": "duldulosman",
+              "discriminator": "0000",
+              "nickname": "Düldül Osman",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 9
+}

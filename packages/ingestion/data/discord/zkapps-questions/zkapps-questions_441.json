@@ -1,0 +1,905 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1198428494892388454",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "SyntaxError: Cannot convert true to a BigInt",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:07:07.9930647+04:00",
+  "messages": [
+    {
+      "id": "1198428494892388454",
+      "type": "Default",
+      "timestamp": "2024-01-21T04:46:58.907+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey all, I was working on a contract -> \n```\nimport {\n  Field,\n  SmartContract,\n  state,\n  State,\n  method,\n  Signature,\n  PublicKey,\n} from 'o1js';\n\nexport class Swap extends SmartContract {\n  @state(Field) ethereumPrice = State<Field>();\n  @state(Field) minaPrice = State<Field>();\n  @state(Field) exchangeRateMinaToEthereum = State<Field>();\n  @state(Field) exchangeRateEthereumToMina = State<Field>();\n\n  init() {\n    super.init();\n  }\n\n  @method updatePricesAndExchangeRate(\n    priceE: Field,\n    signatureE: Signature,\n    priceM: Field,\n    signatureM: Signature,\n    oracle: PublicKey\n  ) {\n    const currentEthPrice = this.ethereumPrice.get();\n    this.ethereumPrice.requireEquals(currentEthPrice);\n    const currentMinaPrice = this.minaPrice.get();\n    this.minaPrice.requireEquals(currentMinaPrice);\n\n    // Evaluate whether the signature is valid for the provided data\n    // const validM = signatureM.verify(oracle, [priceM]);\n    // const validE = signatureE.verify(oracle, [priceE]);\n    // validE.assertTrue();\n    // validM.assertTrue();\n\n    this.minaPrice.set(priceM);\n    this.ethereumPrice.set(priceE);\n\n    const excMinaToEth = priceM.mul(Field.from('10000000000')).div(priceE);\n    const excEthToMina = priceE.mul(Field.from('10000000000')).div(priceM);\n\n    this.exchangeRateMinaToEthereum.set(excMinaToEth);\n    this.exchangeRateEthereumToMina.set(excEthToMina);\n  }\n}\n```\nMy interact script ->",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198428669694181437",
+      "type": "Default",
+      "timestamp": "2024-01-21T04:47:40.583+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\nimport dotenv from 'dotenv';\ndotenv.config();\n\nimport { PrivateKey, Mina, AccountUpdate } from 'o1js';\n\nimport { Client } from '@doot-oracles/client';\nimport { Swap } from './Swap.js';\n\nconst client = new Client(\n  process.env.DOOT_API_KEY ? process.env.DOOT_API_KEY : ''\n);\n\nconst proofsEnabled = false;\n\nconst Local = Mina.LocalBlockchain({ proofsEnabled: proofsEnabled });\nMina.setActiveInstance(Local);\n\nconst deployerPK = Local.testAccounts[0].privateKey;\nconst deployer = deployerPK.toPublicKey();\nconst zkappPK = PrivateKey.random();\nconst zkapp = zkappPK.toPublicKey();\n\nif (proofsEnabled) await Swap.compile();\nconst swap = new Swap(zkapp);\n\nconsole.log('Deploying Swap...');\n\nlet txn = await Mina.transaction(deployer, () => {\n  AccountUpdate.fundNewAccount(deployer);\n  swap.deploy({ zkappKey: zkappPK });\n});\n\nawait txn.prove();\nawait txn.sign([zkappPK, deployerPK]).send();\n\nconsole.log('Deployed.');\n\nconst minaObject = await client.Price('mina');\nconst ethereumObject = await client.Price('ethereum');\n\nconst oracle = minaObject.signatureObject.publicKey;\nconst priceMina = minaObject.price;\nconst priceEthereum = ethereumObject.price;\nconst signatureMina = minaObject.signature;\nconst signatureEthereum = ethereumObject.signature;\n\nconsole.log('Initial Exchange Rates ->');\nconsole.log('Mina / Ethereum :', swap.exchangeRateMinaToEthereum.get());\nconsole.log('Ethereum / Mina :', swap.exchangeRateEthereumToMina.get());\n\ntxn = await Mina.transaction(deployer, () => {\n  swap.updatePricesAndExchangeRate(\n    priceEthereum,\n    signatureEthereum,\n    priceMina,\n    signatureMina,\n    oracle\n  );\n});\nawait txn.prove();\nawait txn.sign([deployerPK]).send();\n\nconsole.log('Updated Exchange Rates ->');\nconsole.log('Mina / Ethereum :', swap.exchangeRateMinaToEthereum.get());\nconsole.log('Ethereum / Mina', swap.exchangeRateEthereumToMina.get());\n```\n\nI have tried everything I could think of but this error persists",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198428789995221013",
+      "type": "Default",
+      "timestamp": "2024-01-21T04:48:09.265+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Would appreciate any help I can get since I have hit a wall and not sure where to look",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198429207160692807",
+      "type": "Default",
+      "timestamp": "2024-01-21T04:49:48.725+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The exact error stack is like this ->\n```\n\nSyntaxError: Cannot convert true to a BigInt\n    at BigInt (<anonymous>)\n    at Bool (o1js/dist/node/provable/field-bigint.js:25:12)\n    at toFieldVar (o1js/dist/node/lib/bool.js:321:30)\n    at Bool.toField (o1js/dist/node/lib/bool.js:170:26)\n    at Function.toFields (o1js/dist/node/lib/bool.js:222:22)\n    at PublicKey.toFields (o1js/dist/node/lib/circuit_value.js:47:38)\n```",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198540420855111701",
+      "type": "Default",
+      "timestamp": "2024-01-21T12:11:44.136+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Error stack is not long enough. We can't see from it where this came from in your code",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198541468520955984",
+      "type": "Default",
+      "timestamp": "2024-01-21T12:15:53.919+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Well, it looks like some public key is not in a valid shape.\n\nMight be oracle. Print it!\n\nIs minaObject strongly typed?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198635279129522289",
+      "type": "Default",
+      "timestamp": "2024-01-21T18:28:40.111+04:00",
+      "timestampEdited": "2024-01-21T18:31:11.573+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @gregor, no the minaObject isnt strongly typed, however the signatureObject is of type \n```\ninterface MinaSignerObject{\n  signature: Signature;\n  publicKey: PublicKey;\n  data: Field;\n}\n```\nDoes this help?",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1198653095769546752",
+      "type": "Default",
+      "timestamp": "2024-01-21T19:39:27.929+04:00",
+      "timestampEdited": "2024-01-21T19:40:49.822+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I made a type for the returned object too as\n```\ninterface ClientResultObject {\n    asset: string;\n    price: Field;\n    decimals: Field;\n    signature: Signature;\n    signatureObject: MinaSignerObject;\n}\n```\nAfter calling const minaObject = await client.Price(\"mina\") and logging it I have :\n```\n{\n  asset: 'mina',\n  price: _Field { value: [ 0, [Array] ] },\n  decimals: _Field { value: [ 0, [Array] ] },\n  signature: _Signature {\n    r: _Field { value: [Array] },\n    s: _Scalar { value: [Array], constantValue: [Array] }\n  },\n  signatureObject: {\n    signature: _Signature { r: [_Field], s: [_Scalar] },\n    publicKey: _PublicKey { x: [_Field], isOdd: [_Bool] },\n    data: _Field { value: [Array] }\n  }\n}```",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198656373735571456",
+      "type": "Default",
+      "timestamp": "2024-01-21T19:52:29.457+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Strange, I also get a \n```\n\nTypeError: workersReadyResolve is not a function\n    at startWorkers (/home/user/Desktop/example/node_modules/o1js/dist/node/index.cjs:3613:3)\n    at async initThreadPool (file:///home/user/Desktop/example/node_modules/o1js/dist/node/bindings/js/node/node-backend.js:78:5)\n    at async withThreadPool (file:///home/user/Desktop/example/node_modules/o1js/dist/node/bindings/js/node/node-backend.js:42:5)\n    at async dummyBase64Proof (file:///home/user/Desktop/example/node_modules/o1js/dist/node/lib/proof_system.js:582:17)\n    at async addProof (file:///home/user/Desktop/example/node_modules/o1js/dist/node/lib/account_update.js:1314:47)\n    at async addMissingProofs (file:///home/user/Desktop/example/node_modules/o1js/dist/node/lib/account_update.js:1295:46)\n    at async Object.prove (file:///home/user/Desktop/example/node_modules/o1js/dist/node/lib/mina.js:158:44)\n    at async file:///home/user/Desktop/example/build/src/interact.js:32:1\n```\n\n\nwhen I dont even include the information in a txn by simply doing \n```\nimport {\n  Client,\n  MinaSignerObject,\n  ClientResultObject,\n} from '@doot-oracles/client';\n\nconst client = new Client(KEY)\nconst minaInformation = await client.Price('mina');\nconsole.log(minaInformation);\n```",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198656859901546766",
+      "type": "Default",
+      "timestamp": "2024-01-21T19:54:25.368+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah the problems are def because of my package, do i have any options I could look over @gregor or do I just start brute forcing whatever I can think of?",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1198699082995220571",
+      "type": "Reply",
+      "timestamp": "2024-01-21T22:42:12.138+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I would just get it to print the full stack trace",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "810793675033673730",
+          "name": "br0wn_d3v",
+          "discriminator": "0000",
+          "nickname": "br0wnD3v",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1198656859901546766",
+        "channelId": "1198428494892388454",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1198699310586548336",
+      "type": "Default",
+      "timestamp": "2024-01-21T22:43:06.4+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Aight, I look over it and get back here if I manage to fix it",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198699424768086016",
+      "type": "Default",
+      "timestamp": "2024-01-21T22:43:33.623+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for the time @gregor ser, really appreciate it \uD83D\uDE04",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 13
+}

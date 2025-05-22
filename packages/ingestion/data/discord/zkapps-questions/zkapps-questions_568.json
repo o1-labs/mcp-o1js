@@ -1,0 +1,351 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1172847140612096020",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "GetBalance on Berkeley return Error: getAccount: Could not find account",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:17:42.0263349+04:00",
+  "messages": [
+    {
+      "id": "1172847140612096020",
+      "type": "Default",
+      "timestamp": "2023-11-11T14:35:48.768+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello,\nI try to get balance for a custom token \n\n```\ntry{\n       const Berkeley = Mina.Network(\n        'https://proxy.berkeley.minaexplorer.com/graphql'\n        );\n      console.log('Berkeley Instance Created');\n      Mina.setActiveInstance(Berkeley);\n      const publicKey = PublicKey.fromBase58(player);\n      const amount = await Mina.getBalance(publicKey,state.zkapp?.token.id);\n      return JSON.stringify(amount.toJSON());\n    }\n    catch(ex){\n      console.log(ex);\n    }\n```\n\nI get this error : Error: getAccount: Could not find account for public key B62qk7R5wo6WTwYSpBHPtfikGvkuasJGEv4ZsSA2sigJdqJqYsWUzA1 with the tokenId x6xZ7mfFUM6oR7wg7MhDwGiWQ9ncq4Fe6XG4fGVbjAHJBpLFUA\n\nBut I already mint a token, why he didn't find this account \nhttps://minascan.io/berkeley/token/x6xZ7mfFUM6oR7wg7MhDwGiWQ9ncq4Fe6XG4fGVbjAHJBpLFUA/holders\n\nAlso when I use account is new, it returns always true\n```\nconst account1 = Account(pubPlayer1, state.zkapp!.token.id);\n const isNew1 = await account1.isNew.get().toBoolean();\n```",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Minascan Block Explorer",
+          "url": "https://minascan.io/berkeley/token/x6xZ7mfFUM6oR7wg7MhDwGiWQ9ncq4Fe6XG4fGVbjAHJBpLFUA/holders",
+          "timestamp": null,
+          "description": "Minascan is a Block Explorer and Analytics Platform for Mina, a lightweight succinct blockchain that uses ZK-proofs.",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172879505799512074",
+      "type": "Default",
+      "timestamp": "2023-11-11T16:44:25.23+04:00",
+      "timestampEdited": "2023-11-11T16:44:52.594+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think the problem come from how the library call the graph,\n\nwhen I create directly an query on https://proxy.berkeley.minaexplorer.com/graphql with :\n```\nquery {\n  account(publicKey :\"B62qk7R5wo6WTwYSpBHPtfikGvkuasJGEv4ZsSA2sigJdqJqYsWUzA1\", token : \"x6xZ7mfFUM6oR7wg7MhDwGiWQ9ncq4Fe6XG4fGVbjAHJBpLFUA\") {\n    nonce\n    inferredNonce\n    receiptChainHash\n    delegate\n    votingFor\n    locked\n    index\n    zkappUri\n    provedState\n    tokenSymbol\n    leafHash\n    balance {\n      liquid\n      locked\n      stateHash\n    }\n  }\n}\n```\n\nI got this result :\n\n```\n{\n  \"data\": {\n    \"account\": {\n      \"nonce\": \"0\",\n      \"inferredNonce\": \"0\",\n      \"receiptChainHash\": \"2n1hGCgg3jCKQJzVBgfujGqyV6D9riKgq27zhXqYgTRVZM5kqfkm\",\n      \"delegate\": null,\n      \"votingFor\": \"2mzWc7ZF8hRKvLyoLpKLZ3TSm8XSjfxZq67dphJpnjhYmU5Vja5Q\",\n      \"locked\": null,\n      \"index\": 10035,\n      \"zkappUri\": null,\n      \"provedState\": null,\n      \"tokenSymbol\": \"\",\n      \"leafHash\": \"21616900349302632668167801083216134137743456401972379136835550504713403975042\",\n      \"balance\": {\n        \"liquid\": \"1\",\n        \"locked\": \"0\",\n        \"stateHash\": \"3NKcpN6efN67Ka6riRbpT95pjyyqn9fkqtH2Apkw9d1P6PUvdeiX\"\n      }\n    }\n  }\n}\n```",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172907968715575388",
+      "type": "Default",
+      "timestamp": "2023-11-11T18:37:31.318+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can try like this:\n```typescript\nconst nftAddress: PublicKey = nft.address;\nconst issuer = new MinaNFTVerifierBadge(this.address);\nconst tokenId = issuer.token.id;\nawait fetchAccount({ publicKey: nftAddress, tokenId });\nconst hasAccount = Mina.hasAccount(nftAddress, tokenId);\nif (hasAccount)\n    const balance = Mina.getBalance(nftAddress, tokenId);\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "295757910691151873",
+              "name": "youtpout",
+              "discriminator": "0000",
+              "nickname": "Youtpout",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1172922797882884216",
+      "type": "Reply",
+      "timestamp": "2023-11-11T19:36:26.867+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok so the secret is to call fetchaccount first",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1172907968715575388",
+        "channelId": "1172847140612096020",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1172922887376736337",
+      "type": "Default",
+      "timestamp": "2023-11-11T19:36:48.204+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "````\n      const publicKey = PublicKey.fromBase58(player);\n      const tokenId= state.zkapp?.token.id;\n      await fetchAccount({publicKey:publicKey, tokenId:tokenId});\n      const hasAccount = Mina.hasAccount(publicKey, tokenId);\n      if (hasAccount){\n        const balance = Mina.getBalance(publicKey, tokenId);\n        return JSON.stringify(balance);\n      }```",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 5
+}

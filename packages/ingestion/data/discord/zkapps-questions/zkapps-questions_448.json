@@ -1,0 +1,1843 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1195756165167059116",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How send mina from user to an other contract",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:11:20.8794531+04:00",
+  "messages": [
+    {
+      "id": "1195756165167059116",
+      "type": "Default",
+      "timestamp": "2024-01-13T19:48:05.851+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, I try to send mina from the user who call the function to an other contract, my code :\n```  @method deposit(amount: UInt64) {\n    // can't deposit 0\n    amount.greaterThan(UInt64.zero).assertTrue();\n\n    let senderUpdate = AccountUpdate.createSigned(this.sender);\n    const contractAddress = this.GameContract.getAndRequireEquals();\n    // don't send is the contract is not defined\n    contractAddress.isEmpty().assertFalse();\n    senderUpdate.send({ to: contractAddress, amount });\n\n    // emit a event to retrieve deposit\n    const data = new DepositData({ user: this.sender, amount });\n    this.emitEvent('deposit', data);\n  }```\n\nI got this error : Cannot update field 'incrementNonce' because permission for this field is 'Signature', but the required authorization was not provided or is invalid.\n\nI tried to add permission  \"incrementNonce:Permissions.none()\" in the 2 contracts but the problem remains, how I can accomplish it\n\nmy full code is here :\nhttps://github.com/youtpout/zkapp-ui/blob/main/contracts/src/gamedeposit.ts\nthe test is here : \nhttps://github.com/youtpout/zkapp-ui/blob/main/contracts/src/gamemerkle.test.ts",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "zkapp-ui/contracts/src/gamedeposit.ts at main · youtpout/zkapp-ui",
+          "url": "https://github.com/youtpout/zkapp-ui/blob/main/contracts/src/gamedeposit.ts",
+          "timestamp": null,
+          "description": "Contribute to youtpout/zkapp-ui development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/sKqhynzR5Nmd1FkXkJIswL4AxzB76o24iFoZ6-X5flI/https/opengraph.githubassets.com/df0fc02ffa2df42d7144bf7fa84a94f26c4681f90540f30330e045106585343f/youtpout/zkapp-ui",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "zkapp-ui/contracts/src/gamemerkle.test.ts at main · youtpout/zkapp-ui",
+          "url": "https://github.com/youtpout/zkapp-ui/blob/main/contracts/src/gamemerkle.test.ts",
+          "timestamp": null,
+          "description": "Contribute to youtpout/zkapp-ui development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/sKqhynzR5Nmd1FkXkJIswL4AxzB76o24iFoZ6-X5flI/https/opengraph.githubassets.com/df0fc02ffa2df42d7144bf7fa84a94f26c4681f90540f30330e045106585343f/youtpout/zkapp-ui",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1195757878162755615",
+      "type": "Default",
+      "timestamp": "2024-01-13T19:54:54.261+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is the problem that you’re trying to increment the nonce of the user’s account by sending mina?  Do you require a signature from the end user somewhere in your flow?  Sorry Im on the go so I didn’t read your code, but I wonder if you just need the user to authorize the send.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1196010765975568394",
+      "type": "Reply",
+      "timestamp": "2024-01-14T12:39:47.414+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, I pass the private key of the user in my tx sign method",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "201337099700535297",
+          "name": "45930",
+          "discriminator": "0000",
+          "nickname": "45930",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1195757878162755615",
+        "channelId": "1195756165167059116",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1196200980916752496",
+      "type": "Default",
+      "timestamp": "2024-01-15T01:15:38.19+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @Youtpout, you need to sign the transaction with the payer account in order to send MINA from this account. I have tried running your tests by adding the zkDepositPrivateKey to the signature, `await txn2.sign([deployerKey, zkDepositPrivateKey]).send();` in line 157, and it passed the tests. I hope this solves your problem \uD83D\uDE42",
+      "author": {
+        "id": "523199492716101653",
+        "name": "yunusgurlek",
+        "discriminator": "0000",
+        "nickname": "Yunus Gürlek",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "295757910691151873",
+              "name": "youtpout",
+              "discriminator": "0000",
+              "nickname": "Youtpout",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1196380668918255676",
+      "type": "Reply",
+      "timestamp": "2024-01-15T13:09:39.148+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you so I need the key of the smartcontract",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "523199492716101653",
+              "name": "yunusgurlek",
+              "discriminator": "0000",
+              "nickname": "Yunus Gürlek",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "523199492716101653",
+          "name": "yunusgurlek",
+          "discriminator": "0000",
+          "nickname": "Yunus Gürlek",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1196200980916752496",
+        "channelId": "1195756165167059116",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1197497734702313472",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:08:28.385+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Youtpout @Yunus Gürlek you don't need the private key of the smart contract to call a method, that wouldn't make any sense.\nYou only need the key if you specifically require it, and I did spot the following in your code:\n```\nzkApp.requireSignature();\n```\nmaybe try removing that?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        },
+        {
+          "id": "523199492716101653",
+          "name": "yunusgurlek",
+          "discriminator": "0000",
+          "nickname": "Yunus Gürlek",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ]
+    },
+    {
+      "id": "1197497982053007442",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:09:27.358+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also plz let me know where you got this code snippet from so I can fix it \uD83D\uDE4F",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197498298324488232",
+      "type": "Reply",
+      "timestamp": "2024-01-18T15:10:42.763+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "● Game merkle › deposit                                                                                                                                                                                                                                                           \n                                                                                                                                                                                                                                                                                    \n    [[],[[\"Unexpected_verification_key_hash\"]],[[\"Cancelled\"]],[[\"Cancelled\"]]]",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1197497982053007442",
+        "channelId": "1195756165167059116",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1197498452595200110",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:11:19.544+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That the error when you remove `requireSignature()`?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197498569222004789",
+      "type": "Reply",
+      "timestamp": "2024-01-18T15:11:47.35+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yes, but I use account createdSigned, I need signature no ?",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1197498452595200110",
+        "channelId": "1195756165167059116",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1197498681121845258",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:12:14.029+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I create the code is not from a snippet",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1197498682069745674",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:12:14.255+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "but not signature on the zkapp account I assume",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197498822834790420",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:12:47.816+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "My smartcontract : ```\nexport class GameDeposit extends SmartContract {\n  @state(PublicKey) GameContract = State<PublicKey>();\n  @state(PublicKey) Owner = State<PublicKey>();\n\n  events = {\n    deposit: DepositData,\n  };\n\n  deploy(args: DeployArgs) {\n    super.deploy(args);\n\n    this.account.permissions.set({\n      ...Permissions.default(),\n      editState: Permissions.signature(),\n    });\n  }\n\n  @method setOwner(newOwner: PublicKey) {\n    // define owner of the contract to update info like owner and contract address\n    const actualOwner = this.Owner.getAndRequireEquals();\n    const contractOwner = Provable.if<PublicKey>(\n      actualOwner.equals(PublicKey.empty()),\n      newOwner,\n      actualOwner\n    );\n    AccountUpdate.createSigned(contractOwner);\n\n    this.Owner.set(newOwner);\n  }\n\n  @method setContractAddress(contractAddress: PublicKey) {\n    const actualOwner = this.Owner.getAndRequireEquals();\n    // don't set is the owner is not defined\n    actualOwner.isEmpty().assertFalse();\n    AccountUpdate.createSigned(actualOwner);\n    this.GameContract.set(contractAddress);\n  }\n\n  @method deposit(amount: UInt64) {\n    // can't deposit 0\n    amount.greaterThan(UInt64.zero).assertTrue();\n\n    let senderUpdate = AccountUpdate.createSigned(this.sender);\n    const contractAddress = this.GameContract.getAndRequireEquals();\n    // don't send is the contract is not defined\n    contractAddress.isEmpty().assertFalse();\n    senderUpdate.send({ to: contractAddress, amount });\n\n    // emit a event to retrieve deposit\n    const data = new DepositData({ user: this.sender, amount });\n    this.emitEvent('deposit', data);\n  }\n}\n```",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197499110450790470",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:13:56.389+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`requireSignature()` says: require a signature on this account update",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197499178360766505",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:14:12.58+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`createSigned()`: create a new account update, and call `requireSignature` on it",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197499243234078783",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:14:28.047+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so, you never need `requireSignature()` in addition to createSigned",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197499286129213482",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:14:38.274+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and especially not on a different account",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197499670277132368",
+      "type": "Reply",
+      "timestamp": "2024-01-18T15:16:09.862+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it's work if the create signed is in the smartcontract ?",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1197499178360766505",
+        "channelId": "1195756165167059116",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1197499727239991317",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:16:23.443+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "works from anywhere",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197499907481800745",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:17:06.416+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you can get my code here https://github.com/youtpout/zkapp-ui/blob/e20642500f92736306a50ebf8a7da8e300a713a7/contracts/src/gamedeposit.ts",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "zkapp-ui/contracts/src/gamedeposit.ts at e20642500f92736306a50ebf8a...",
+          "url": "https://github.com/youtpout/zkapp-ui/blob/e20642500f92736306a50ebf8a7da8e300a713a7/contracts/src/gamedeposit.ts",
+          "timestamp": null,
+          "description": "Contribute to youtpout/zkapp-ui development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/sKqhynzR5Nmd1FkXkJIswL4AxzB76o24iFoZ6-X5flI/https/opengraph.githubassets.com/df0fc02ffa2df42d7144bf7fa84a94f26c4681f90540f30330e045106585343f/youtpout/zkapp-ui",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197500053535871076",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:17:41.238+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and test in gamemerkle.test.ts",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197500670849327226",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:20:08.417+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah all the `zkDeposit.requireSignature()` calls seem wrong to me! would you want only the smart contract developer to call those methods?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197500951326629909",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:21:15.288+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and this code looks like a bug: https://github.com/youtpout/zkapp-ui/blob/e20642500f92736306a50ebf8a7da8e300a713a7/contracts/src/gamemerkle.test.ts#L43-L52\n\nyou probably want to set the global `verificationKey2`, but instead you create a variable in a local scope with the same name and then don't use the compiled verification keys",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197501221796327444",
+      "type": "Default",
+      "timestamp": "2024-01-18T15:22:19.773+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "to set a global variable, you have to assign `verificationKey2 = ...`, without the `const` declaration",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197518248971870230",
+      "type": "Reply",
+      "timestamp": "2024-01-18T16:29:59.368+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "are you sure , I used object destructuring https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#object_destructuring",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Destructuring assignment - JavaScript | MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment",
+          "timestamp": null,
+          "description": "The destructuring assignment syntax is a JavaScript expression that makes it possible to unpack values from arrays, or properties from objects, into distinct variables.",
+          "color": "#FFFFFF",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/uTsbfg1keKx7xiXpqHx6VONnYXONQVyFzRcHtfMZfeg/https/developer.mozilla.org/mdn-social-share.cd6c4a5a.png",
+            "width": 1920,
+            "height": 1080
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1197501221796327444",
+        "channelId": "1195756165167059116",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1197518327208226856",
+      "type": "Default",
+      "timestamp": "2024-01-18T16:30:18.021+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "const { verificationKey: verificationKey2 } = await GameDeposit.compile();",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197518586923724870",
+      "type": "Default",
+      "timestamp": "2024-01-18T16:31:19.942+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah the syntax is strange",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1197591432261808242",
+      "type": "Default",
+      "timestamp": "2024-01-18T21:20:47.624+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Trust me on this, or just try it out",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1197618864700264548",
+      "type": "Reply",
+      "timestamp": "2024-01-18T23:09:48.027+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok i don’t need this part of code for the moment",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1197591432261808242",
+        "channelId": "1195756165167059116",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 29
+}

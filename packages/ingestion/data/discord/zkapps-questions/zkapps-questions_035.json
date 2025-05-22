@@ -1,0 +1,1495 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1324788429808205967",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "o1js: Where proofs should be stored?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T15:14:24.0729388+04:00",
+  "messages": [
+    {
+      "id": "1324788429808205967",
+      "type": "Default",
+      "timestamp": "2025-01-03T21:16:15.045+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "o1js ZkPrograms executes offchain.\nThen the proofs can be validated onchain or offchain.\n\nI want to make this proofs available to the users offchain.\n\nTo smart contracts keeps the states I presume the proofs are permanent stored along with the transactions.\n\nUsually how the proofs can be fetch?\n\nIn my particular case I am working with Protokit, but understand how would this work onchain also helps me.\n\nI suppose store the proofs offchain is not a great solution.\n\nShould I create a State inside the smart contract to store this proofs or theoretically it shouldn't be needed?",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1308005304545575006",
+              "name": "oneal3464",
+              "discriminator": "0000",
+              "nickname": "Oneal3463",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1308005304545575006/6c5996770c985bcd6e5b68131ff2ba04.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1324886837059387493",
+      "type": "Default",
+      "timestamp": "2025-01-04T03:47:17.162+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That will still pose the problem of only 8 on-chain state, if you can afford to store it on-chain its pretty good yeah",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1324894129636904960",
+      "type": "Default",
+      "timestamp": "2025-01-04T04:16:15.848+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Proofs aren't stored because they aren't needed after being used. What's onchain is the verification keys that are able to verify proofs. When you submit a proof onchain, the chain verifies the proof and if it's valid it updates the onchain state accordingly, but the proof can be discarded and isn't stored.\n\nThis is one of the beauties of Mina. The chain is able to discard all history and remain lightweight, since you don't need historic transactions or headers or anything to fully verify that the current onchain state is valid. You can be sure that all state transitions up to the present are valid because the chain will never accept an invalid state transition. You only need the last proof that proves that all the current onchain state is valid. All past proofs or proofs specific to a zkApp or account are \"contained\" within this last tiny proof, so they can be discarded.\n\nThis is why you can fully verify the whole chain in an instant as opposed to the days / weeks it takes to synchronize with even the Bitcoin chain.",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "201337099700535297",
+              "name": "45930",
+              "discriminator": "0000",
+              "nickname": "45930",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1324905327497576670",
+      "type": "Default",
+      "timestamp": "2025-01-04T05:00:45.626+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For the zkProgram proofs, the usual model is to merge all those offchain proofs into a single proof that you finally submit onchain to settle the current state. I'm not very familiar with Protokit but I guess it provides a method to settle all the offchain state transitions to a final onchain state on Mina, and again all the proofs can be / are discarded since they wouldn't be needed anymore.\n\nNot sure what you mean by \"make proofs available to the users offchain\". Your users likely don't need those proofs and sharing offchain proofs with your users isn't useful, since the only thing that matters is the final onchain settlement. A malicious zkApp could even create offchain proofs of alternative states in an attempt to fool users by using these offchain proofs as evidence of something happening in the zkApp, but at the end submitting a completely different state.\n\nYou could retrieve signed receipts to users if you want to provide quick feedback about if their transactions got accepted by your zkApp, without needing to share proofs that will probably be bigger than a receipt and not that useful for users since they can't verify if the proof is valid without the other proofs and state transitions.",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "201337099700535297",
+              "name": "45930",
+              "discriminator": "0000",
+              "nickname": "45930",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1324914117278040126",
+      "type": "Default",
+      "timestamp": "2025-01-04T05:35:41.273+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks @br0wnD3v \n\n@chrlyz your comments are really helpful\n\nSo, I created this anonymous vote project with Protokit https://zeropoll.xyz\n\nIt's already \"functional\", but not yet really safe. \n\nBecause protokit currently is not integrated with L1, does not implements snarkys and I don't see any kind of decentralization - currently you simply have your own centralized postgres with the transactions.\n\nSo, my idea was to bring a feature to allows users (optionally) to download the proofs and verify themselves without need to trust in the Protokit L2.\n\nSomething like: \n\n```typescript\nimport { voteProgram } from \"@zeropoll/chain\"\nimport { verify } from 'o1js';\n\nconst { verificationKey } = await voteProgram.compile()\nconst ok = await verify(JsonProofHere, verificationKey);\n\n```\n\nThis voteProgram verification would be recursive, the root proof must have the previous vote proof and so on...\n\nBut probably at least this root proof must be stored somewhere, like in the \"module\" (our smart contract) state.\n\nI assume in an L1 app it may not be needed at all. But we may need to wait more 4 months to have L1 implemented in Protokit.\n\nMakes sense? Sorry if it may sound more complex than it should be.",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "810793675033673730",
+          "name": "br0wn_d3v",
+          "discriminator": "0000",
+          "nickname": "br0wnD3v",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+        },
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1324915716637589504",
+      "type": "Default",
+      "timestamp": "2025-01-04T05:42:02.59+04:00",
+      "timestampEdited": "2025-01-04T05:42:41.053+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you are keen on making these proofs available off chain, I suggest emitting all the submitted proofs and these being picked up by your listener, the listener would be required to create new json and pin it with every new addition (under the trust assumption you are not going to miss out on any proof). you can have a method on your smart contract to store this ipfs cid instead (update the cid state)",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1324916253370089554",
+      "type": "Default",
+      "timestamp": "2025-01-04T05:44:10.557+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/Doot-Foundation/Doot_WebApplication/blob/main/utils%2Fhelper%2FPinHistorical.js#L47\n(not entirely related)",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1324916608115806228",
+      "type": "Default",
+      "timestamp": "2025-01-04T05:45:35.135+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/Doot-Foundation/contracts/blob/main/src%2FDoot.ts#L32\nhttps://github.com/Doot-Foundation/contracts/blob/main/src%2FDoot.ts#L281",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1324916945694232654",
+      "type": "Default",
+      "timestamp": "2025-01-04T05:46:55.62+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I guess what you are trying to do is make the process being verified by anyone if they wish to (from start to end) and cause of that you would want the whole proof history",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "372048889135628300",
+              "name": "anarkrypto",
+              "discriminator": "0000",
+              "nickname": "Kaique Anarkrypto",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1324917121393889322",
+      "type": "Default",
+      "timestamp": "2025-01-04T05:47:37.51+04:00",
+      "timestampEdited": "2025-01-04T05:47:59.86+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am pretty sure there is an easier way to do this (Witness to a ZkProgram recursion proof or something) but I am not really sure if it exists or not",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1324924821246840944",
+      "type": "Reply",
+      "timestamp": "2025-01-04T06:18:13.298+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I would then just wait until L1 settlement is implemented on Protokit tbh, since there's no point on providing any of these offchain proofs to your users since they would just be proving that there's a sequence of valid state transitions but it's not guaranteed that this sequence will be the one submitted to the L1, so you would just be wasting time working on something like that.",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "⬆️",
+            "code": "arrow_up",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2b06.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "810793675033673730",
+              "name": "br0wn_d3v",
+              "discriminator": "0000",
+              "nickname": "br0wnD3v",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "372048889135628300",
+              "name": "anarkrypto",
+              "discriminator": "0000",
+              "nickname": "Kaique Anarkrypto",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "372048889135628300",
+          "name": "anarkrypto",
+          "discriminator": "0000",
+          "nickname": "Kaique Anarkrypto",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1324914117278040126",
+        "channelId": "1324788429808205967",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1324942722083061870",
+      "type": "Reply",
+      "timestamp": "2025-01-04T07:29:21.19+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It can prove at least that the votes are legit while the L2 cannot prove that.\n\nBut yeah, it's not silver bullet",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1050599472071180389",
+              "name": "chrlyz",
+              "discriminator": "0000",
+              "nickname": "chrlyz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1324924821246840944",
+        "channelId": "1324788429808205967",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1324999618936705084",
+      "type": "Reply",
+      "timestamp": "2025-01-04T11:15:26.457+04:00",
+      "timestampEdited": "2025-01-04T11:19:06.609+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I see, you are right on being able to prove the voting even without committing the result onchain. If you were using vanilla o1js instead of Protokit you could simply store the last proof resulting from merging or aggregating all the other proofs and just share the resulting proof with users, which could in turn compile the zkProgram to get the verification key and verify the proof themselves (check [this](https://docs.minaprotocol.com/zkapps/tutorials/recursion) tutorial to get a better understanding of how this would look like in o1js). Not sure how you would do this in Protokit tho.",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "372048889135628300",
+              "name": "anarkrypto",
+              "discriminator": "0000",
+              "nickname": "Kaique Anarkrypto",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "372048889135628300",
+          "name": "anarkrypto",
+          "discriminator": "0000",
+          "nickname": "Kaique Anarkrypto",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1324942722083061870",
+        "channelId": "1324788429808205967",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1325059865546063925",
+      "type": "Default",
+      "timestamp": "2025-01-04T15:14:50.368+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "zkCloudWorker supports storing any metadata, including serialized proofs created inside zkCloudWorker cloud worker, and accessing those proofs.\nYou need to call `publishTransactionMetadata()` for it, and then the proof will be accessible.\nYou can see the example of metadata at any proof job on https://jobs.minatokens.com/, for example, for the last NFT transfer that was made 5 minutes ago:\nhttps://zkcloudworker.com/job/zkCWENShkxmVVtRrmDsIeV1wke0WevSlEtmmmKo1LIGo2Yjp/",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Proof Generation Jobs",
+          "url": "https://jobs.minatokens.com/",
+          "timestamp": null,
+          "description": "zkCloudWorker Proof Generation Jobs",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "1041776221064798229",
+            "name": "based",
+            "code": "based",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.discordapp.com/emojis/1041776221064798229.png"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "810793675033673730",
+              "name": "br0wn_d3v",
+              "discriminator": "0000",
+              "nickname": "br0wnD3v",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "372048889135628300",
+              "name": "anarkrypto",
+              "discriminator": "0000",
+              "nickname": "Kaique Anarkrypto",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1325064265526280232",
+      "type": "Default",
+      "timestamp": "2025-01-04T15:32:19.405+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can also check the voting example that consolidates ZkProgram proofs and puts the result of the voting on-chain for the purpose of upgrading the verification keys of the Smart Contracts, but the voting is actually just about the database that can hold any data, not only verification keys.\nhttps://github.com/zkcloudworker/minatokens-lib/blob/main/packages/upgradable/src/upgrade.ts\nhttps://github.com/dfstio/upgrade-example\n\nThe basic idea is that you can, instead of waiting for L1 settlement contracts that are general, design your own SmartContract for the specific narrow purpose of committing voting results on L1.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "372048889135628300",
+              "name": "anarkrypto",
+              "discriminator": "0000",
+              "nickname": "Kaique Anarkrypto",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1326131385597169716",
+      "type": "Default",
+      "timestamp": "2025-01-07T14:12:40.656+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "shortest answer here would be that the proofs themselves are not neccessarily stored, since they are not needed to verify the latest block, instead the proofs are recursively verified, this applies to proofs that authorize account updates, or block proofs of the L1 itself",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "372048889135628300",
+              "name": "anarkrypto",
+              "discriminator": "0000",
+              "nickname": "Kaique Anarkrypto",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1334242832004943903",
+      "type": "Default",
+      "timestamp": "2025-01-29T23:24:40.183+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I guess the original proof can be seen from the transaction authorization-field, if it is proof type? Could it be picked up there and used offline?",
+      "author": {
+        "id": "619405548575522816",
+        "name": "jqrs",
+        "discriminator": "0000",
+        "nickname": "jq-rs",
+        "color": "#FFA6C9",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/619405548575522816/6acef26b4dd89d247d6ea815faf2deb7.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 17
+}

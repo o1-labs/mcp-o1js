@@ -1,0 +1,212 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1125547312882659350",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Pattern for referring to an index stored in state?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T15:15:37.2679306+04:00",
+  "messages": [
+    {
+      "id": "1125547312882659350",
+      "type": "Default",
+      "timestamp": "2023-07-04T02:03:11.049+04:00",
+      "timestampEdited": "2023-07-04T11:46:56.202+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have a MerkleTree that I'd like to use in a similar way to an array, where I'd like to append values to it.  I'd like an append(item: Item) function that adds the item to the next unused index.\n\nWhat's a good way to do this?\n\n(Currently, I'm trying an SC that keeps 2 state Fields: The MerkleRoot and the last index.   But I seem to be unable to cast the Index field into a BigInt without breaking provability...)",
+      "author": {
+        "id": "802439536331194388",
+        "name": "voboda_",
+        "discriminator": "0000",
+        "nickname": "voboda",
+        "color": "#F9D7FA",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1282734038930559086",
+            "name": "Minacon team",
+            "color": "#F9D7FA",
+            "position": 128
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/802439536331194388/22d76c312ad714cf6b34baaecaacf682.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1125675469606494218",
+      "type": "Default",
+      "timestamp": "2023-07-04T10:32:25.993+04:00",
+      "timestampEdited": "2023-07-04T11:47:06.145+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Related: in Tutorial 5, in the Merkle Maps section, an example is given:\n```\n  zkapp.update(\n    contract.update(\n      witness,\n      key,\n      Field(50),\n      Field(5)\n    );\n  );\n```\n\nHowever, contract is not specified in this tutorial, nor in the example repo, nor can I find an `update()` function the API docs.   What is `contract` in this case?  What line of code is missing that instantiates it?",
+      "author": {
+        "id": "802439536331194388",
+        "name": "voboda_",
+        "discriminator": "0000",
+        "nickname": "voboda",
+        "color": "#F9D7FA",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1282734038930559086",
+            "name": "Minacon team",
+            "color": "#F9D7FA",
+            "position": 128
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/802439536331194388/22d76c312ad714cf6b34baaecaacf682.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1125823852216328304",
+      "type": "Default",
+      "timestamp": "2023-07-04T20:22:03.164+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think that this is saying call a method (which you write) called `update`, which then grabs state, does some logic (optional) and updates the state. Take a look at the example from tutorial 5 which updates the Merkle tree: \n\n```ts\n  @method update(\n    leafWitness: MerkleWitness20,\n    numberBefore: Field,\n    incrementAmount: Field\n  ) {\n    const initialRoot = this.treeRoot.get();\n    this.treeRoot.assertEquals(initialRoot);\n\n    incrementAmount.assertLt(Field(10));\n\n    // check the initial state matches what we expect\n    const rootBefore = leafWitness.calculateRoot(numberBefore);\n    rootBefore.assertEquals(initialRoot);\n\n    // compute the root after incrementing\n    const rootAfter = leafWitness.calculateRoot(\n      numberBefore.add(incrementAmount)\n    );\n\n    // set the new root\n    this.treeRoot.set(rootAfter);\n  }\n```\n\nSo, you could write a similar method to update the state for your Merkle map. The example you referenced would then be calling your contract method with some arguments, generating a proof. The `zkapp.update` part would then presumably reference creating, signing and sending the transaction with the proof and state updates.",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1125849060100800622",
+      "type": "Default",
+      "timestamp": "2023-07-04T22:02:13.192+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks.  I worked out that kapp.update referred to the @method directly. \n\nI believe that contract.update was not needed, and was written in by mistake.",
+      "author": {
+        "id": "802439536331194388",
+        "name": "voboda_",
+        "discriminator": "0000",
+        "nickname": "voboda",
+        "color": "#F9D7FA",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1282734038930559086",
+            "name": "Minacon team",
+            "color": "#F9D7FA",
+            "position": 128
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/802439536331194388/22d76c312ad714cf6b34baaecaacf682.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

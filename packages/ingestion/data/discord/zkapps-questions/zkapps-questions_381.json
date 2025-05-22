@@ -1,0 +1,238 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1210775746746916946",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "When a @state changes, does everyone running the contract automatically get the new value?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:31:34.5634908+04:00",
+  "messages": [
+    {
+      "id": "1210775746746916946",
+      "type": "Default",
+      "timestamp": "2024-02-24T06:30:33.15+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In the https://docs.minaprotocol.com/zkapps/tutorials/hello-world there is a `@state` called `num`. When it has a new value and different people are running the `SmartContract` in their machines, do all of them automatically get the latest value when `this.num.get()` is called? Or do different machines executing this smart contract need to communicate the latest state separately using an unspecified manner?\n\nIf everyone automatically get the latest value of the state, do they get it from Archive Nodes? Because no one else has the values of the `@state` as I understand it. Because the blockchain only contains proofs that assertions in the smart contract were asserted correctly by each smart contract executor.",
+      "author": {
+        "id": "1183046725867413616",
+        "name": "rokosbasiliskegg_95590",
+        "discriminator": "0000",
+        "nickname": "EJP",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Mina Documentation",
+          "url": "https://docs.minaprotocol.com/zkapps/tutorials/hello-world",
+          "timestamp": null,
+          "description": "Website for documentation about Mina Protocol",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/_PJlmeDNad-_70g7jbEdYnu0Z3mezgosb1bPK642OJE/https/docs.minaprotocol.com/img/common/mina-logo.png",
+            "width": 1120,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1210867679280504893",
+      "type": "Reply",
+      "timestamp": "2024-02-24T12:35:51.574+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://docs.minaprotocol.com/zkapps/o1js/smart-contracts#on-chain-state explains in more detail how this works at the circuit level. the zkapp account state in the ledger has fixed space for 8 field elements, so if you only need a few pieces of state syncing to the chain is all you need.\n\none of these values can be the hash of any off-chain state, in which case your application separately needs to handle the question of data availability.",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1183046725867413616",
+          "name": "rokosbasiliskegg_95590",
+          "discriminator": "0000",
+          "nickname": "EJP",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1210775746746916946",
+        "channelId": "1210775746746916946",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1211576750933540885",
+      "type": "Default",
+      "timestamp": "2024-02-26T11:33:27.43+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@EJP also, when you say only archive nodes have this state, this is not true (and is a classical misunderstanding of Mina's architecture).\n\nMina nodes also have the current state, and have a graphql API to fetch accounts and other stuff.\n\no1js will fetch the state from any graphql url you give. It'll be the state of the latest block",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1183046725867413616",
+          "name": "rokosbasiliskegg_95590",
+          "discriminator": "0000",
+          "nickname": "EJP",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ]
+    },
+    {
+      "id": "1212256345416273920",
+      "type": "Default",
+      "timestamp": "2024-02-28T08:33:55.381+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you",
+      "author": {
+        "id": "1183046725867413616",
+        "name": "rokosbasiliskegg_95590",
+        "discriminator": "0000",
+        "nickname": "EJP",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

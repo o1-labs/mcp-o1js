@@ -1,0 +1,338 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1362893208715001856",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Simple struct initialisation fails?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T15:01:54.3543982+04:00",
+  "messages": [
+    {
+      "id": "1362893208715001856",
+      "type": "Default",
+      "timestamp": "2025-04-19T00:51:02.289+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here is a simple dummy code I am trying to run\n```javascript\nimport { Field, Provable, Struct, ZkProgram } from \"o1js\";\n\nconst ARRAY_LEN = 10;\n\nclass DoesNotWorkStruct extends Struct({\n    single_array: Provable.Array(Field, ARRAY_LEN),\n    double_array: Provable.Array(Provable.Array(Field, ARRAY_LEN), ARRAY_LEN),\n    element: Field\n}) { }\n\n\nconst program = ZkProgram({\n    name: \"DoesNotWork\",\n    publicInput: DoesNotWorkStruct,\n    methods: {\n        main: {\n            privateInputs: [Field],\n            method: async (publicInput: DoesNotWorkStruct, privateInputs: Field) => {\n                let sum = privateInputs;\n                const { single_array, double_array, element } = publicInput;\n                for (let i = 0; i < ARRAY_LEN; i++) {\n                    sum = sum.add(single_array[i]);\n                    for (let j = 0; j < ARRAY_LEN; j++) {\n                        sum = sum.add(double_array[i][j]);\n                    }\n                }\n                sum.assertEquals(element);\n            }\n        }\n    }\n})\n\nconst main = async () => {\n    await program.compile();\n    const publicInput = new DoesNotWorkStruct({\n        single_array: Array.from({ length: ARRAY_LEN }, (_, i) => Field(i)),\n        double_array: Array.from({ length: ARRAY_LEN }, (_, i) => Array.from({ length: ARRAY_LEN }, (_, j) => Field(i + j))),\n        element: Field(945)\n    })\n    const privateInput = Field(0);\n    const { proof } = await program.main(publicInput, privateInput);\n    console.log(\"Proof generated:\", proof);\n    await proof.verify()\n}\n\n\nmain()\n```\nThis code fails with the error\n```\nTypeError: Class constructor Struct_ cannot be invoked without 'new'\n    at new DoesNotWorkStruct (/Users/utkarshdagoat/dev/o1js-struct-test/dist/index.js:59:42)\n```\nThe compiled code in question which throws the error fixing gives `.apply` is not a constructor\n```javascript\n        return _super !== null && new _super.apply(this, arguments) || this;\n\n```\nAm I doing something wrong?",
+      "author": {
+        "id": "1055876440333242408",
+        "name": "utkarshdagoat",
+        "discriminator": "0000",
+        "nickname": "utkarshdagoat",
+        "color": "#FFF7F7",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1362893407105712438",
+      "type": "Default",
+      "timestamp": "2025-04-19T00:51:49.589+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I tried different o1js and node version everything gives the same error. strangely other code build with same tsconfig with struct is able to run",
+      "author": {
+        "id": "1055876440333242408",
+        "name": "utkarshdagoat",
+        "discriminator": "0000",
+        "nickname": "utkarshdagoat",
+        "color": "#FFF7F7",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1362893499917271231",
+      "type": "Default",
+      "timestamp": "2025-04-19T00:52:11.717+04:00",
+      "timestampEdited": "2025-04-19T00:52:22.598+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```json\n{\n    \"files\": [\n        \"index.ts\"\n    ],\n    \"compilerOptions\": {\n        \"outDir\": \"dist\",\n        \"strictNullChecks\": true,\n        \"lib\": [\n            \"es2020\",\n        ],\n        \"target\": \"ES2020\",\n        \"module\": \"ES2022\",\n        \"declaration\": true,\n        \"experimentalDecorators\": true,\n        \"emitDecoratorMetadata\": true,\n        \"moduleResolution\": \"node\",\n        \"noImplicitAny\": true,\n        \"allowJs\": true,\n        \"esModuleInterop\": true,\n        \"strict\": true,\n        \"alwaysStrict\": true,\n        \"declarationMap\": true,\n        \"strictFunctionTypes\": true,\n        \"types\": [\n            \"node\"\n        ],\n        \"skipLibCheck\": true\n    },\n    \"exclude\": [\n        \"node_modules\"\n    ]\n}```\ntsconfig.json",
+      "author": {
+        "id": "1055876440333242408",
+        "name": "utkarshdagoat",
+        "discriminator": "0000",
+        "nickname": "utkarshdagoat",
+        "color": "#FFF7F7",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1363017647872147580",
+      "type": "Default",
+      "timestamp": "2025-04-19T09:05:30.896+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It worked for me. Can you share `package.json`?",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1363034824792604672",
+      "type": "Default",
+      "timestamp": "2025-04-19T10:13:46.193+04:00",
+      "timestampEdited": "2025-04-19T10:13:54.61+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\n{\n  \"name\": \"o1js-struct-test\",\n  \"version\": \"1.0.0\",\n  \"description\": \"\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"build\": \"tsc index.ts --outDir dist\"\n  },\n  \"keywords\": [],\n  \"author\": \"\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"@types/node\": \"^22.14.1\",\n    \"o1js\": \"^2.0.0\"\n  },\n  \"devDependencies\": {\n    \"typescript\": \"^5.8.3\"\n  }\n}\n```",
+      "author": {
+        "id": "1055876440333242408",
+        "name": "utkarshdagoat",
+        "discriminator": "0000",
+        "nickname": "utkarshdagoat",
+        "color": "#FFF7F7",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1363412421376737352",
+      "type": "Default",
+      "timestamp": "2025-04-20T11:14:12.234+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you replace the `package.json` and `tsconfig.json` with zkapp-cli generated ones if there is reason to use custom ones?",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1055876440333242408",
+              "name": "utkarshdagoat",
+              "discriminator": "0000",
+              "nickname": "utkarshdagoat",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 6
+}

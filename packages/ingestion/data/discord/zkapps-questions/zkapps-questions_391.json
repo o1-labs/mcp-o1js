@@ -1,0 +1,136 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1210517174049833022",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "setVerificationKey, missing 'AuthRequired'",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:37:39.177183+04:00",
+  "messages": [
+    {
+      "id": "1210517174049833022",
+      "type": "Default",
+      "timestamp": "2024-02-23T13:23:04.615+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I just updated my snarkyjs to o1js.\n\n```\ninit() {\n    super.init();\n    this.account.permissions.set({\n      ...Permissions.default(),\n      editActionState: Permissions.proofOrSignature(),\n      editState: Permissions.proofOrSignature(),\n      setVerificationKey: Permissions.proofOrSignature(),\n      send: Permissions.proofOrSignature(),\n      incrementNonce: Permissions.proofOrSignature(),\n    });\n    this.nullifierRoot.set(Field(0));\n    this.committedGuardians.set(Field(0));\n    this.approvedGuardians.set(Field(0));\n    this.counters.set(PackedLimits.fromBigInts([BigInt(0), BigInt(0)]));\n  }\n```\n\nError:\n```\nsrc/guardians/GuardianZkApp.ts:124:7 - error TS2739: Type 'AuthRequired' is missing the following properties from type '{ auth: AuthRequired; txnVersion: UInt32; }': auth, txnVersion\n\n    124       setVerificationKey: Permissions.proofOrSignature(),\n              ~~~~~~~~~~~~~~~~~~\n\n      node_modules/o1js/dist/node/bindings/mina-transaction/gen/transaction.d.ts:370:21\n        370                     setVerificationKey: {\n                                ~~~~~~~~~~~~~~~~~~\n        The expected type comes from property 'setVerificationKey' which is declared here on type '{ editState: AuthRequired; access: AuthRequired; send: AuthRequired; receive: AuthRequired; setDelegate: AuthRequired; ... 7 more ...; setTiming: AuthRequired; }'\n```\n\nHas anyone an example how to use \"setVerificationKey\"?\n  ```setVerificationKey: {\n                        auth: AuthRequired;\n                        txnVersion: UInt32;\n                    };```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1210517875912220702",
+      "type": "Default",
+      "timestamp": "2024-02-23T13:25:51.952+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I just found it here: https://github.com/o1-labs/o1js/blob/24537f740f82c2922a61e937b28fae8bf0fe068c/src/examples/zkapps/zkapp-self-update.ts#L24\n\n```\ninit() {\n    super.init();\n    this.account.permissions.set({\n      ...Permissions.default(),\n      setVerificationKey: {\n        auth: Permissions.proof(),\n        txnVersion: TransactionVersion.current(),\n      },\n    });\n  }```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "o1js/src/examples/zkapps/zkapp-self-update.ts at 24537f740f82c2922a...",
+          "url": "https://github.com/o1-labs/o1js/blob/24537f740f82c2922a61e937b28fae8bf0fe068c/src/examples/zkapps/zkapp-self-update.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/o1js development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/L9XaBCgiNzxoo_6YkBRjWmuawlUrC_1K197YyfKdVS4/https/opengraph.githubassets.com/46bfa021ef76ee97bbb74cfd2746ff3466e0694331752c32b4cf82c19faa9491/o1-labs/o1js",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 2
+}

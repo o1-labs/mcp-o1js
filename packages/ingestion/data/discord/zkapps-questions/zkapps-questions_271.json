@@ -1,0 +1,1713 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1237299723732385844",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "@method.returns(Field) does not compile",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T18:13:54.8789355+04:00",
+  "messages": [
+    {
+      "id": "1237299723732385844",
+      "type": "Default",
+      "timestamp": "2024-05-07T11:07:22.055+04:00",
+      "timestampEdited": "2024-05-07T11:09:31.26+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Using @method.returns decorator gives the error below. The error disappears when returns is removed.\n```\nsrc/KV.ts:39:4 - error TS2345: Argument of type 'ActionsKV' is not assignable to parameter of type 'SmartContract & { [x: string]: (...args: any) => Promise<Field>; }'.\n  Type 'ActionsKV' is not assignable to type '{ [x: string]: (...args: any) => Promise<Field>; }'.\n    Index signature for type 'string' is missing in type 'ActionsKV'.\n\n39   @method.returns(Field) async get(key: PublicKey) {\n      ~~~~~~~~~~~~~~~~~~~~~\n```",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1237750512120758413",
+      "type": "Default",
+      "timestamp": "2024-05-08T16:58:38.382+04:00",
+      "timestampEdited": "2024-05-08T16:58:45.382+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "can you show the code? I doubt that `.returns()` is the problem, we use it all over the place",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1238040520584859681",
+      "type": "Default",
+      "timestamp": "2024-05-09T12:11:01.788+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "``` import {\n  Field,\n  Struct,\n  method,\n  state,\n  State,\n  SmartContract,\n  Reducer,\n  provable,\n  PublicKey,\n  Bool,\n  Poseidon,\n  Provable\n} from 'o1js';\n\n/**\n * Basic Example\n * See https://docs.minaprotocol.com/zkapps for more info.\n *\n * The Add contract initializes the state variable 'num' to be a Field(1) value by default when deployed.\n * When the 'update' method is called, the Add contract adds Field(2) to its 'num' contract state.\n *\n * This file is safe to delete and replace with your own contract.\n */\n\n\nexport class Option extends Struct({\n  isSome: Bool,\n  value: Field,\n}) {}\n\nexport const KeyValuePair = provable({\n  key: Field,\n  value: Field,\n});\n\nexport class StorageContract extends SmartContract {\n  reducer = Reducer({\n    actionType: KeyValuePair,\n  });\n\n  @method async set(key: PublicKey, value: Field) {\n    this.reducer.dispatch({ key: Poseidon.hash(key.toFields()), value });\n  }\n\n  @method.returns(Option)\n  async get(key: PublicKey) {\n    let pendingActions = this.reducer.getActions({\n      fromActionState: Reducer.initialActionState,\n    });\n\n    let keyHash = Poseidon.hash(key.toFields());\n\n    let optionValue = this.reducer.reduce(\n      pendingActions,\n      Option,\n      (state, action) => {\n        let currentMatch = keyHash.equals(action.key);\n        return {\n          isSome: currentMatch.or(state.isSome),\n          value: Provable.if(currentMatch, action.value, state.value),\n        };\n      },\n      Option.empty(),\n      { maxUpdatesWithActions: 5 }\n    );\n\n    return optionValue;\n  }\n}\n\n```",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1238040928090853376",
+      "type": "Default",
+      "timestamp": "2024-05-09T12:12:38.945+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "code is a copy of map.ts from your feature/experimental-offchain-state fork.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1238041965929435136",
+      "type": "Default",
+      "timestamp": "2024-05-09T12:16:46.385+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1238041965619187742",
+          "url": "https://cdn.discordapp.com/attachments/1237299723732385844/1238041965619187742/Screenshot_2024-05-09_at_11.16.38.png?ex=6809f36e&is=6808a1ee&hm=e44b28794de7071d2487cfb64e7b014df43f48f05c3d12911ab9491572d961a9&",
+          "fileName": "Screenshot_2024-05-09_at_11.16.38.png",
+          "fileSizeBytes": 186498
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1238076079667679265",
+      "type": "Reply",
+      "timestamp": "2024-05-09T14:32:19.734+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I changed Option to Field here to check if it is related to that.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1237299723732385844",
+        "channelId": "1237299723732385844",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1238389066916036628",
+      "type": "Reply",
+      "timestamp": "2024-05-10T11:16:01.709+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Check if it's related to what?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "401088306210799616",
+          "name": "borays",
+          "discriminator": "0000",
+          "nickname": "boray",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1238076079667679265",
+        "channelId": "1237299723732385844",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1238389316972183565",
+      "type": "Default",
+      "timestamp": "2024-05-10T11:17:01.327+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Changing Option to Field seems wrong because the method actually returns an option",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1238389390611316776",
+      "type": "Default",
+      "timestamp": "2024-05-10T11:17:18.884+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It has to match the method return type",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1238434959778119741",
+      "type": "Reply",
+      "timestamp": "2024-05-10T14:18:23.42+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "to check if can return Field, I changed the rest to return Field. The error message has returns(Field) because of that.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1238389066916036628",
+        "channelId": "1237299723732385844",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1239425210470629377",
+      "type": "Default",
+      "timestamp": "2024-05-13T07:53:17.583+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Did you find a fix to this problem?",
+      "author": {
+        "id": "231445939980599296",
+        "name": "julio4",
+        "discriminator": "0000",
+        "nickname": "Julio | Nethermind",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/231445939980599296/754d9ad40e47f5ae603b056ba18192ea.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1239535127420338207",
+      "type": "Reply",
+      "timestamp": "2024-05-13T15:10:03.826+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Not yet",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "231445939980599296",
+          "name": "julio4",
+          "discriminator": "0000",
+          "nickname": "Julio | Nethermind",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/231445939980599296/754d9ad40e47f5ae603b056ba18192ea.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1239425210470629377",
+        "channelId": "1237299723732385844",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1239554838707310672",
+      "type": "Default",
+      "timestamp": "2024-05-13T16:28:23.363+04:00",
+      "timestampEdited": "2024-05-13T16:30:07.968+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "try changing this \n``` @method.returns(Option)\n  async get(key: PublicKey) { ```\nto \n```  @method.returns(Option)\n  async get(key: PublicKey): Promise<Option> { ```\npretty sure stuff should work without explicitly defining return type of TS but kinda remember getting similar error when initially migrating to latest o1js",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1239556292356345856",
+      "type": "Default",
+      "timestamp": "2024-05-13T16:34:09.94+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "looking at my commits around that time I've had to update typescript in my package.json to `\"^5.4.3\"`",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1239563125242466375",
+      "type": "Default",
+      "timestamp": "2024-05-13T17:01:19.027+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hey @boray I copied your file into my editor, it doesn't have an error for me. I'm on TS 5.1",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "401088306210799616",
+          "name": "borays",
+          "discriminator": "0000",
+          "nickname": "boray",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1240430536850276422",
+      "type": "Reply",
+      "timestamp": "2024-05-16T02:28:06.07+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this didn't fix but I changed typescript to `\"^5.4.3\"` and it seems to build without any error right now.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4C",
+            "code": "ok_hand",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44c.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738036747455299764",
+              "name": "zkkirol",
+              "discriminator": "0000",
+              "nickname": "zkKirol",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "738036747455299764",
+          "name": "zkkirol",
+          "discriminator": "0000",
+          "nickname": "zkKirol",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "857943736289984583",
+              "name": "prism-contributing-member",
+              "color": "#FFEABD",
+              "position": 112
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "1344664872356679743",
+              "name": "MWN-tester",
+              "color": "#FFA6C9",
+              "position": 39
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1239554838707310672",
+        "channelId": "1237299723732385844",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1240709846731456594",
+      "type": "Reply",
+      "timestamp": "2024-05-16T20:57:58.735+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks, this worked for me too!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "401088306210799616",
+          "name": "borays",
+          "discriminator": "0000",
+          "nickname": "boray",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1240430536850276422",
+        "channelId": "1237299723732385844",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1240723136199135332",
+      "type": "Reply",
+      "timestamp": "2024-05-16T21:50:47.191+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I tried ts versions from 4.7.3 to 5.4.3. The error disappears after 5.0. I am looking to release notes to find out why this happened.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1240430536850276422",
+        "channelId": "1237299723732385844",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1240723821292556499",
+      "type": "Default",
+      "timestamp": "2024-05-16T21:53:30.53+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It seems to be related to this bug https://github.com/microsoft/TypeScript/issues/52435",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Tighter parameter decorator checking with `--experimentalDecorators...",
+          "url": "https://github.com/microsoft/TypeScript/issues/52435",
+          "timestamp": null,
+          "description": "// @experimentalDecorators: true export declare const Inject: (entity: Function, dataSource?: string) => (target: object, key: string | symbol, index?: number) => void; export class Foo {} ex...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/MuHKyDrLiRjWaf15crfnK9K5uPTwPIveo0QVC61oLzM/https/opengraph.githubassets.com/00bc66a925b9f62d649f9cc0c5b9e126dd3bb55bf771ffd2d97523829c292231/microsoft/TypeScript/issues/52435",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE2E",
+            "code": "open_mouth",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f62e.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 19
+}

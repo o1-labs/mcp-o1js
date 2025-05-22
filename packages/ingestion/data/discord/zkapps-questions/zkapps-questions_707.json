@@ -1,0 +1,694 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1134314489702002768",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Reducer (in Berkeley) fails with getActions",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:40:41.2992585+04:00",
+  "messages": [
+    {
+      "id": "1134314489702002768",
+      "type": "Default",
+      "timestamp": "2023-07-28T06:40:48.889+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "When running this code on Berkeley:\n```\n    // first check if finished (result > 0)\n    let result: Field = instance.result.get();\n    const isFinished = result.greaterThan(Field(0)).toBoolean();\n    if (isFinished)\n      continue; // it will not be copied to the updated queue \n\n    // still voting, must leave it in the queue and go on ...\n    updatedQueue.push(running[j]);\n\n    let claimUid: Field = instance.claimUid.get();\n    console.log(\"\\nrollingClaims running claimUid= \", claimUid.toString());\n\n    // do we have pending votes ?\n    // CAUTION: we must be sure about what does reducer.getActions() really\n    // returns because it may be misgiding\n    let actionsState: Field = instance.actionsState.get();\n    console.log(\"actionsState=\", actionsState.toString());\n    \n    let pending = instance.reducer.getActions({\n      fromActionState: actionsState,\n    });\n    console.log(\"rollingClaims pending votes= \", pending.length);\n```",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1134314516461666485",
+      "type": "Default",
+      "timestamp": "2023-07-28T06:40:55.269+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I get this error:\n```\naddress= B62qkNrf2DcHrUjSxAdvC71oRKYS2sXpzZgP2JGNM5q6vKT42xVsmEb\nsecret= \n\nrollingClaims running claimUid=  1001\nactionsState= 25079927036070901246064867767436987657692091363973573142121686150614948079097\n\n/home/mzito/dev/work/sc-contracts/contracts/node_modules/snarkyjs/dist/node/bindings/compiled/_node_bindings/snarky_js_node.bc.cjs:7467\n         throw err;\n         ^\n\nError: getActions: Could not find actions for the public key [object Object]\n    at Object.getActions (file:///home/mzito/dev/work/sc-contracts/contracts/node_modules/snarkyjs/dist/node/lib/mina.js:601:19)\n    at Module.getActions (file:///home/mzito/dev/work/sc-contracts/contracts/node_modules/snarkyjs/dist/node/lib/mina.js:763:27)\n    at file:///home/mzito/dev/work/sc-contracts/contracts/node_modules/snarkyjs/dist/node/lib/zkapp.js:998:36\n    at Object.asProver (file:///home/mzito/dev/work/sc-contracts/contracts/node_modules/snarkyjs/dist/node/lib/provable-context.js:32:9)\n    at Object.getActions (file:///home/mzito/dev/work/sc-contracts/contracts/node_modules/snarkyjs/dist/node/lib/zkapp.js:997:22)\n    at rollupClaims (file:///home/mzito/dev/work/sc-contracts/contracts/build/src/claims-roller.js:22:40)\n    at file:///home/mzito/dev/work/sc-contracts/contracts/build/src/tests/main-voting-rollup-tests.js:25:11\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n```\n\nI had previously send transactions which dispatched 3 actions and they were succesfull.\n\nSo I know there area actions available. \n\nAnd by the way, as I understand it should not fail, just return an array with length 0.\n\nThanks for any help  !",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1134314688646238309",
+      "type": "Default",
+      "timestamp": "2023-07-28T06:41:36.321+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is there a particular way to retrieve actions in Berkeley ? How ?",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1134315055048052796",
+      "type": "Default",
+      "timestamp": "2023-07-28T06:43:03.678+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also the same code was running and tested in Local.",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1134322364071563304",
+      "type": "Default",
+      "timestamp": "2023-07-28T07:12:06.285+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Using this ```\n    const \n      BERKELEY_URL = 'https://proxy.berkeley.minaexplorer.com/graphql',\n      ARCHIVE_URL = 'https://archive.berkeley.minaexplorer.com/';\n\n    const Berkeley = Mina.Network({\n      mina: BERKELEY_URL, \n      archive: ARCHIVE_URL\n    });\n    Mina.setActiveInstance(Berkeley);\n```",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1134322441221591081",
+      "type": "Default",
+      "timestamp": "2023-07-28T07:12:24.679+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Does not solve it. What I am doing wrong ?",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1136295231281705032",
+      "type": "Default",
+      "timestamp": "2023-08-02T17:51:34.482+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi there, any answer on this ?",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1136295452841619507",
+      "type": "Default",
+      "timestamp": "2023-08-02T17:52:27.306+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also tried using Mina.getActions but with similar error",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1136297771998117928",
+      "type": "Reply",
+      "timestamp": "2023-08-02T18:01:40.236+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Mario | Socialcap Did you even talk to the admin yet or even open a ticket support to get help?",
+      "author": {
+        "id": "1131549905517809716",
+        "name": "jean234.",
+        "discriminator": "0000",
+        "nickname": "Jean234",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "687695163988246532",
+          "name": "mario_zito",
+          "discriminator": "0000",
+          "nickname": "Mario | Socialcap",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1136295452841619507",
+        "channelId": "1134314489702002768",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1136339340780392468",
+      "type": "Reply",
+      "timestamp": "2023-08-02T20:46:51.006+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "From what I know this is the channel for questions. Why should I talk to admin for a dev question ?  Questions of this type have been posted here many times before. I have posted many of them myself and received answers  ... so don't get exactly what you mean. Where are the support tickets ?",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1131549905517809716",
+          "name": "jean234.",
+          "discriminator": "0000",
+          "nickname": "Jean234",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1136297771998117928",
+        "channelId": "1134314489702002768",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1136353976242159658",
+      "type": "Default",
+      "timestamp": "2023-08-02T21:45:00.372+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @Mario | Socialcap , are you getting no results from the above code? I just ran it and I'm getting returned actions with the following script. Using `fetchActions` would be the correct call over `getActions`:\n\n```ts\nimport { PublicKey, Mina } from 'snarkyjs';\n\nconst address = 'B62qkNrf2DcHrUjSxAdvC71oRKYS2sXpzZgP2JGNM5q6vKT42xVsmEb';\n\nconst BERKELEY_URL = 'https://proxy.berkeley.minaexplorer.com/graphql',\n  ARCHIVE_URL = 'https://archive.berkeley.minaexplorer.com/';\n\nconst Berkeley = Mina.Network({\n  mina: BERKELEY_URL,\n  archive: ARCHIVE_URL,\n});\nMina.setActiveInstance(Berkeley);\n\nconsole.log('Fetching actions for address: ' + address);\nMina.fetchActions(PublicKey.fromBase58(address)).then((actions) => {\n  console.log(actions);\n});\n```",
+      "author": {
+        "id": "147939956642414593",
+        "name": ".martman",
+        "discriminator": "0000",
+        "nickname": "o1martin",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "827666021543837728",
+            "name": "pre-release-access",
+            "color": "#98C79F",
+            "position": 85
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/147939956642414593/f70f8767c85f26db2e8c664abab37de1.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "687695163988246532",
+              "name": "mario_zito",
+              "discriminator": "0000",
+              "nickname": "Mario | Socialcap",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "687695163988246532",
+          "name": "mario_zito",
+          "discriminator": "0000",
+          "nickname": "Mario | Socialcap",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1136368013772324925",
+      "type": "Default",
+      "timestamp": "2023-08-02T22:40:47.18+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, this solves it. Sorry, tried to use `getActions` as used in the reducer \uD83D\uDE26 Thanks very much !",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 12
+}

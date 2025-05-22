@@ -1,0 +1,165 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1050326380379906068",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error in tutorial 5 - Struct",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T17:50:16.8467578+04:00",
+  "messages": [
+    {
+      "id": "1050326380379906068",
+      "type": "Default",
+      "timestamp": "2022-12-08T12:22:03.203+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The followingo code doesn't work:\n\n```\nclass Point extends Struct({\n  x: Field,\n  y: Field,\n}) {\n  addPoints(a: Point, b: Point) {\n    return new Point({ x: a.x.add(b.x), y: a.y.add(b.y) });\n  }\n}\n\nconst point1 = new Point({ x: Field(10), y: Field(4) });\nconst point2 = new Point({ x: Field(1), y: Field(2) });\n\nconst pointSum = Point.addPoints(point1, point2);\n\nconsole.log(`pointSum Fields: ${pointSum.toFields().map((p) => p.toString())}`);\n\nclass Points8 extends Struct({\n  points: [Point, Point, Point, Point, Point, Point, Point, Point],\n}) {}\n\nconst pointsArray = new Array(8)\n  .fill(null)\n  .map((_, i) => new Point({ x: Field(i), y: Field(i * 10) }));\nconst points8 = new Points8({ points: pointsArray });\n\nconsole.log(`points8 Fields: ${JSON.stringify(points8)}`);\n```\n\nbecause `addPoints` is an instance method. How to define class method for pure Struct?\n\nHere is how I implemeted it as instance method:\n```\nclass Point extends Struct({\n    x: Field,\n    y: Field,\n  }) {\n    add(another_point: Point) {\n      return new Point({\n        x: this.x.add(another_point.x),\n        y: this.y.add(another_point.y),\n      });\n    }\n  }\n\n  const point1 = new Point({ x: Field(10), y: Field(4) });\n  const point2 = new Point({ x: Field(1), y: Field(2) });\n\n  const pointSum = point1.add(point2);\n\n  console.log(\n    'Point summary - x: ' +\n      pointSum.x.toString() +\n      ' | y: ' +\n      pointSum.y.toString()\n  );\n```",
+      "author": {
+        "id": "610641267415580687",
+        "name": "piotrmisiurek",
+        "discriminator": "0000",
+        "nickname": "piotrmisiurek \uD83C\uDF4A",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/610641267415580687/d15d8ae39b6a65bb92d4ee02273e2b73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "✅",
+            "code": "white_check_mark",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2705.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1050328658763579422",
+      "type": "Default",
+      "timestamp": "2022-12-08T12:31:06.412+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Greetings, I believe the `static` keyword is missing for `addPoints` \nFor further ref: https://www.typescriptlang.org/docs/handbook/2/classes.html#static-members",
+      "author": {
+        "id": "121594525704650752",
+        "name": "0xerhant",
+        "discriminator": "0000",
+        "nickname": "erhant",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/121594525704650752/560878fdfb689c09f9f4b8d9ea9b4fa9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1050576892262105178",
+      "type": "Default",
+      "timestamp": "2022-12-09T04:57:29.89+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you",
+      "author": {
+        "id": "610641267415580687",
+        "name": "piotrmisiurek",
+        "discriminator": "0000",
+        "nickname": "piotrmisiurek \uD83C\uDF4A",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/610641267415580687/d15d8ae39b6a65bb92d4ee02273e2b73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE4F",
+            "code": "pray",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f64f.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "121594525704650752",
+              "name": "0xerhant",
+              "discriminator": "0000",
+              "nickname": "erhant",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/121594525704650752/560878fdfb689c09f9f4b8d9ea9b4fa9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 3
+}

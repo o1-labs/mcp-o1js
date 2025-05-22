@@ -1,0 +1,457 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1212741256980074506",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Signature only setState problems on a contract instance.",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:25:35.3718901+04:00",
+  "messages": [
+    {
+      "id": "1212741256980074506",
+      "type": "Default",
+      "timestamp": "2024-02-29T16:40:47.307+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I get this error:\n** \"Transaction verification failed: Cannot update field 'appState' because permission for this field is 'Signature', but the required authorization was not provided or is invalid.\"**\n\n\nRunning this code:\n```\n  const tx = await Mina.transaction(owner, () => {\n    zkapp.somemethodcall(proof)\n  });\n  await tx.prove();\n  const retTx = tx.sign([zkappKey, ownerKey]);\n  const retTxId = await retTx.send();\n```\n\nThe init contract init:\n```\n  init() {\n    super.init();\n    // some state update\n    let p = Permissions.proof();\n    let s = Permissions.signature();\n    this.account.permissions.set({\n      ...Permissions.allImpossible(),\n      access: p,\n      editState: s,\n      editActionState: s,\n      send: s,\n      receive: p\n    });\n  }\n```\nWhat am I missing??",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1212766319238189106",
+      "type": "Default",
+      "timestamp": "2024-02-29T18:20:22.615+04:00",
+      "timestampEdited": "2024-02-29T18:20:44.472+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you print out the transaction using `toPretty()`? I think calling of the method sets the authorization to `{ isSigned: false, isProved: true }`, so you might need to call `this.requireSignature()` inside of the method to use also signature authorization.",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "➕",
+            "code": "heavy_plus_sign",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2795.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "201337099700535297",
+              "name": "45930",
+              "discriminator": "0000",
+              "nickname": "45930",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE0D",
+            "code": "heart_eyes",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f60d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "281785907202228244",
+              "name": "anks_",
+              "discriminator": "0000",
+              "nickname": "anks",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1212799897623859290",
+      "type": "Default",
+      "timestamp": "2024-02-29T20:33:48.326+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\n authorizationKind: {\n          isSigned: false,\n          isProved: true,\n          verificationKeyHash: '28873130871708446492440600360129267805033850949317645836087892752141973488529'\n        },\n```",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1212799960781692979",
+      "type": "Default",
+      "timestamp": "2024-02-29T20:34:03.384+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You were right",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1212804569743233034",
+      "type": "Default",
+      "timestamp": "2024-02-29T20:52:22.246+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It worked! Thank you @Faserisko",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "141272134633783297",
+          "name": "faseris",
+          "discriminator": "0000",
+          "nickname": "Faserisko",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1212830189625548830",
+      "type": "Default",
+      "timestamp": "2024-02-29T22:34:10.502+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Actually I've seen result from a wrong tab. \nIt did not work.\nIt change the error to be:\n```    Provable comparison functions can only be used on Fields of size <= 253 bits, got 255 bits.\n```\nwhich does not happen when using Proofs for setState..",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1213568978903900171",
+      "type": "Default",
+      "timestamp": "2024-03-02T23:29:51.592+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@anks there's not much point of calling a zkApp method when you just authorize it with a signature",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "281785907202228244",
+          "name": "anks_",
+          "discriminator": "0000",
+          "nickname": "anks",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1213599803984846848",
+      "type": "Default",
+      "timestamp": "2024-03-03T01:32:20.864+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah yeah. Still, is this why the problem occurs? \nI mistakenly thought that there's something like proof&signatures authorization\nThanks",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1213790720440139806",
+      "type": "Default",
+      "timestamp": "2024-03-03T14:10:58.894+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No this probably isn't why the problem occurs. No idea and hard to tell without code / stack trace",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 9
+}

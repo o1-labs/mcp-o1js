@@ -1,0 +1,312 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1091272861978726440",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Jest worker encountered 4 child process exceptions, exceeding retry limit",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T16:40:32.3608306+04:00",
+  "messages": [
+    {
+      "id": "1091272861978726440",
+      "type": "Default",
+      "timestamp": "2023-03-31T12:08:45.165+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\ndescribe('Guardian', () => {\n  beforeAll(async () => {\n    await isReady;\n  });\n  describe('#Guardian().from', () => {\n    it('create a new guardian', async () => {\n      const guardianAccount = PrivateKey.random().toPublicKey();\n      const guardian = Guardian.from(\n        guardianAccount,\n        Field(100),\n        Field(1),\n        Bool(true),\n        new GuardianWitness(dummyWitness)\n      );\n      expect(guardian.publicKey).toEqual(guardianAccount);\n      expect(guardian.guardianId).toEqual(Field(100));\n      expect(guardian.nullifier).toEqual(Field(1));\n      expect(guardian.isActive).toEqual(Bool(true));\n      expect(guardian.witness).toEqual(new GuardianWitness(dummyWitness));\n    });\n  });\n\n  describe('#empty().from', () => {\n    it('create a new guardian', async () => {\n      const guardian = Guardian.empty();\n      expect(guardian.publicKey).toEqual(PublicKey.empty());\n      expect(guardian.guardianId).toEqual(Field(0));\n      expect(guardian.nullifier).toEqual(Field(0));\n      expect(guardian.isActive).toEqual(Bool(false));\n    });\n  });\n\n  describe('#hash()', () => {\n    it('should return hash of the guardian', async () => {\n      const guardianAccount = PrivateKey.random().toPublicKey();\n      const guardianHash = Poseidon.hash(\n        guardianAccount\n          .toFields()\n          .concat(Field(1))\n          .concat(Field(2))\n          .concat(Bool(true).toFields())\n      );\n      const newGuardian = Guardian.from(\n        guardianAccount,\n        Field(1),\n        Field(2),\n        Bool(true),\n        new GuardianWitness(dummyWitness)\n      );\n      expect(newGuardian.hash()).toEqual(guardianHash);\n    });\n  });\n});\n```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1091272862125539348",
+          "url": "https://cdn.discordapp.com/attachments/1091272861978726440/1091272862125539348/Schermafbeelding_2023-03-31_om_10.08.20.png?ex=680b430d&is=6809f18d&hm=9c33b1d7854934906249722de79fee9c67ecbeb20682fd189c0279aad9096cf8&",
+          "fileName": "Schermafbeelding_2023-03-31_om_10.08.20.png",
+          "fileSizeBytes": 185553
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091272940143788083",
+      "type": "Default",
+      "timestamp": "2023-03-31T12:09:03.801+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Another test within the same file:\n```\nlet proofsEnabled = true;\n\ndescribe('GuardianZkApp', () => {\n  let deployerAccount: PublicKey,\n    deployerKey: PrivateKey,\n    guardians: [\n      {\n        key: PrivateKey;\n        account: PublicKey;\n      }\n    ],\n    zkAppAddress: PublicKey,\n    zkAppPrivateKey: PrivateKey,\n    zkApp: GuardianZkApp;\n  const guardianTree = new MerkleTree(8);\n  beforeAll(async () => {\n    await isReady;\n    if (proofsEnabled) GuardianZkApp.compile();\n  });\n  beforeEach(() => {\n    const Local = Mina.LocalBlockchain({ proofsEnabled });\n    Mina.setActiveInstance(Local);\n    ({ privateKey: deployerKey, publicKey: deployerAccount } =\n      Local.testAccounts[0]);\n    for (let i = 0; i < 7; i++) {\n      ({ privateKey: guardians[i].key, publicKey: guardians[i].account });\n      guardianTree.setLeaf(\n        0n,\n        Guardian.from(\n          guardians[i].account,\n          Field(i),\n          Field(i),\n          Bool(true),\n          new GuardianWitness(dummyWitness)\n        ).hash()\n      );\n    }\n    zkAppPrivateKey = PrivateKey.random();\n    zkAppAddress = zkAppPrivateKey.toPublicKey();\n    zkApp = new GuardianZkApp(zkAppAddress);\n  });\n\n  afterAll(() => {\n    setTimeout(shutdown, 0);\n  });\n\n  async function localDeploy() {\n    const txn = await Mina.transaction(deployerAccount, () => {\n      AccountUpdate.fundNewAccount(deployerAccount);\n      zkApp.deploy();\n    });\n    await txn.prove();\n    await txn.sign([deployerKey, zkAppPrivateKey]).send();\n\n    console.log('deploy and fund user accounts');\n  }\n\n  describe('#init', () => {\n    it('generates and deploys the `GuardianZkApp` smart contract', async () => {\n      await localDeploy();\n      const committedGuardians = await zkApp.committedGuardians.get();\n      expect(committedGuardians).toEqual(Field(0));\n\n      const accumulatedGuardians = await zkApp.accumulatedGuardians.get();\n      expect(accumulatedGuardians).toEqual(Field(0));\n    });\n  });\n});\n```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091275024272457808",
+      "type": "Default",
+      "timestamp": "2023-03-31T12:17:20.696+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "My humble advice is to make your flow work in a plain nodejs script first, so you don't have to debug through Jest which is annoying in my experience",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091275231139725323",
+      "type": "Default",
+      "timestamp": "2023-03-31T12:18:10.017+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Then when you know it all should work, you can start making it work as a set of Jest tests and fix any additional problems there",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091313252580986981",
+      "type": "Default",
+      "timestamp": "2023-03-31T14:49:15.035+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it works now. Solution:\n-  separated Guardian.test.ts with GuardianZkApp.test.ts\n- separated for loop pushing guardians array with setting guardianTree",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091313378833731676",
+      "type": "Default",
+      "timestamp": "2023-03-31T14:49:45.136+04:00",
+      "timestampEdited": "2023-03-31T14:50:14.319+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "import {\n  AccountUpdate,\n  Bool,\n  Field,\n  MerkleTree,\n  Mina,\n  PrivateKey,\n  PublicKey,\n  isReady,\n  shutdown,\n} from 'snarkyjs';\nimport { Guardian } from './Guardian';\nimport { GuardianZkApp } from './GuardianZkApp';\n\nlet proofsEnabled = false;\ntype GuardiansType = {\n  key: PrivateKey;\n  account: PublicKey;\n};\ndescribe.only('GuardianZkApp', () => {\n  let deployerAccount: PublicKey,\n    deployerKey: PrivateKey,\n    zkAppAddress: PublicKey,\n    zkAppPrivateKey: PrivateKey,\n    zkApp: GuardianZkApp;\n\n  let guardians: Array<GuardiansType> = [];\n  let guardianTree: MerkleTree;\n  beforeAll(async () => {\n    await isReady;\n    if (proofsEnabled) GuardianZkApp.compile();\n  });\n  beforeEach(() => {\n    const Local = Mina.LocalBlockchain({ proofsEnabled });\n    Mina.setActiveInstance(Local);\n    ({ privateKey: deployerKey, publicKey: deployerAccount } =\n      Local.testAccounts[0]);\n\n    guardianTree = new MerkleTree(4);\n\n    for (let i = 1; i <= 4; i++) {\n      guardians.push({\n        key: Local.testAccounts[i].privateKey,\n        account: Local.testAccounts[i].publicKey,\n      });\n    }\n    for (let i = 0; i < guardians.length; i++) {\n      const newGuardianHash = Guardian.from(\n        guardians[i].account,\n        Field(i + 1),\n        Field(1),\n        Bool(true)\n      ).hash();\n      guardianTree.setLeaf(BigInt(i), newGuardianHash);\n    }\n\n    zkAppPrivateKey = PrivateKey.random();\n    zkAppAddress = zkAppPrivateKey.toPublicKey();\n    zkApp = new GuardianZkApp(zkAppAddress);\n  });\n\n  afterAll(() => {\n    setTimeout(shutdown, 0);\n  });\n\n  async function localDeploy() {\n    const txn = await Mina.transaction(deployerAccount, () => {\n      AccountUpdate.fundNewAccount(deployerAccount);\n      zkApp.deploy();\n    });\n    await txn.prove();\n    await txn.sign([deployerKey, zkAppPrivateKey]).send();\n\n    console.log('deploy and fund user accounts');\n  }\n});",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 6
+}

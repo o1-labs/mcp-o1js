@@ -1,0 +1,149 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1130658130389381192",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Construct an array of proofs",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:51:20.5024789+04:00",
+  "messages": [
+    {
+      "id": "1130658130389381192",
+      "type": "Default",
+      "timestamp": "2023-07-18T04:31:44.897+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```typescript\nclass SProof extends Experimental.ZkProgram.Proof(S) {...}\n  const leaves = Provable.Array(Experimental.ZkProgram.Proof(SProof), 5)\n```\nI'm attempting to use `leaves` as a privateInput, but types are not playing nice. \n\nok...\nthis typechecks, but I lose type information:\n```ts\n  const leaves = provablePure(Array(numOfAccounts).fill(Experimental.ZkProgram.Proof(SProof)))\n```",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131518949717196940",
+      "type": "Default",
+      "timestamp": "2023-07-20T13:32:20.218+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Answered here: https://discord.com/channels/484437221055922177/1131426170576052385/1131507619702513716\nIssue here: https://github.com/o1-labs/snarkyjs/issues/1039",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131555821042536549",
+      "type": "Reply",
+      "timestamp": "2023-07-20T15:58:51.027+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In functional dreamland, i'd like to write code like this, after zkignite i'll play around with proof_system.ts, see if i can encode using fp-ts and HKTs\n```typescript\nimport { ProvablePure } from \"snarkyjs\";\n//import { Monoid, Ord, Group } from \"fp-ts\" \n\n\ntype N = string\ntype CartesianProduct<N extends string, V> = {\n  [K in N]: V\n}\n\n\nexport interface PacioliGroup<A> extends Group<A> {\n  readonly min: (\n    cart_prod: CartesianProduct<N, A>\n  ) => CartesianProduct<N, A>;\n}\n\nexport const mkPacioliGroup = <A>(\n  M: Monoid<A>,\n  O: Ord<A>\n): PacioliGroup<CartesianProduct<N, A>> => ({\n  ...M,\n  inverse: (cart_prod: CartesianProduct<N, A>) => ({\n    first: cart_prod.first,\n    second: cart_prod.second\n  }),\n  // as (d, c) = (d', c') there exists an n such that d + c' + n = d' + c + n\n  min: (cart_prod: CartesianProduct<N, A>, factor: A): CartesianProduct<N, A> => {\n    return O.compare(cart_prod.first, cart_prod.second) ?\n      M.concat(cart_prod, M.inverse(cart_prod), { first: M.empty, second: factor }) :\n      M.concat(cart_prod, M.inverse(cart_prod), { first: factor, second: M.empty })\n  },\n});\n\n// issue: user can build TAccount with {debit, debit}\ntype TAccount<M> = CartesianProduct<'debit' | 'credit', M>\ntype ProvableTAccount<M extends ProvablePure<M>> = TAccount<M>\n```",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131518949717196940",
+        "channelId": "1130658130389381192",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 3
+}

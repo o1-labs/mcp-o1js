@@ -1,0 +1,109 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1176594494934765578",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "No verification key found for proved account update",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:01:51.4243647+04:00",
+  "messages": [
+    {
+      "id": "1176594494934765578",
+      "type": "Default",
+      "timestamp": "2023-11-21T22:46:27.661+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am trying to deploy a zkapp using `proof` authentication rather than `signature`.\nI can see the proof being generated locally but when I want to perform the update, I am recieving the following error:\n*\"Couldn't send zkApp command: (Verification_failed\\n (\\\"No verification key found for proved account update\\\"\\n  (account_id\\n   (B62qrztYfPinaKqpXaYGY6QJ3SSW2NNKs7SajBLF1iFNXW9BoALN2Aq\\n    0x0000000000000000000000000000000000000000000000000000000000000001))))\"*\n\nHere is my code:\n```\n        const network = 'https://proxy.berkeley.minaexplorer.com/graphql';\n    Mina.setActiveInstance(Mina.Network(network));\n    let zkappAddress = PublicKey.fromBase58(wallets[0].publicKey);\n    const zkApp = new Add(zkappAddress);\n    const { account } = await fetchAccount({ publicKey: zkappAddress });\n\n    const accountPrivateKey: PrivateKey = PrivateKey.fromBase58(wallets[0].privateKey);\n    const accountPublicKey: PublicKey = accountPrivateKey.toPublicKey();\n\n    await Add.compile();\n\n    const deployerAccount: any = { sender: accountPublicKey, fee: 20000000, nonce: Types.Account.toJSON(account).nonce };\n    const tx = await Mina.transaction(deployerAccount, () => {\n        AccountUpdate.fundNewAccount(accountPublicKey);\n        zkApp.deploy();\n    });\n\n    await tx.prove();\n    await tx.sign([accountPrivateKey]).send();\n\n    const tx2 = await Mina.transaction(deployerAccount, () => {\n        AccountUpdate.fundNewAccount(accountPublicKey);\n        zkApp.update();\n    });\n\n    await tx2.prove();\n    await tx2.sign([accountPrivateKey]).send();\n```",
+      "author": {
+        "id": "88199751954092032",
+        "name": "battlecruiser96",
+        "discriminator": "0000",
+        "nickname": "Teofil Jolte",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1344691391145443418",
+            "name": "mina-web-node-team",
+            "color": "#FF69B4",
+            "position": 40
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/88199751954092032/fae70c38c4265c7db92f2aad04889f93.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1176594643799003226",
+      "type": "ChannelNameChange",
+      "timestamp": "2023-11-21T22:47:03.153+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Changed the channel name: No verification key found for proved account update",
+      "author": {
+        "id": "88199751954092032",
+        "name": "battlecruiser96",
+        "discriminator": "0000",
+        "nickname": "Teofil Jolte",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1344691391145443418",
+            "name": "mina-web-node-team",
+            "color": "#FF69B4",
+            "position": 40
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/88199751954092032/fae70c38c4265c7db92f2aad04889f93.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 2
+}

@@ -1,0 +1,269 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1207887121839292436",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Creation of Foregin field type with large modulus fails",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:43:34.1365513+04:00",
+  "messages": [
+    {
+      "id": "1207887121839292436",
+      "type": "Default",
+      "timestamp": "2024-02-16T07:12:11.304+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm getting the folloiwng error while trying to create a Foregin Field class with a large modulus\n\n```\n> node --experimental-vm-modules node_modules/jest/bin/jest.js\n\n(node:2366) ExperimentalWarning: VM Modules is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n FAIL  src/btc.test.ts\n  ● Test suite failed to run\n\n    2^-kmax exists\n\n       7 |\n       8 | // A Foreign field of size 257 bits\n    >  9 | class Field257 extends createForeignField(1n << 257n) {}\n         |                        ^\n      10 |\n      11 | // Define a provable type for 80-byte and 32-byte arrays\n      12 | class Bytes80 extends Bytes(80) {}\n\n      at assert (node_modules/o1js/src/lib/util/assert.ts:5:11)\n      at createField (node_modules/o1js/src/bindings/crypto/finite_field.ts:264:3)\n      at createForeignField (node_modules/o1js/src/lib/foreign-field.ts:637:16)\n      at src/btc.ts:9:24\n```",
+      "author": {
+        "id": "1033254813435170856",
+        "name": "rahul.aeriuslabs",
+        "discriminator": "0000",
+        "nickname": "Rahul | Aerius Labs",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1033254813435170856/618367133a7c8e439d8df8d6e175f2ea.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1207951698396717086",
+      "type": "Default",
+      "timestamp": "2024-02-16T11:28:47.555+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "aaah dammit. that's not because it's large but because it's a power of two. a recent optimization I added only works for prime moduli, but I forgot this is needed for `ForeignField` as well.\nthe simple fix would be to skip the optimization instead of throwing an error",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1033254813435170856",
+              "name": "rahul.aeriuslabs",
+              "discriminator": "0000",
+              "nickname": "Rahul | Aerius Labs",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1033254813435170856/618367133a7c8e439d8df8d6e175f2ea.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1208026407314133012",
+      "type": "Default",
+      "timestamp": "2024-02-16T16:25:39.549+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "fixed, will be released soon https://github.com/o1-labs/o1js-bindings/pull/246",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Fix createField with non-prime modulus by mitschabaude · Pull Reque...",
+          "url": "https://github.com/o1-labs/o1js-bindings/pull/246",
+          "timestamp": null,
+          "description": "remove an assert in finite-field.ts that breaks foreign fields with non prime modulus\nadd exported constant that a recent PR missed",
+          "color": "#1E2327",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1208028473587929149",
+      "type": "Default",
+      "timestamp": "2024-02-16T16:33:52.187+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "okay, I’ll use the branch for now",
+      "author": {
+        "id": "1033254813435170856",
+        "name": "rahul.aeriuslabs",
+        "discriminator": "0000",
+        "nickname": "Rahul | Aerius Labs",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1033254813435170856/618367133a7c8e439d8df8d6e175f2ea.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1208028489307914270",
+      "type": "Default",
+      "timestamp": "2024-02-16T16:33:55.935+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks",
+      "author": {
+        "id": "1033254813435170856",
+        "name": "rahul.aeriuslabs",
+        "discriminator": "0000",
+        "nickname": "Rahul | Aerius Labs",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1033254813435170856/618367133a7c8e439d8df8d6e175f2ea.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 5
+}

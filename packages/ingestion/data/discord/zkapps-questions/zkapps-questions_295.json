@@ -1,0 +1,265 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1233876643538534413",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error: the permutation was not constructed correctly: final value",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T10:41:08.6971289+04:00",
+  "messages": [
+    {
+      "id": "1233876643538534413",
+      "type": "Default",
+      "timestamp": "2024-04-28T00:25:16.139+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi, I am currently running into an issue when developing my zkapp. I get the error \"Error: the permutation was not constructed correctly: final value\" when I try to prove a zkapp txn. I know this error has been discussed here before, but I could not find a solution to my problem. Any help would be greatly appreciated :).\n\nOne of my apps has a method to check, whether it is still active:\n\n`@method isActive(): Bool {\n        \n        this.expirationDate.requireEquals(this.expirationDate.get());\n        this.notBeenDeactivated.requireEquals(this.notBeenDeactivated.get());\n        this.network.timestamp.requireEquals(this.network.timestamp.get());\n\n        let currTimestamp = this.network.timestamp.get();\n\n        let isExpired = currTimestamp.greaterThan(this.expirationDate.get());\n\n        return this.notBeenDeactivated.get().and(isExpired.not());\n    }`\n\nAnd this is how I call it:\n\n`\nlet twinOver = new VerifiableCredentialReference(PublicKey.fromBase58(\"B62...\"));\nlet txn = await Mina.transaction({sender: issuerAdd, fee: 0.1e9}, () => {\n    result = twinOver.isActive();\n})\nconsole.log(result.toString());\nconsole.log(\"Proving...\");\nawait txn.prove(); <--- this is where the error occurs\nconsole.log(\"Signing...\");\nawait txn.sign([issuerPk]).send();`\n\nThis is on the Berkeley testnet \no1js version : ^0.17.0",
+      "author": {
+        "id": "357214506725670913",
+        "name": "swenter.",
+        "discriminator": "0000",
+        "nickname": "Swenter",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/357214506725670913/98a5b6004bcb5ce1a915f3f35d337eef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1234119769653776425",
+      "type": "Default",
+      "timestamp": "2024-04-28T16:31:21.922+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "See https://github.com/o1-labs/o1js/issues/1588",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "this.network.timestamp causes \"the permutation was not constructed ...",
+          "url": "https://github.com/o1-labs/o1js/issues/1588",
+          "timestamp": null,
+          "description": "this.network.timestamp gives incorrect time and throw \"the permutation was not constructed correctly: final value\" error when calling tx.prove() on devnet: [4:09:35 PM] timestamp : 179361...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/fiy9IsuNx4peBLG-OI9NDk3syUDq9rySoEwkHc8VQmQ/https/opengraph.githubassets.com/c33e4dd331e51d058d7ac5b502a86f76f02563038bf6318e0069d01c42d2517a/o1-labs/o1js/issues/1588",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1234123487237636119",
+      "type": "Default",
+      "timestamp": "2024-04-28T16:46:08.263+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey, thanks for the reply. Does that mean I can't use this on the current version of berkeley? Or is there some fix I am missing? \uD83D\uDE42",
+      "author": {
+        "id": "357214506725670913",
+        "name": "swenter.",
+        "discriminator": "0000",
+        "nickname": "Swenter",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/357214506725670913/98a5b6004bcb5ce1a915f3f35d337eef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1234124548861984849",
+      "type": "Default",
+      "timestamp": "2024-04-28T16:50:21.374+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Just comment temporarily lines that use timestamp and later remove the comment when this issue will be fixed.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "603718596073619477",
+            "name": "IconSuccess",
+            "code": "IconSuccess",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.discordapp.com/emojis/603718596073619477.png"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "357214506725670913",
+              "name": "swenter.",
+              "discriminator": "0000",
+              "nickname": "Swenter",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/357214506725670913/98a5b6004bcb5ce1a915f3f35d337eef.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

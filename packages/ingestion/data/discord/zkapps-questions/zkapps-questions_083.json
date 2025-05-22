@@ -1,0 +1,583 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1307975196619178054",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "ZKProgram Recursion Questions",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:20:06.5917268+04:00",
+  "messages": [
+    {
+      "id": "1307975196619178054",
+      "type": "Default",
+      "timestamp": "2024-11-18T11:46:27.878+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am currently trying to implement a rollup using zkProgram. While brainstorming for a real-world application, I came across the following questions.\n\n* How does zkProgram handle cases where multiple users simultaneously update a Merkle map?\n(As each transaction gets merged recursively, the initialRoot and latestRoot will likely change. Wouldn't this cause the state verification in the merge method to fail?)\n\n* If I want to dispatch each piece of data added via zkProgram as an event, how can I make the smart contract dispatch these events?\n\n* How can I calculate the maximum number of events that can be included in a single transaction?",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1307980321181925457",
+      "type": "Default",
+      "timestamp": "2024-11-18T12:06:49.669+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You should implement the sequencer that handles user txs, put them in blocks, and put the blocks to the L1.\nYou can see the implementation of similar ZkProgram at\nhttps://github.com/Staketab/mina-names/blob/main/contracts/src/rollup/transaction.ts#L346\nI recommend using IndexedMerkleMap instead of MerkleMap for a rollup; it will soon go from the Experimental namespace.\n\nThe maximum number of events is limited by the maximum size of events in one tx (it is 100Fields as far as I remember), but you can put an unlimited number of events by putting them in IPFS and just put the IPFS hash in the event.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1308078949372264590",
+      "type": "Default",
+      "timestamp": "2024-11-18T18:38:44.462+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Amazing questions @roy ... You've anticipated the right questions exactly.\n\n> How does zkProgram handle cases where multiple users simultaneously update a Merkle map?\n\nOn Mina, only 1 transaction per block can update the same state.  You didn't reference Mina explicitly, but can I assume that's what you're thinking about?  (As opposed to an o1js-based rollup to another chain or some other meaning of a rollup)\n\nSo you must imagine a way to combine many state updates into a single change to the merkle map.  The easiest way to do this is to have a centralized sequencer handle this.  Basically have users submit proofs to one server, have that server provably combine the proofs, and have the server submit the single state change to Mina periodically.  This design is susceptible to censorship by the server, but with provable computation, you can at least trust that all the proofs it submits are valid.  This is roughly the approach that [protokit](https://protokit.dev/) takes.\n\n> If I want to dispatch each piece of data added via zkProgram as an event, how can I make the smart contract dispatch these events?\n\nWe have an API called [actions/reducer](https://docs.minaprotocol.com/zkapps/writing-a-zkapp/feature-overview/actions-and-reducer) which explicitly handles this.  The smart contract will emit an \"action\" and commit to the action on chain (so that we can guarantee that every action is processed eventually and none are skipped).  Later, a \"reducer\" can come along and update the state with the combination of all actions.\n\nThis design is preferred by many at o1Labs for its theoretical properties of censorship resistance and decentralization, but the basic implementation of it has a dependency on something called the archive node.  The performance of requesting actions from free archive nodes is not good, so to productionalize this solution, I believe some infrastructure work is needed.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "433489869927481346",
+          "name": "zeniroy.",
+          "discriminator": "0000",
+          "nickname": "roy",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1308080364518117376",
+      "type": "Default",
+      "timestamp": "2024-11-18T18:44:21.859+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@DFST 's solution basically comes out of the action reducer pattern, but actually solving some of the infrastructure problems. So it ends up being a more complicated solution, but it's also more complete.\n\nEvents are similar to actions, but they don't set any on chain state with a commitment.  They just emit data to the network, and anyone can follow along and process the event as they see fit.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "⬆️",
+            "code": "arrow_up",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2b06.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "433489869927481346",
+              "name": "zeniroy.",
+              "discriminator": "0000",
+              "nickname": "roy",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+            },
+            {
+              "id": "810793675033673730",
+              "name": "br0wn_d3v",
+              "discriminator": "0000",
+              "nickname": "br0wnD3v",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/810793675033673730/2c6f77b0a0462b53cc3ce467970054c8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1308267622810521610",
+      "type": "Default",
+      "timestamp": "2024-11-19T07:08:27.715+04:00",
+      "timestampEdited": "2024-11-19T10:56:08.115+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you both for your detailed answers! I’d like to ask some follow-up questions in more detail.\n\n1.\nAs you assumed, I’m working in the context of Mina. I’ve been referring to this example: https://github.com/es92/zkApp-examples/blob/main/09-recursion/src/rollup.ts. In the example, the merge method asserts that the initialState of rollup2proof matches the latestRoot of rollup1proof. This implies a sequential execution where the result of rollup1proof is available when generating rollup2proof. However, what I want to understand is the case where two proofs are generated simultaneously rather than sequentially. In such a case, the initialRoot of both proofs would be the same, but the latestRoot of rollup2 would differ from the initialRoot of rollup1. This would cause the merge method to fail.\n\nIf a sequencer is needed to handle this situation, what exactly would its role be? My assumption is that when rollup1proof arrives at a centralized server, the calculated latestRoot would be sent to the client producing rollup2proof, which would then use the latestRoot from rollup1proof as its initialRoot to compute rollup2proof. Is this correct?\n\n2.\nI’d like to roll up rollup1proof and rollup2proof into a single transaction and settle it in a smart contract. In such a scenario, the smart contract's task would be to verify the combined proof and update the Merkle map’s root with the latestRoot provided in the proof, which is all that the example demonstrates.\n\nHere, I’d like to emitEvent the additions or modifications to the Merkle map made by the two transactions as events. My goal is for anyone to be able to reconstruct the entire map by consuming these events. My rough assumption is that this could be achieved by accumulating event data during the merge process and then emitting it via the smart contract. Is this the standard approach for such use cases?",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1308723655106232350",
+      "type": "Default",
+      "timestamp": "2024-11-20T13:20:34.287+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can calculate the proofs in parallel. To do it, you just run the complete calculation without proving it by using     ZkProgram.rawMethods, getting all the publicInputs for all the steps. Then, you run the proving in parallel and merge the proofs. For 1000 tx, it can fit in 15-20 min, depending on your ZkProgram; for ten txs, it is much faster.\n\nYes, you can reconstruct the map using events, subject to the maximum number of Fields in each event.\n\nYou can check the existing simple example for it:\nhttps://github.com/zkcloudworker/worker-example/blob/main/tests/contract.test.ts#L272\nor, if you need more details, look at the sequencer code example:\nhttps://github.com/zkcloudworker/zkcloudworker-aws/blob/main/src/api/sequencer.ts",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "433489869927481346",
+              "name": "zeniroy.",
+              "discriminator": "0000",
+              "nickname": "roy",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 6
+}

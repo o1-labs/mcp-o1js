@@ -1,0 +1,462 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1052218862785019955",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Initializing dynamic state",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T17:24:19.1667906+04:00",
+  "messages": [
+    {
+      "id": "1052218862785019955",
+      "type": "Default",
+      "timestamp": "2022-12-13T17:42:06.169+04:00",
+      "timestampEdited": "2022-12-13T17:42:25.176+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "What is the best and intended way to initialize a contract´s state, which is not constant? \nSo not a static variable but a parameter given at deploy-time (for example the publickey of an owner).\nYou can always call a contract-method which sets the state based on private inputs in your deploy-transaction, but iirc this is currently not supported by the protocol (<https://github.com/MinaProtocol/mina/issues/12122>, which is merged but not released yet).\nAlso, i figured, since there is an extra init() method in SmartContract, why not let it consume inputs and set state based on them?",
+      "author": {
+        "id": "138034851872899081",
+        "name": "rpanic",
+        "discriminator": "0000",
+        "nickname": "rpanic",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "✅",
+            "code": "white_check_mark",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2705.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1052294780324945960",
+      "type": "Default",
+      "timestamp": "2022-12-13T22:43:46.321+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Given the current state of things, I think defining your own init state method would be the way for defining dynamic state that isn't just defined in the init already.\n\nThe reason for this is because (I could be wrong here) is that init does not use `@method` which is a way to define methods that generate proofs. This means since the current init isn't a proof generating method, it must be statically defined. \n\nCheck out the PR here where Gregor puts together a great explanation for his thoughts/reasoning + directions moving forward! \uD83D\uDE04 https://github.com/o1-labs/snarkyjs/pull/543",
+      "author": {
+        "id": "147939956642414593",
+        "name": ".martman",
+        "discriminator": "0000",
+        "nickname": "o1martin",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "827666021543837728",
+            "name": "pre-release-access",
+            "color": "#98C79F",
+            "position": 85
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/147939956642414593/f70f8767c85f26db2e8c664abab37de1.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Call `init()` during `deploy()`, just once by mitschabaude · Pull R...",
+          "url": "https://github.com/o1-labs/snarkyjs/pull/543",
+          "timestamp": null,
+          "description": "init() RFC\nThis proposes a simple, incremental change which is intended to\n\nsolve the pain point of ensuring that state is initialized only once\ngive users an opt-in, easy-to-use way of showing tha...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/lnK_D91Y9Ak52mWMS4E0RqdtFEmtE5nRAEINxpGUimQ/https/opengraph.githubassets.com/f5dd523f9c97ca7c08c4c748354979430be1e788aea7d321d4cbc1a6907736c6/o1-labs/snarkyjs/pull/543",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055435188328464404",
+      "type": "Default",
+      "timestamp": "2022-12-22T14:42:37.935+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> since there is an extra init() method in SmartContract, why not let it consume inputs and set state based on them?\nbecause this method is called during `zk deploy`, which is invoked from the command line, where passing in parameters is awkward",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1062734433083469844",
+      "type": "Default",
+      "timestamp": "2023-01-11T18:07:13.498+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Maybe we can handle it like this temporarily, but it is obviously impossible to use the zk deploy command to deploy the contract.\n```typescript\ndeploy(args: {\n    customParam1: Field;\n    customParam2: Field;\n    zkappKey?: PrivateKey | undefined;\n    verificationKey?:\n      | {\n          data: string;\n          hash: string | Field;\n        }\n      | undefined;\n  }) {\n    super.deploy(args);\n    ...\n}\n```",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1062864071344525422",
+      "type": "Default",
+      "timestamp": "2023-01-12T02:42:21.668+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So the workaround is to make a accountupdate calling the initstate method, but authorize it with a signature (with the pk from the contract address) and then a second AU setting the vk",
+      "author": {
+        "id": "138034851872899081",
+        "name": "rpanic",
+        "discriminator": "0000",
+        "nickname": "rpanic",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 5
+}

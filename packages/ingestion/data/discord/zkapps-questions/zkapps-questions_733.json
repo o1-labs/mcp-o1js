@@ -1,0 +1,386 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1130219194282168360",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "What could be the reason for blocks occasionally being skipped?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:55:46.9406444+04:00",
+  "messages": [
+    {
+      "id": "1130219194282168360",
+      "type": "Default",
+      "timestamp": "2023-07-16T23:27:34.374+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've retrieved the latest blocks through the GraphQL interface. It seems that sometimes there are skipped blocks. What could be the reason for this?\n\nAm I correct in assuming that if no transactions were transferred during a particular block time, no block was created? Is it also correct to assume that every produced block contains at least one transaction?\n\nIs the time interval in minutes between the blocks always exactly the same (3 minutes)?\n\n{\n  blocks: [\n    { blockHeight: 3049, dateTime: '2023-07-16T19:10:01Z' },\n    { blockHeight: 3048, dateTime: '2023-07-16T19:01:01Z' },\n    { blockHeight: 3047, dateTime: '2023-07-16T18:58:01Z' },\n    { blockHeight: 3046, dateTime: '2023-07-16T18:55:01Z' },\n    { blockHeight: 3045, dateTime: '2023-07-16T18:49:01Z' },\n    { blockHeight: 3045, dateTime: '2023-07-16T18:49:01Z' },\n    { blockHeight: 3044, dateTime: '2023-07-16T18:40:01Z' },\n    { blockHeight: 3043, dateTime: '2023-07-16T18:37:01Z' },\n    { blockHeight: 3043, dateTime: '2023-07-16T18:37:01Z' },\n    { blockHeight: 3042, dateTime: '2023-07-16T18:28:01Z' }\n  ]\n}",
+      "author": {
+        "id": "830489040675274842",
+        "name": "_a6b8",
+        "discriminator": "0000",
+        "nickname": "andreas",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/830489040675274842/04034efca3aa0678bee02d0d6f4305d0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1130228652135690380",
+      "type": "Default",
+      "timestamp": "2023-07-17T00:05:09.302+04:00",
+      "timestampEdited": "2023-07-17T00:07:01.333+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Might be useful to include the slot in the query so it's a bit more obvious ```gql\nquery MyQuery {\n  blocks(limit: 10, sortBy: BLOCKHEIGHT_DESC) {\n    blockHeight\n    protocolState {\n      consensusState {\n        slotSinceGenesis\n      }\n    }\n    dateTime\n    receivedTime\n  }\n}```\nBut not all slots have blocks. Assuming all stake was online the target ratio is 75% of blocks to be full, so we expect 25% of slots to be empty, plus not all stake is online so some slots will also be empty as noone produced a block then.  It has nothing to do with transactions, can be 0 or more. The `dateTime` there is the start of the slot in UTC, which will always be at a 3 minute interval as that's the slot time, but you can also add on `receivedTime` to see when the block was actually received.",
+      "author": {
+        "id": "445391540119011329",
+        "name": "garethtdavies",
+        "discriminator": "0000",
+        "nickname": "garethtdavies",
+        "color": "#1F8B4C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "671808653812170765",
+            "name": "Community Leaders",
+            "color": "#1F8B4C",
+            "position": 125
+          },
+          {
+            "id": "722830883999973376",
+            "name": "Community MVP",
+            "color": "#536452",
+            "position": 120
+          },
+          {
+            "id": "828705107784630303",
+            "name": "CORE Leader",
+            "color": "#992D22",
+            "position": 119
+          },
+          {
+            "id": "918823949528346624",
+            "name": "CORE value champion",
+            "color": "#C27C0E",
+            "position": 118
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "745645274583662592",
+            "name": "technical community ambassador",
+            "color": "#C7972A",
+            "position": 116
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "849712902709313547",
+            "name": "node-working-group",
+            "color": "#99AAB5",
+            "position": 94
+          },
+          {
+            "id": "626071487987580928",
+            "name": "testnet-mvp",
+            "color": "#2ECC71",
+            "position": 93
+          },
+          {
+            "id": "652506253259440138",
+            "name": "Beta Phase 1 Winner",
+            "color": "#2ECC71",
+            "position": 92
+          },
+          {
+            "id": "666350593836711968",
+            "name": "Beta Testers",
+            "color": "#98C79F",
+            "position": 86
+          },
+          {
+            "id": "1246045923654762496",
+            "name": "berkeley-pre-release",
+            "color": "#98C79F",
+            "position": 84
+          },
+          {
+            "id": "817478763088314389",
+            "name": "RC Initiator",
+            "color": null,
+            "position": 83
+          },
+          {
+            "id": "961225664575459328",
+            "name": "dp-test-group",
+            "color": "#98C79F",
+            "position": 82
+          },
+          {
+            "id": "601500112023191580",
+            "name": "testnet-connected",
+            "color": "#BEF8DC",
+            "position": 81
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "807079219691257886",
+            "name": "spp",
+            "color": null,
+            "position": 76
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1240660664985321623",
+            "name": "mainnet-archive-node",
+            "color": "#2ECC71",
+            "position": 42
+          },
+          {
+            "id": "1224800471135289364",
+            "name": "devnet-node-op",
+            "color": "#57A14D",
+            "position": 41
+          },
+          {
+            "id": "1204126954199060570",
+            "name": "UMT-SNARK-Worker",
+            "color": "#2ECC71",
+            "position": 36
+          },
+          {
+            "id": "1204127002530156585",
+            "name": "UMT-operator",
+            "color": "#11806A",
+            "position": 33
+          },
+          {
+            "id": "1093202151607636080",
+            "name": "TW2-Archivist",
+            "color": "#037223",
+            "position": 31
+          },
+          {
+            "id": "1093205210685505587",
+            "name": "TW2-Snarkworker",
+            "color": "#5BE089",
+            "position": 30
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/445391540119011329/724a9e8bdd06202435bda0520f51cdec.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1130446482017898617",
+      "type": "Default",
+      "timestamp": "2023-07-17T14:30:43.993+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you for the informative response. I'm currently trying to fully understand this piece:\n\n```\nBut not all slots have blocks. Assuming all stake was online the target ratio is 75% of blocks to be full, so we expect 25% of slots to be empty, plus not all stake is online so some slots will also be empty as no one produced a block then.\n```\n\nMy general expectation would be that a blockchain regularly produces blocks to ensure a prediction of when a transaction will be processed under normal circumstances. From what I understand from your text, it seems that we cannot predict when the next block will be created, but rather have to rely on the expectation that it will happen in the next few slots. Or is there a statistical way to predict based on the \"target ratio\"?",
+      "author": {
+        "id": "830489040675274842",
+        "name": "_a6b8",
+        "discriminator": "0000",
+        "nickname": "andreas",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/830489040675274842/04034efca3aa0678bee02d0d6f4305d0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 3
+}

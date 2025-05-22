@@ -1,0 +1,392 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1082885059536748655",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Wait.... so arbitrary proof composition works out of the box??",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T17:00:49.2593368+04:00",
+  "messages": [
+    {
+      "id": "1082885059536748655",
+      "type": "Default",
+      "timestamp": "2023-03-08T08:38:37.225+04:00",
+      "timestampEdited": "2023-03-08T08:44:43.9+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is kind of a stupid question but I just need a confirmation on this because it's so mind-blowing.\nI can take a Proof1 and verify it in a completely different Proof2?\n\nSo the following code works?\n```typescript\ntype CompositeInput = {\n  a: Field,\n  b: Field,\n}\n\nconst CompositeInput = provablePure(\n  { a: Field, b: Field },\n  { customObjectKeys: ['a', 'b'] }\n);\n\nlet Program1 = Experimental.ZkProgram({\n  publicInput: CompositeInput,\n\n  methods: {\n    baseCase: {\n      privateInputs: [],\n\n      method(publicInput: CompositeInput) {\n        publicInput.a.assertEquals(Field(0))\n        publicInput.b.assertEquals(Field(0))\n      },\n    },\n  },\n});\n\n\nconst Program1Proof = Experimental.ZkProgram.Proof(Program1);\n\nlet Program2 = Experimental.ZkProgram({\n  publicInput: Field,\n\n  methods: {\n    baseCase: {\n      privateInputs: [],\n\n      method(publicInput: Field) {\n        publicInput.assertEquals(Field(1))\n      },\n    },\n\n    inductiveCase: {\n      privateInputs: [Program1Proof],\n\n      // and can we add a self proof???\n      method(publicInput: Field, anotherProof: Proof<CompositeInput>) {\n        anotherProof.verify();\n        anotherProof.publicInput.a.add(1).assertEquals(publicInput);\n        anotherProof.publicInput.b.add(1).assertEquals(publicInput);\n      },\n    },\n  },\n});\n\nconsole.time('compiling 1...');\nawait Program1.compile();\nconsole.timeEnd('compiling 1...');\n\n\nconsole.time('compiling 2...');\nconst { verificationKey } = await Program2.compile();\nconsole.timeEnd('compiling 2...');\nconsole.log('verification key', verificationKey.slice(0, 10) + '..');\n\nconsole.log('proving base case...');\nconst proof = await Program1.baseCase({\n  a: Field(0),\n  b: Field(0)\n});\n\nconsole.time('proving step 1...');\nconst proof2 = await Program2.inductiveCase(Field(1), proof);\nconsole.timeEnd('proving step 1...');\n\nconsole.log('verify...');\nconst ok = await verify(proof2, verificationKey);\nconsole.log('ok?', ok);\n\n```",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "847560222137385002",
+              "name": "romanh.",
+              "discriminator": "0000",
+              "nickname": "Roman H. | Fatty.io | Runwago",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/847560222137385002/c0cfab16d0b6aed60890171071999ee2.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1083045339789004810",
+      "type": "Default",
+      "timestamp": "2023-03-08T19:15:31.015+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "As long as the Proof`s ZkProgram is known at compile-time, yes! \uD83D\uDE42\nBut I´d highly recommend using Struct instead of provablePure",
+      "author": {
+        "id": "138034851872899081",
+        "name": "rpanic",
+        "discriminator": "0000",
+        "nickname": "rpanic",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1083586520532914197",
+      "type": "Default",
+      "timestamp": "2023-03-10T07:05:58.559+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "1. this is amazing\n2. curious as to why Struct [0] [1] is better than provable/provablePure?\n\n[0] def https://github.com/o1-labs/snarkyjs/blob/841a6693412dd9e006e46664791885ffa73571fd/src/lib/circuit_value.ts#L735\n[1] use https://github.com/o1-labs/snarkyjs/blob/61fc19e2ccc43f5221ddfb5d72bf5a6c9e8e5630/src/lib/circuit_value.test.ts#L66",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "snarkyjs/circuit_value.ts at 841a6693412dd9e006e46664791885ffa73571...",
+          "url": "https://github.com/o1-labs/snarkyjs/blob/841a6693412dd9e006e46664791885ffa73571fd/src/lib/circuit_value.ts",
+          "timestamp": null,
+          "description": "Typescript/Javascript framework for zk-SNARKs and zkApps - snarkyjs/circuit_value.ts at 841a6693412dd9e006e46664791885ffa73571fd · o1-labs/snarkyjs",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/vkLeADFddo8M6KugeqOcrrxzCZZIjoVBV04mwfTfU9c/https/opengraph.githubassets.com/4aedca8d3e34cd7d276a9ae8730a180873f21752222714a980b3cd1cf0f2b080/o1-labs/snarkyjs",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "snarkyjs/circuit_value.test.ts at 61fc19e2ccc43f5221ddfb5d72bf5a6c9...",
+          "url": "https://github.com/o1-labs/snarkyjs/blob/61fc19e2ccc43f5221ddfb5d72bf5a6c9e8e5630/src/lib/circuit_value.test.ts",
+          "timestamp": null,
+          "description": "Typescript/Javascript framework for zk-SNARKs and zkApps - snarkyjs/circuit_value.test.ts at 61fc19e2ccc43f5221ddfb5d72bf5a6c9e8e5630 · o1-labs/snarkyjs",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/vkLeADFddo8M6KugeqOcrrxzCZZIjoVBV04mwfTfU9c/https/opengraph.githubassets.com/4aedca8d3e34cd7d276a9ae8730a180873f21752222714a980b3cd1cf0f2b080/o1-labs/snarkyjs",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1083670611596939354",
+      "type": "Default",
+      "timestamp": "2023-03-10T12:40:07.431+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't know exactly how provablePure works in practice, I just know that is basically the base-concept on which Structs are built upon. Structs make it really easy to work with complex data though",
+      "author": {
+        "id": "138034851872899081",
+        "name": "rpanic",
+        "discriminator": "0000",
+        "nickname": "rpanic",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1083905979692875836",
+      "type": "Default",
+      "timestamp": "2023-03-11T04:15:23.558+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Makes sense! Thanks!",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 5
+}

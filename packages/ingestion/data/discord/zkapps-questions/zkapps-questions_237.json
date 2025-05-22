@@ -1,0 +1,5097 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1253851793239310528",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to implement token escrow payment?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:53:40.0919688+04:00",
+  "messages": [
+    {
+      "id": "1253851793239310528",
+      "type": "Default",
+      "timestamp": "2024-06-22T03:19:22.948+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I want to withdraw tokens from contract, without needing to provide a signature, by using proofs only.\n\n``` @method\n  async withdraw(withdrawAmount: UInt64) {    \n    const token = new FungibleToken(this.tokenAddress.getAndRequireEquals());\n    await token.transfer(\n     this.address,\n     this.sender.getAndRequireSignature(),\n     withdraw\n    );\n  }```\n\nCalling it gives me:\n\n`Check signature: Invalid signature on account_update `\n\nThis is despite setting send permission for proof only, and also trying it with `send: Permissions.none()`.\n\nIf I sign with the contract key, it goes through but I do not want to do so as that key would need to be shared and tx would needed to be double signed complicating thigns.\n\nIn the dex example (https://github.com/o1-labs/o1js/blob/1588ee566d15a6e5ef6a1a611386c7da578ab48a/src/examples/zkapps/dex/dex.ts#L264)  there is the following syntax:\n\n`this.self.body.mayUseToken = AccountUpdate.MayUseToken.ParentsOwnToken;`\n\nand in the dex with actions (https://github.com/o1-labs/o1js/blob/1588ee566d15a6e5ef6a1a611386c7da578ab48a/src/examples/zkapps/dex/dex-with-actions.ts#L283) this one:\n\n`receiver.body.mayUseToken = AccountUpdate.MayUseToken.InheritFromParent;`\n\nDexes need custodial /escrow transfer, so I'm thinking this may be something I need to do.\n\nIs that the case, and if so what is the correct way to grant permission to the contract token account to transfer funds without the need for its private key?",
+      "author": {
+        "id": "875698957513289789",
+        "name": "catalytic__converter",
+        "discriminator": "0000",
+        "nickname": "widly",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/875698957513289789/899b0500e9e90405839a1455877c5327.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "o1js/src/examples/zkapps/dex/dex.ts at 1588ee566d15a6e5ef6a1a611386...",
+          "url": "https://github.com/o1-labs/o1js/blob/1588ee566d15a6e5ef6a1a611386c7da578ab48a/src/examples/zkapps/dex/dex.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/o1js development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/JSQMifRUFWt18BF1M52MX8rhPM0SxhdOs67gG9RXdqw/https/opengraph.githubassets.com/70d07946e8977b3333aff4d15b947c2197cde1246c4ccea2e385018708afbdc5/o1-labs/o1js",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "o1js/src/examples/zkapps/dex/dex-with-actions.ts at 1588ee566d15a6e...",
+          "url": "https://github.com/o1-labs/o1js/blob/1588ee566d15a6e5ef6a1a611386c7da578ab48a/src/examples/zkapps/dex/dex-with-actions.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/o1js development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/JSQMifRUFWt18BF1M52MX8rhPM0SxhdOs67gG9RXdqw/https/opengraph.githubassets.com/70d07946e8977b3333aff4d15b947c2197cde1246c4ccea2e385018708afbdc5/o1-labs/o1js",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738036747455299764",
+              "name": "zkkirol",
+              "discriminator": "0000",
+              "nickname": "zkKirol",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1253992157753249855",
+      "type": "Default",
+      "timestamp": "2024-06-22T12:37:08.456+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Print account updates and see what’s happening?",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254323594604056600",
+      "type": "Default",
+      "timestamp": "2024-06-23T10:34:09.159+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@widly check out the dex swaps in more detail. \n\nIn your example, the hierarchy between the zkapp method and the token.transfer() call is wrong. You can't call token.transfer() from the method that is authorizing the transfer. \n\nRather, you call your method, take the account update it created (which decreases the balance and authorizes that with a proof), and pass that account update as the first argument to token.transfer()",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "875698957513289789",
+          "name": "catalytic__converter",
+          "discriminator": "0000",
+          "nickname": "widly",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/875698957513289789/899b0500e9e90405839a1455877c5327.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1254323857054240779",
+      "type": "Default",
+      "timestamp": "2024-06-23T10:35:11.732+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So, token.transfer() would be called in the Mina.transaction() block, outside the method",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254324162198110249",
+      "type": "Default",
+      "timestamp": "2024-06-23T10:36:24.484+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The token contract has to \"supervise\" the transfer, so the transferring method cannot also \"supervise\" the token contract (they would form a cycle)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254324184532914287",
+      "type": "Default",
+      "timestamp": "2024-06-23T10:36:29.809+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I hope I'm making sense",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254626744988864512",
+      "type": "Reply",
+      "timestamp": "2024-06-24T06:38:45.843+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I also have a question about this example. Under the restrictions you mentioned, how can we implement the restriction in the current zkapp that the tokens owned by the zkapp can only be burned instead of transferred?",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1254323594604056600",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1254716980703924314",
+      "type": "Reply",
+      "timestamp": "2024-06-24T12:37:19.714+04:00",
+      "timestampEdited": "2024-06-24T12:39:26.221+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it's an interesting puzzle to solve \uD83D\uDE04\nif you accept the overhead of two additional method calls for the token contract, then I have a solution:\n\nthe token contract could have a custom `burn(a: AccountUpdate)` method which sets its own state to `isBurning = true`, then approves the input account update (and checks that it actually burns tokens!), and then calls another custom token contract method `resetBurn()` which asserts that `isBurning = true` and resets it to `isBurning = false`. There should be absolutely no way of setting `isBurning = true`  other than calling `tokenContract.burn()`.\n\nfinally, the token contract should have another custom method, `assertBurn()`, which only requires that `isBurning = true` and nothing else.\n\nIn your zkapp method, you can then call `tokenContract.assertBurn()` and it guarantees you that you're inside a `tokenContract.burn()` call. So the zkapp ensures its tokens are burnt, not transfered.",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f440.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "790104669237805096",
+              "name": "zkcomdex",
+              "discriminator": "0000",
+              "nickname": "Comdex",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "790104669237805096",
+          "name": "zkcomdex",
+          "discriminator": "0000",
+          "nickname": "Comdex",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1254626744988864512",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1254717271570382890",
+      "type": "Default",
+      "timestamp": "2024-06-24T12:38:29.062+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "A better solution should come with a protocol upgrade where you can make assertions about your parent account updates",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254741532762832936",
+      "type": "Reply",
+      "timestamp": "2024-06-24T14:14:53.381+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This does seem to be a feasible solution. \uD83D\uDE05   However, in many cases, token contracts are used as external contracts, and zkapp developers do not have the authority to modify token contracts. At the same time, the business logic of zkapp itself should not be a matter for token contract owners to care about, so this is a big limitation. What I can think of is that it is also very difficult for zkapp to set whitelist and blacklist restrictions for token transfers it owns.",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1254716980703924314",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1254780990359076884",
+      "type": "Default",
+      "timestamp": "2024-06-24T16:51:40.805+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> zkapp developers do not have the authority to modify token contracts\n\nwell, on the standard token contract (https://github.com/MinaFoundation/mina-fungible-token/blob/main/FungibleToken.ts), there is no burn method at all that can be used by zkapps.\n\nso I was assuming we're talking about \"how to implement a token contract which enables zkapps to assert they are burning tokens\"",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254781282391560274",
+      "type": "Default",
+      "timestamp": "2024-06-24T16:52:50.431+04:00",
+      "timestampEdited": "2024-06-24T16:53:17.89+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> At the same time, the business logic of zkapp itself should not be a matter for token contract owners to care about, so this is a big limitation.\ntoken contract developers should care about enabling to use their token in maximally flexible way",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254781902678921328",
+      "type": "Default",
+      "timestamp": "2024-06-24T16:55:18.319+04:00",
+      "timestampEdited": "2024-06-24T16:55:23.657+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> What I can think of is that it is also very difficult for zkapp to set whitelist and blacklist restrictions for token transfers it owns.\nThis I don't see as a big problem, because the zkapp can usually _create_ the receiver account update itself, so it can define exactly what transfers it enables",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254782501210292244",
+      "type": "Default",
+      "timestamp": "2024-06-24T16:57:41.02+04:00",
+      "timestampEdited": "2024-06-24T17:02:30.922+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so the usual flow to send from a zkapp that I imagine is\n* in your zkapp method,\n  * decrease your own balance\n  * create a child account update that has a matching positive balance change\n* outside your zkapp method, take the full tree of account updates returned by the zkapp, and give it to the token contract to approve",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254782681317900308",
+      "type": "Default",
+      "timestamp": "2024-06-24T16:58:23.961+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "note that the two steps inside the zkapp method listed above are both done by `this.send()`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254783288762040350",
+      "type": "Default",
+      "timestamp": "2024-06-24T17:00:48.787+04:00",
+      "timestampEdited": "2024-06-24T17:01:07.021+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and to get the tree of account updates created by the zkapp, you can use `zkapp.self.extractTree()`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254783596078567534",
+      "type": "Default",
+      "timestamp": "2024-06-24T17:02:02.057+04:00",
+      "timestampEdited": "2024-06-24T17:02:08.993+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "actually you don't need to do that, just call `tokenContract.approveAccountUpdate(zkapp.self)`, this will extract the tree under the hood",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254809816786800792",
+      "type": "Default",
+      "timestamp": "2024-06-24T18:46:13.561+04:00",
+      "timestampEdited": "2024-06-24T19:33:09.245+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think we getting somewhere close yet not working\n\nfor clarity:\nwe have contract A(which happens to be an extended of TokenContract FYI) that users send tokens X by interacting with contracts.payment() \nafter some conditions are valid we want to allow whitelisted admin address to call method on contract A to withdraw those tokens \nwe don't want admin having to hold contractA priv Key \n\nTokenX is just FungibleToken implementation, so I had to remove the transfer override function as it only takes PubKey (how to make it an optional parameter so we still use event?) rather than AccountUpdate. \nsaying that I am not sure what our 'withdraw' method should have, decrease balance and return just it  such as\n#1 \n```     @method.returns(AccountUpdate)\n  async organiserWithdraw(\n    _groupSettings: GroupSettings,\n    withdraw: UInt32\n  ) {\n   ...\n    // Transfer token to the caller\n    const token = new FungibleToken(_groupSettings.tokenAddress);\n    const accUpdate = AccountUpdate.create(this.address, token.deriveTokenId());\n    accUpdate.balance.subInPlace(withdraw);\n    return this.self;\n  }\n...\n const txn = await Mina.transaction(admin, async () => {\n      const accUpdate = await group.organiserWithdraw(\n        GROUP_SETTINGS,\n        UInt32.from(3000)\n      );\n       await tokenApp.transfer(accUpdate, admin, 3000)\n    });\n    await txn.prove();\n    await txn.sign([admin.key]).send();\n\n```\nerror #1 :\n` Field.assertEquals(): 3000 != 0\n\n      120 |   @method\n      121 |   async approveBase(updates: AccountUpdateForest): Promise<void> {\n> 122 |     this.checkZeroBalanceChange(updates);\n          |          ^\n`\n\nI can't understand how could .transfer() take Account update if it uses it to create accountUpdates itself ? (transfer just do .send, which then does sub and add balance from AccountUpdates it creates).\n\n#2 or should we do all updates and only approve those in .transaction ?\n```\n  @method.returns(AccountUpdate)\n  async organiserWithdraw(\n    _groupSettings: GroupSettings,\n    withdraw: UInt32\n  ) {\n  ...\n    // Transfer token to the caller\n    const token = new FungibleToken(_groupSettings.tokenAddress);\n    const accUpdate = AccountUpdate.create(this.address, token.deriveTokenId());\n    accUpdate.balance.subInPlace(withdraw);\n       const accUpdate2 = AccountUpdate.create(organiser, token.deriveTokenId());\n    accUpdate2.balance.addInPlace(withdraw);\n    return this.self;\n  }\n```\nwould this.self AccountUpdate have all child ones under?\n\n```\n  const txn = await Mina.transaction(admin, async () => {\n      const accUpdate = await group.organiserWithdraw(\n        GROUP_SETTINGS,\n        UInt32.from(3000)\n      );\n      await tokenApp.approveAccountUpdate(accUpdate);\n    });\n    await txn.prove();\n    await txn.sign([admin.key]).send();\n```\nerror #2 \n` Transaction failed with errors:\n    - [[],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Token_owner_not_caller\"]],[[\"Token_owner_not_caller\"],[\"Update_not_permitted_balance\"]],[[\"Cancelled\"]]] `",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254812434410111036",
+      "type": "Default",
+      "timestamp": "2024-06-24T18:56:37.651+04:00",
+      "timestampEdited": "2024-06-24T19:37:41.829+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But then, even if we create valid accountUpdates to be approved by token, won't contractA privateKey be still required ?\n \uD83E\uDD2F\n\ndoes the fact we using  TokenContract to control another TokenContract making it somehow diffrent?",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1254877102272938046",
+      "type": "Default",
+      "timestamp": "2024-06-24T23:13:35.671+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll write up an example tomorrow, this will speak more than a 1000 words",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738036747455299764",
+              "name": "zkkirol",
+              "discriminator": "0000",
+              "nickname": "zkKirol",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1254877293403312241",
+      "type": "Default",
+      "timestamp": "2024-06-24T23:14:21.24+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But you can also look at how the Dex examples use `tokenContract.transfer()`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255089858913763429",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:19:00.807+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'd be interested in a new implementation of the standard token to facilitate this, I find the current solution counterintuitive and complex to set up, it forces you to sign at least once with the escrow contract key, we don't have this hassle with sending mina.",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255091970821455913",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:27:24.325+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "why would you have to sign with the escrow contract key?\n\nalso \"new implementation of the standard token\" is not really the issue to solve. the underlying protocol for custom tokens is complex to use, mainly because you only can pass down one permission at a time. but to change that requires a HF",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255089858913763429",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255092254280908863",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:28:31.907+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok @zkKirol @widly @Youtpout. I created an example that demonstrates how to withdraw custom tokens from a zkApp!\nhttps://github.com/o1-labs/o1js/pull/1699/commits/e3235a7f520e84ae6ae70e7e0034780a3200aca2",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        },
+        {
+          "id": "738036747455299764",
+          "name": "zkkirol",
+          "discriminator": "0000",
+          "nickname": "zkKirol",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "857943736289984583",
+              "name": "prism-contributing-member",
+              "color": "#FFEABD",
+              "position": 112
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "1344664872356679743",
+              "name": "MWN-tester",
+              "color": "#FFA6C9",
+              "position": 39
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+        },
+        {
+          "id": "875698957513289789",
+          "name": "catalytic__converter",
+          "discriminator": "0000",
+          "nickname": "widly",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/875698957513289789/899b0500e9e90405839a1455877c5327.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1255092549048336415",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:29:42.185+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "TL;DR:\n\n```ts\n// contract method\n@method async withdraw(amount: UInt64) {\n  // only the admin can withdraw\n  this.sender.getAndRequireSignature().assertEquals(admin);\n\n  // withdraw the amount\n  let receiverAU = this.send({ to: admin, amount });\n\n  // let the receiver update inherit token permissions from this contract\n  // TODO: .send() should do this automatically\n  receiverAU.body.mayUseToken = AccountUpdate.MayUseToken.InheritFromParent;\n}\n```\n\n```ts\n// transaction logic\nawait Mina.transaction(admin, async () => {\n  await escrow.withdraw(UInt64.from(500));\n\n  // token-approve the withdrawal\n  await token.approveAccountUpdate(escrow.self);\n})\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255092652844519487",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:30:06.932+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "also check out `withdrawOptimized()` which creates one account update less than `withdraw()`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255092693999157279",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:30:16.744+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For the dex example, the dextoken holder must be deployed with the zkapp key",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255091970821455913",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255092927773016178",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:31:12.48+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "why is that a problem? you would deploy it at the same time as the main dex contract itself, which also needs the zkapp key. deploying your contracts is expected to require the key, it's the same for all contracts",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255092693999157279",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255093129258729543",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:32:00.518+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it's basically a proxy contract that enables the dex to hold multiple tokens",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255093238436724856",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:32:26.548+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if I want to let a user create his own pool, I'll have to provide him with the key as well.",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255092927773016178",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255093647452667926",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:34:04.065+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok I see, that's undesirable! but do you think this is a fundamental problem with the token standard? maybe the token holder address could be made a parameter?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255093238436724856",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255093776506945656",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:34:34.834+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\n// withdraw the amount\n    this.send({ to: adminAU, amount });\n\n```\n\nI thought this method was for sending minas and not a custom token.",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255092652844519487",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255094017129975858",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:35:32.203+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it will use the same tokenId for the receiver as the sender (= `this`) has, so in the case the sender is a custom token account, it's a custom token transfer",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255093776506945656",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255094093101666439",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:35:50.316+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh okay",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255093647452667926",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255094234118098945",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:36:23.937+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "in the end it just creates the receiver account update, and modifies both `this.balance` and `receiver.balance`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255094299125612594",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:36:39.436+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "not very fancy",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255094526553358396",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:37:33.659+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the part that's harder to figure out yourself is where we set `body.mayUseToken = ...` \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255094592781418564",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:37:49.449+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In my case, I'll have to deploy all the token/pool pairs with a custom contract that will manage the swap.",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255095006377676811",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:39:28.058+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the signature key should be public, but they do not allow assets to be transferred or the contract to be updated",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255095168370081832",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:40:06.68+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sounds like a nice solution!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255095006377676811",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255095700803289169",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:42:13.622+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "on the other hand, if the signature key is public, you can't prevent anyone from creating those token accounts by themselves, and setting permissions however they like, and then locking down permissions",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255096693582462987",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:46:10.319+04:00",
+      "timestampEdited": "2024-06-25T13:46:30.355+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so maybe there shouldn't be a single hard-coded signature key, but rather people should be able to register pool contracts created with any key, and the deployment of those contracts makes sure that the creators can't manipulate them later on",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255097006246985768",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:47:24.864+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so it would be up to the backend to manage this when a new pool is created, for example, but the platform would have to be at least centralized.",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255099171271086121",
+      "type": "Reply",
+      "timestamp": "2024-06-25T13:56:01.046+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "why?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255097006246985768",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255099249604038666",
+      "type": "Default",
+      "timestamp": "2024-06-25T13:56:19.722+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you could use offchain state to store it, which is decentralized",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255102329393381387",
+      "type": "Reply",
+      "timestamp": "2024-06-25T14:08:34.001+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think we're off topic, we can talk about it again on one of my posts.",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255099171271086121",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255190342437965975",
+      "type": "Reply",
+      "timestamp": "2024-06-25T19:58:17.946+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/o1-labs/o1js/pull/1699",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Two new zkApp examples by mitschabaude · Pull Request #1699 · o1-la...",
+          "url": "https://github.com/o1-labs/o1js/pull/1699",
+          "timestamp": null,
+          "description": "This PR just adds two new examples for things that are not documented well\n\nexample for withdrawing custom tokens from a zkapp\nexample for linking of state between two zkapps",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/CNQ2otbgf8iGBL4Lo-eyidYuFHOe5zvA0XyobDNfCDU/https/opengraph.githubassets.com/611b991cc77a478aade48c74722b5996af116b924624c5d3cc16861e6d835924/o1-labs/o1js/pull/1699",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1254877102272938046",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255194514944163903",
+      "type": "Default",
+      "timestamp": "2024-06-25T20:14:52.749+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "big thanks for the example, it does explain how to do the escrow well\nbut",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255194547705745571",
+      "type": "Reply",
+      "timestamp": "2024-06-25T20:15:00.56+04:00",
+      "timestampEdited": "2024-06-25T20:15:33.69+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/KarolDevLtd/Sliced.club/blob/smallFixes3/contracts/src/GroupBasic.ts#L168\n I think in our use case `this` may not be working as\nthe GroupBasic(your 'TokenEscrow' ) is extended from TokenContract in our case.\n\nhttps://github.com/KarolDevLtd/Sliced.club/blob/smallFixes3/contracts/src/GroupBasic.test.ts#L580\nyou create \n`let escrow = new TokenEscrow(escrowAccount, tokenId); `\nand you use that to sign escrow.self, would we need to create new instance of GroupBasic using fungibleTokenId?",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255094017129975858",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255437030008295435",
+      "type": "Default",
+      "timestamp": "2024-06-26T12:18:32.846+04:00",
+      "timestampEdited": "2024-06-26T12:24:36.76+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@zkKirol \n> I think in our use case this may not be working as\nit can _only_ ever work with `this`. to send tokens, a contract has to make the token send part of the account update created by the method - only that way, the send is authorized with a proof. that's an important constraint to keep in mind no matter what your design looks like",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738036747455299764",
+              "name": "zkkirol",
+              "discriminator": "0000",
+              "nickname": "zkKirol",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "738036747455299764",
+          "name": "zkkirol",
+          "discriminator": "0000",
+          "nickname": "zkKirol",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "857943736289984583",
+              "name": "prism-contributing-member",
+              "color": "#FFEABD",
+              "position": 112
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "1344664872356679743",
+              "name": "MWN-tester",
+              "color": "#FFA6C9",
+              "position": 39
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1255438033193406609",
+      "type": "Default",
+      "timestamp": "2024-06-26T12:22:32.024+04:00",
+      "timestampEdited": "2024-06-26T12:23:15.523+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Another thing to keep in mind is that every account, and in particular every zkapp account, has just 1 token id, and can therefore hold just 1 kind of token.\n\nIt sounds like you have a token contract which is also itself supposed to hold (other) tokens.\nmost likely, what you need to do is have multiple zkapps deployed, to accounts with the same address (your zkapp address) but with different token ids.\n\nand then, there's no reason to deploy one and the same contract to all those accounts. the token holder account could have different methods than the main (MINA) account.\nbut the fact that there are multiple zkapps that probably need to collaborate in some way complicates things. I had to solve this in the DEX examples, which use one main contract `Dex` and a proxy contract `DexTokenHolder` for each token the DEX wants to hold.",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255442801882173441",
+      "type": "Reply",
+      "timestamp": "2024-06-26T12:41:28.968+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "interesting, bit counter intuitive imo \n(What if one would want to use native Mina and token at the same time/method?)",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255437030008295435",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255442883234758729",
+      "type": "Default",
+      "timestamp": "2024-06-26T12:41:48.364+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok, guess my confusion came from assumption that if my zkapp has pubKey and it's own tokenId, if I send another token to it it would automatically just create new token account with same pubKey but different tokenId. \nWe'll give a try `GroupTokenHolder`\nAgain thanks for help, examples and shinning some light at it all!",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255512666580193291",
+      "type": "Reply",
+      "timestamp": "2024-06-26T17:19:06.01+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks, I tested it and it works \uD83D\uDE05  After looking at the current token standard contract, I found that transfers of tokens owned by zkapp are basically undetectable by the contract to emit transfer events (the current contract indeed does not consider supporting zkapp token accounts). We might need to recognize the transfer of tokens in the approveBase method and emit transfer events to facilitate data processing for some off-chain services.",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1254783596078567534",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255528527965720668",
+      "type": "Reply",
+      "timestamp": "2024-06-26T18:22:07.659+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Currently o1js does not seem to provide a method for zkapp to burn tokens through proof (without signature). The existing this.internal.burn method still requires the sender's signature, even if the sender passed in is a zkapp's AccountUpdate",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1254716980703924314",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255610353749069929",
+      "type": "Reply",
+      "timestamp": "2024-06-26T23:47:16.446+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That doesn't sound right",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "790104669237805096",
+          "name": "zkcomdex",
+          "discriminator": "0000",
+          "nickname": "Comdex",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255528527965720668",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255610425186455614",
+      "type": "Default",
+      "timestamp": "2024-06-26T23:47:33.478+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Burning is the same as sending in that regard",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255610795237314590",
+      "type": "Default",
+      "timestamp": "2024-06-26T23:49:01.705+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh sorry I misunderstood you and get what you mean! So maybe this.internal.burn() has a bug? It's not very complicated though so maybe you can write your own version",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255614767335342133",
+      "type": "Default",
+      "timestamp": "2024-06-27T00:04:48.727+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks  @gregor. That's an exact example we were after and as well as an explanation why our aproach wasn't working.",
+      "author": {
+        "id": "875698957513289789",
+        "name": "catalytic__converter",
+        "discriminator": "0000",
+        "nickname": "widly",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/875698957513289789/899b0500e9e90405839a1455877c5327.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1255793915471200286",
+      "type": "Reply",
+      "timestamp": "2024-06-27T11:56:40.971+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, I checked the burn method and found that the sender's signature is mandatory. Im curious if AccoutUpdate.label will have any impact on the processing of transactions?",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255610795237314590",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255811375905640478",
+      "type": "Default",
+      "timestamp": "2024-06-27T13:06:03.863+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have a question.\nWhen a SmartContract is deployed on-chain, it can be queried as an account: https://minascan.io/devnet/account/B62qqVsWwGsd25ZaBpZKEGMiqmHaeufYqK2ACjX895RaQrMj2DZutaM/txs\nWhen deploying using TokenContract, it also appears as a regular account: https://minascan.io/devnet/account/B62qjwDWxjf4LtJ4YWJQDdTNPqZ69ZyeCzbpAFKN7EoZzYig5ZRz8JE\n\nIs there something that needs to be set during deployment for accounts to be queried as zkAccounts?",
+      "author": {
+        "id": "321139103624069120",
+        "name": "jegwon.choi",
+        "discriminator": "0000",
+        "nickname": "bigcloud",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/321139103624069120/1aa993a0073764ee75222c3ed5e615a7.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Minascan Block Explorer",
+          "url": "https://minascan.io/devnet/account/B62qqVsWwGsd25ZaBpZKEGMiqmHaeufYqK2ACjX895RaQrMj2DZutaM/txs",
+          "timestamp": null,
+          "description": "Minascan is a Block Explorer and Analytics Platform for Mina, a lightweight succinct blockchain that uses ZK-proofs.",
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "Minascan Block Explorer",
+          "url": "https://minascan.io/devnet/account/B62qjwDWxjf4LtJ4YWJQDdTNPqZ69ZyeCzbpAFKN7EoZzYig5ZRz8JE",
+          "timestamp": null,
+          "description": "Minascan is a Block Explorer and Analytics Platform for Mina, a lightweight succinct blockchain that uses ZK-proofs.",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255813675017834558",
+      "type": "Reply",
+      "timestamp": "2024-06-27T13:15:12.014+04:00",
+      "timestampEdited": "2024-06-27T13:15:20.77+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "when you're calling fetchAccount() you need to pass token ID as 2nd parameter\n\nin your test do:\n``` import {TokenId} from 'o1js';\nconst derivedTokenId = TokenId.derive(contractAddress);\nconst result = await fetchAccount({\n publicKey: contractAddress,\n tokenId: derivedTokenId, \n});\n```",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "321139103624069120",
+          "name": "jegwon.choi",
+          "discriminator": "0000",
+          "nickname": "bigcloud",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/321139103624069120/1aa993a0073764ee75222c3ed5e615a7.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255811375905640478",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255819155937165363",
+      "type": "Reply",
+      "timestamp": "2024-06-27T13:36:58.767+04:00",
+      "timestampEdited": "2024-06-27T13:40:12.103+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Isn't this about retrieving account information for the tokenId?\nDoes this have anything to do with being displayed as a zkApp on the block explorer?\n\nI was looking for related information and ended up posting in the wrong place instead of zkApps-developer. I'm sorry about that.",
+      "author": {
+        "id": "321139103624069120",
+        "name": "jegwon.choi",
+        "discriminator": "0000",
+        "nickname": "bigcloud",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/321139103624069120/1aa993a0073764ee75222c3ed5e615a7.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738036747455299764",
+          "name": "zkkirol",
+          "discriminator": "0000",
+          "nickname": "zkKirol",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "857943736289984583",
+              "name": "prism-contributing-member",
+              "color": "#FFEABD",
+              "position": 112
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "1344664872356679743",
+              "name": "MWN-tester",
+              "color": "#FFA6C9",
+              "position": 39
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255813675017834558",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255920788239028275",
+      "type": "Reply",
+      "timestamp": "2024-06-27T20:20:49.796+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No, label is for debugging inside o1js. Not part of the JSON transaction",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4C",
+            "code": "ok_hand",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44c.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "790104669237805096",
+              "name": "zkcomdex",
+              "discriminator": "0000",
+              "nickname": "Comdex",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "790104669237805096",
+          "name": "zkcomdex",
+          "discriminator": "0000",
+          "nickname": "Comdex",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255793915471200286",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255921690249134091",
+      "type": "Reply",
+      "timestamp": "2024-06-27T20:24:24.852+04:00",
+      "timestampEdited": "2024-06-27T20:24:39.778+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah token id doesn't seem related to what your asking. \n\nHowever, I'm not sure what you're asking. What do you mean with \"being queried as zkapp accounts\"? There is no separate query, a zkapp account is also just an account",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "321139103624069120",
+          "name": "jegwon.choi",
+          "discriminator": "0000",
+          "nickname": "bigcloud",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/321139103624069120/1aa993a0073764ee75222c3ed5e615a7.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255819155937165363",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1255921992637485156",
+      "type": "Default",
+      "timestamp": "2024-06-27T20:25:36.947+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There is a field on every account called \"zkapp\". It will typically be null for end user accounts, and contains zkapp related stuff like the verification key",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1256136507350061076",
+      "type": "Reply",
+      "timestamp": "2024-06-28T10:38:01.24+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "일반 계정과 zkApp 계정에 대한 제 이해가 잘못된 것인지 확인하고자 질문드렸습니다.\n답변을 통해 제가 이미 알고 있던 내용이 맞다는 것을 확인했습니다. 저는 잠시 블록 탐색기에 표시되는 정보에 혼동이 있었습니다.\n감사합니다. \uD83D\uDC4D",
+      "author": {
+        "id": "321139103624069120",
+        "name": "jegwon.choi",
+        "discriminator": "0000",
+        "nickname": "bigcloud",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/321139103624069120/1aa993a0073764ee75222c3ed5e615a7.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE05",
+            "code": "sweat_smile",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f605.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "401088306210799616",
+              "name": "borays",
+              "discriminator": "0000",
+              "nickname": "boray",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+            },
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1255921992637485156",
+        "channelId": "1253851793239310528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1256316492899946647",
+      "type": "Default",
+      "timestamp": "2024-06-28T22:33:13.139+04:00",
+      "timestampEdited": "2024-06-28T22:33:20.313+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> I asked the question to confirm whether my understanding of regular accounts and zkApp accounts was incorrect. Through your response, I confirmed that what I already knew was correct. I was briefly confused by the information displayed on the block explorer. Thank you. \uD83D\uDC4D\n\n\\- 4o",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 68
+}

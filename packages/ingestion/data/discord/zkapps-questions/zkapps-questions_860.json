@@ -1,0 +1,486 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1102701764358193273",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Transaction verification failed: Cannot update field 'appState' because permission for this field",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T16:07:36.1202144+04:00",
+  "messages": [
+    {
+      "id": "1102701764358193273",
+      "type": "Default",
+      "timestamp": "2023-05-02T01:03:07.831+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The full error is: \n```Error: Transaction verification failed: Cannot update field 'appState' because permission for this field is 'Proof', but the required authorization was not provided or is invalid.\n        Error trace: \n\nCannot read properties of undefined (reading 'length')\n    at checkPermission\n```\n\nAny idea what this means or how to fix? \nThe code is:\n```\nimport {\n  AccountUpdate,\n  Mina,\n  PrivateKey,\n  PublicKey,\n  fetchAccount,\n  isReady,\n  shutdown,\n} from 'snarkyjs';\nimport { Add } from './Add.js';\n\nawait isReady;\n\nconst Local = Mina.LocalBlockchain({ proofsEnabled: true });\nMina.setActiveInstance(Local);\n\nconst { privateKey: deployerKey, publicKey: deployerAccount } =\n  Local.testAccounts[0];\nconst { privateKey: senderKey, publicKey: senderAccount } =\n  Local.testAccounts[1];\n\nlet zkAppPrivateKey = PrivateKey.random();\nlet appKey = zkAppPrivateKey.toPublicKey();\nconst zkApp = new Add(appKey);\n\nconst txn = await Mina.transaction(deployerKey, () => {\n  AccountUpdate.fundNewAccount(deployerAccount);\n  zkApp.deploy();\n});\nawait txn.sign([deployerKey, zkAppPrivateKey]).send();\n\nlet num = zkApp.num.get();\n\nconsole.log(num.toString());\n\n// ----------------------------------------------------\nawait Add.compile();\n\nconst txn1 = await Mina.transaction(senderAccount, () => {\n  zkApp.update();\n});\nawait txn1.prove();\nawait txn1.sign([senderKey]).send();\n\nnum = zkApp.num.get();\nconsole.log('state after txn1:', num.toString());\n// ----------------------------------------------------\nconsole.log('Shutting down');\nawait shutdown();\n```\n\nalmost directly from the tutorial 1",
+      "author": {
+        "id": "401572278183133186",
+        "name": "calebcurry",
+        "discriminator": "0000",
+        "nickname": "CalebCurry",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401572278183133186/1aa46f860975473fc0a465a1cac05989.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "1050599472071180389",
+              "name": "chrlyz",
+              "discriminator": "0000",
+              "nickname": "chrlyz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1102909418858872902",
+      "type": "Default",
+      "timestamp": "2023-05-02T14:48:16.522+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "looking into it \uD83D\uDC40",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1102911298053886024",
+      "type": "Default",
+      "timestamp": "2023-05-02T14:55:44.557+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@CalebCurry the problem is that you compile after deploying. in this case, deploy seems to silently not set the verification key, which is kinda awful behavior. your proof can then not be verified against the on chain verification key, because there is none.\n\nfix: move `await Add.compile()` before deploy",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD14",
+            "code": "thinking",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f914.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "374663548174991362",
+              "name": "maht0rz",
+              "discriminator": "0000",
+              "nickname": "maht0rz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "1050599472071180389",
+              "name": "chrlyz",
+              "discriminator": "0000",
+              "nickname": "chrlyz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "401572278183133186",
+          "name": "calebcurry",
+          "discriminator": "0000",
+          "nickname": "CalebCurry",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401572278183133186/1aa46f860975473fc0a465a1cac05989.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1102914293122482246",
+      "type": "Default",
+      "timestamp": "2023-05-02T15:07:38.637+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "alright, fixing the `deploy()` behavior. How do you like this error message @CalebCurry?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1102914292883394601",
+          "url": "https://cdn.discordapp.com/attachments/1102701764358193273/1102914292883394601/image.png?ex=680b6cfa&is=680a1b7a&hm=384b0e8552330f6e6ef8ade79b4bfa4ad32253642c6593e39087f7376dafc75e&",
+          "fileName": "image.png",
+          "fileSizeBytes": 46647
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "401572278183133186",
+              "name": "calebcurry",
+              "discriminator": "0000",
+              "nickname": "CalebCurry",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/401572278183133186/1aa46f860975473fc0a465a1cac05989.png?size=512"
+            },
+            {
+              "id": "1050599472071180389",
+              "name": "chrlyz",
+              "discriminator": "0000",
+              "nickname": "chrlyz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "401572278183133186",
+          "name": "calebcurry",
+          "discriminator": "0000",
+          "nickname": "CalebCurry",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401572278183133186/1aa46f860975473fc0a465a1cac05989.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1102914456545153044",
+      "type": "Default",
+      "timestamp": "2023-05-02T15:08:17.6+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this will only throw with proofs enabled ^",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1102914698543906837",
+      "type": "Default",
+      "timestamp": "2023-05-02T15:09:15.297+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if proofs aren't enabled & vk not found, we update the account with a dummy vk",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1102917119500353536",
+      "type": "Default",
+      "timestamp": "2023-05-02T15:18:52.498+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "PR: https://github.com/o1-labs/snarkyjs/pull/885",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1103023786980298802",
+      "type": "Default",
+      "timestamp": "2023-05-02T22:22:44.007+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sweet, thanks!",
+      "author": {
+        "id": "401572278183133186",
+        "name": "calebcurry",
+        "discriminator": "0000",
+        "nickname": "CalebCurry",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401572278183133186/1aa46f860975473fc0a465a1cac05989.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 8
+}

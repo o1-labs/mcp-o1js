@@ -1,0 +1,1455 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1212334305527730236",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "List of allowed control structures, methods, etc",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:21:10.2405347+04:00",
+  "messages": [
+    {
+      "id": "1212334305527730236",
+      "type": "Default",
+      "timestamp": "2024-02-28T13:43:42.52+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi,\nI know that some things do work in  zkprogram/smart contract like all the methods listed in https://docs.minaprotocol.com/zkapps/o1js-reference/modules.\nIt is not possible to use e.g. `if`, but you have to use `Provable.if` instead.\nHowever it seems to be possible to access the elements of an array (see https://docs.minaprotocol.com/zkapps/tutorials/common-types-and-functions)\nI could not find any concluding documentation on what is allowed and what is not allowed. However that would be needed to build circuits that actually do what I expect.\nFor example is it allowed to create a function which calles only allowed stuff and then call this function in my zkprogram? Will the constraints that are in the function be part of the circuit?\n\nDoes anybody know some ressources where this is explained?",
+      "author": {
+        "id": "1204922502380388384",
+        "name": "close.galaxy",
+        "discriminator": "0000",
+        "nickname": "close galaxy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1264965348805967892",
+              "name": "duncans0199_87641",
+              "discriminator": "0000",
+              "nickname": "duncans",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1212341145896615986",
+      "type": "Default",
+      "timestamp": "2024-02-28T14:10:53.391+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "circuit is basically an execution trace of certain computation, to build that execution trace of the computation you must write a function, that deep down touches o1js APIs, e.g. for assertions - most importantly it must be constant size, so you can't use native `ifs` as you identified, you also can't use dynamic array access\n\nexample circuit\n```ts\nconst foo = (publicInput: Field, privateInput: Field) => {\n  return Provable.if(publicInput.greaterThan(privateInput, publicInput.add(1), publicInput.sub(1));\n}\n```\n\n^^ then you wrap this into a zk program:\n\n```ts\nconst program = ZkProgram({\n  publicInput: Field,\n  publicOutput: Field,\n  methods: {\n    foo: {\n      privateInput: [Field],\n      method: foo // from above\n    }\n  }\n})\n```\n\n^^ this will allow you to then compile the program and access the prover 'version' of your foo method\n\n```ts\nawait program.compile();\nconst proof = await program.foo(Field(1)); // gives back the proof\n```",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1212342057318883368",
+      "type": "Default",
+      "timestamp": "2024-02-28T14:14:30.691+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "when you compile the program above `foo()` will get executed with dummy inputs, so that the prover & verifier keys can be constructed, then during `program.foo()` the prover key is used to compute the real proof based on the real inputs.\n\nadditionally you can do something like the following to verify the proof using the verification key attached to the program, OR you can use the return value of `compile()` which is the verificaiton key itself, to use a standalone `verify(verificationKey, proof)` function\n\n```ts\nprogram.verify(proof)\n```",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1212343117722951701",
+      "type": "Default",
+      "timestamp": "2024-02-28T14:18:43.511+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Provable.switch can “index an array” but its maximum length is fixed.",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1212343440965369867",
+      "type": "Default",
+      "timestamp": "2024-02-28T14:20:00.578+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i guess you can also do `array[0]` as long as the index you're touching does not dynamically change, i assume also `array[variable]` could work if both the array and the variable came from an input?",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1212343660029415434",
+      "type": "Default",
+      "timestamp": "2024-02-28T14:20:52.807+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@rpanic always reminds me how exactly it works with arrays because i always forget",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "138034851872899081",
+          "name": "rpanic",
+          "discriminator": "0000",
+          "nickname": "rpanic",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1093206126817968280",
+              "name": "TW2-Operator",
+              "color": "#72BE86",
+              "position": 28
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1212344271794077707",
+      "type": "Reply",
+      "timestamp": "2024-02-28T14:23:18.663+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "function calling is permitted. just make sure that your functions use types like Field, as you note. you can even call other methods, and verify other zkprograms :)",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1204922502380388384",
+          "name": "close.galaxy",
+          "discriminator": "0000",
+          "nickname": "close galaxy",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1212334305527730236",
+        "channelId": "1212334305527730236",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1212370103006527520",
+      "type": "Default",
+      "timestamp": "2024-02-28T16:05:57.304+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think the important thing that you need to make sure is, that the execution trace (i.e. the exact steps the program will take) don't depend on your inputs and will always go through the exact same way. You can analyze that pretty easily by checking if there are any dependencies up to parameters or witnesses and if all the values that are in your control flow structures are constant through all possible executions. If there aren't any, you should be fine",
+      "author": {
+        "id": "138034851872899081",
+        "name": "rpanic",
+        "discriminator": "0000",
+        "nickname": "rpanic",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/138034851872899081/a3ac1d3e9ff9778efba8901ccb03783a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1204922502380388384",
+              "name": "close.galaxy",
+              "discriminator": "0000",
+              "nickname": "close galaxy",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1212394138947944510",
+      "type": "Default",
+      "timestamp": "2024-02-28T17:41:27.919+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok, thank you all for your answers, that was also my intuitive understanding. maybe this should be part of the documentation (maybe as a page under https://docs.minaprotocol.com/zkapps/o1js ?)",
+      "author": {
+        "id": "1204922502380388384",
+        "name": "close.galaxy",
+        "discriminator": "0000",
+        "nickname": "close galaxy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Mina Documentation",
+          "url": "https://docs.minaprotocol.com/zkapps/o1js",
+          "timestamp": null,
+          "description": "Website for documentation about Mina Protocol",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/_PJlmeDNad-_70g7jbEdYnu0Z3mezgosb1bPK642OJE/https/docs.minaprotocol.com/img/common/mina-logo.png",
+            "width": 1120,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1212716301307609129",
+      "type": "Default",
+      "timestamp": "2024-02-29T15:01:37.411+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@close galaxy this might answer a few of your questions because it explains how your provable code is interpreted:\nhttps://docs.minaprotocol.com/zkapps/faq#does-o1js-compile-my-javascript-code-to-an-arithmetic-circuit",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1204922502380388384",
+              "name": "close.galaxy",
+              "discriminator": "0000",
+              "nickname": "close galaxy",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1204922502380388384",
+          "name": "close.galaxy",
+          "discriminator": "0000",
+          "nickname": "close galaxy",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+        }
+      ]
+    },
+    {
+      "id": "1212717523150176267",
+      "type": "Default",
+      "timestamp": "2024-02-29T15:06:28.721+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> I could not find any concluding documentation on what is allowed and what is not allowed\nIn general I don't like this framing of \"what is allowed\"  (even though I know we use it in our docs).\n\nThink of your method as being a way of metaprogramming a computation. You not really _do_ the computation, but you define _how the computation graph looks like_. (And conveniently, we can also _do_ the computation based on that info).\n\nNow, with that knowledge, you can metaprogram your circuit in any way you like, using arbitrary JS. Your method is not compiled but just executed, like you execute any JS function. So, there's nothing inherently \"not allowed\". `if` statements are allowed and I use them extremely often when writing circuits.\n\nThe only thing to watch out for (as others have pointed out) is that you build the same computation graph with each run of your function.",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1212718474112147486",
+      "type": "Default",
+      "timestamp": "2024-02-29T15:10:15.448+04:00",
+      "timestampEdited": "2024-02-29T15:10:26.691+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Btw @close galaxy, if you _don't_ build the same computation graph with each run of your method, then you'll not be able to create a proof. Also, some of the patterns people would use to violate this rule naturally lead to an error during compile.\n\nSo this is one advice that I like to give out strongly:\n\n**Always try to compile your methods and create proofs.**\n\nBecause only then you know that it works. I have seen people write immense amount of garbage code because they didn't try to create a proof at least once - so don't miss it \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1204922502380388384",
+          "name": "close.galaxy",
+          "discriminator": "0000",
+          "nickname": "close galaxy",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+        }
+      ]
+    },
+    {
+      "id": "1212719677571072030",
+      "type": "Default",
+      "timestamp": "2024-02-29T15:15:02.375+04:00",
+      "timestampEdited": "2024-02-29T15:16:42.814+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "example of using an `if` statement in provable code from the o1js code base:\n`if (this.isConstant()) { ... }` (`this` is `Field`)\nit's valid because in the two different branches, we're _already_ dealing with different computation graphs. The input being a constant vs a variable means that it plays a fundamentally different role in your computation, and so we build a different circuit depending on that (in the constant case, we don't build any circuit, just return a different constant)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1212719677365821471",
+          "url": "https://cdn.discordapp.com/attachments/1212334305527730236/1212719677365821471/image.png?ex=680ac5f6&is=68097476&hm=eb55ce553ee14b1d976e6c109deda3ac202c05d38976288847b1eda58f5828c2&",
+          "fileName": "image.png",
+          "fileSizeBytes": 44801
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1213787793814454272",
+      "type": "Reply",
+      "timestamp": "2024-03-03T13:59:21.132+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Well, I think the approach should be to be sure that everything actually works. Testing shows the presence, not the absence of bugs, afterall.",
+      "author": {
+        "id": "1204922502380388384",
+        "name": "close.galaxy",
+        "discriminator": "0000",
+        "nickname": "close galaxy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1212718474112147486",
+        "channelId": "1212334305527730236",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1213787933606289458",
+      "type": "Default",
+      "timestamp": "2024-03-03T13:59:54.461+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks a lot for your answers! @gregor",
+      "author": {
+        "id": "1204922502380388384",
+        "name": "close.galaxy",
+        "discriminator": "0000",
+        "nickname": "close galaxy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1213789819667480596",
+      "type": "Reply",
+      "timestamp": "2024-03-03T14:07:24.133+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Definitely but that assurance comes with experience and the experience comes with testing",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1204922502380388384",
+          "name": "close.galaxy",
+          "discriminator": "0000",
+          "nickname": "close galaxy",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1213787793814454272",
+        "channelId": "1212334305527730236",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1215007469911408810",
+      "type": "Default",
+      "timestamp": "2024-03-06T22:45:54.574+04:00",
+      "timestampEdited": "2024-03-06T22:47:35.445+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I feel thats a bit like beginners writing code in C, sure you can get it to work, but the chances you add some exploitable bugs are quite high if you just do whatever works.",
+      "author": {
+        "id": "1204922502380388384",
+        "name": "close.galaxy",
+        "discriminator": "0000",
+        "nickname": "close galaxy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215008368582721586",
+      "type": "Default",
+      "timestamp": "2024-03-06T22:49:28.834+04:00",
+      "timestampEdited": "2024-03-06T22:49:47.107+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you have a programming language that isn't memory-safe, thread-safe and type-safe, you at least want to know how to watch out what is dangerous and what is not (e.g. common pitfalls)",
+      "author": {
+        "id": "1204922502380388384",
+        "name": "close.galaxy",
+        "discriminator": "0000",
+        "nickname": "close galaxy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215009457201872937",
+      "type": "Default",
+      "timestamp": "2024-03-06T22:53:48.381+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So my original question was more in the direction of what is safe and what might be dangerous, even if it techincally is allowed, just like using `gets` in C is also \"allowed\"",
+      "author": {
+        "id": "1204922502380388384",
+        "name": "close.galaxy",
+        "discriminator": "0000",
+        "nickname": "close galaxy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 19
+}

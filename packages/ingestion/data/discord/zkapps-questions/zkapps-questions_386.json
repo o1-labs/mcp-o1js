@@ -1,0 +1,1480 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1211443081518383175",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Is it possible to save provable computation based on a Bool condition?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:34:41.1553085+04:00",
+  "messages": [
+    {
+      "id": "1211443081518383175",
+      "type": "Default",
+      "timestamp": "2024-02-26T02:42:18.158+04:00",
+      "timestampEdited": "2024-02-26T02:45:54.229+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Concerning the 2nd challenge's statement - I quote --> **In case the message number is not greater than the previous one, this means that this is a duplicate message.\nIn this case, it still should be processed, but the message details do not need to be checked.**\n\nI don't think it's technically possible to satisfy such logic with provable code because the `Provable.if` executes both if-else blocks and picks one based on the condition, this means that in all cases the **message details** will be validated(check) so there won't be any computation saved in case of a duplicate message.\n\n- Such logic would be possible if we want to exit proof generation using `assertEquals` or any **assert** check before proceeding to the next code - This solution is not flexible in many cases.\n\nDoes anyone know of a solution that helps skip a provable process?",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211446909651255316",
+      "type": "Default",
+      "timestamp": "2024-02-26T02:57:30.856+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It doesn't save any in-circuit resource, but if you have something like isNotDuplicate.and(messageValidity.verify()).assertTrue(), then in the case that the message _is_ a duplicate you can save the out-of-circuit price of having to compute a message validity sub-proof while processing the batch.",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211447796268277760",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:01:02.242+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "in general, the only way to skip work is to use recursion and branch in the verifier.",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211451816575893615",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:17:00.758+04:00",
+      "timestampEdited": "2024-02-26T03:17:22.489+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@ember do you mean, to shift the check out as a stand-alone proof and revert the **main** proof generation depending on `proof.verify().assertTrue()`.\nI think this technique is the same as asserting validity directly \uD83E\uDD14 \nIt also means that in all cases you would need to generate a proof for message details validity - what I truly desire is to only prove validity(generate) based on a condition.",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "192258292544700426",
+          "name": "3221229683",
+          "discriminator": "0000",
+          "nickname": "ember",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1211452891823341568",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:21:17.117+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> It also means that in all cases you would need to generate a proof for message details validity\nno, it is not true. in the case where `isNotDuplicate` is false, the other input is irrelevant and you can just pass Proof.dummy",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211454302951047288",
+      "type": "Reply",
+      "timestamp": "2024-02-26T03:26:53.556+04:00",
+      "timestampEdited": "2024-02-26T03:27:05.647+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Doesn't the bitwise `and` takes consideration of both inputs `isNotDuplicate` & ` messageValidity.verify()).assertTrue()` \nHaving a dummy proof in case of a duplicate message would require knowledge of the user to provide custom inputs - this would ask to trust the user I think",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "192258292544700426",
+          "name": "3221229683",
+          "discriminator": "0000",
+          "nickname": "ember",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1211452891823341568",
+        "channelId": "1211443081518383175",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1211454699539275849",
+      "type": "Reply",
+      "timestamp": "2024-02-26T03:28:28.11+04:00",
+      "timestampEdited": "2024-02-26T03:28:41.565+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "think about it this way: when the isNotDuplicate is false, even if the user passes an invalid input, it will not matter, the condition will verify.",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "418492902088507403",
+          "name": "creepyk19",
+          "discriminator": "0000",
+          "nickname": "MahmoudK19",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1211454302951047288",
+        "channelId": "1211443081518383175",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1211455111524651048",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:30:06.335+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it doesn't save any in-circuit resource, and it does require the caller to know what proofs it needs to compute for the contrac tto succeed,  but it allows whoever is calling your contract to skip computing proofs for conditions that are irrelevant.",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211455233818103838",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:30:35.492+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(this is very different than trusting them to do anything. it just gives them the freedom to sometimes skip computing a \"real\" proof)",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211455806399184896",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:32:52.006+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Btw, is the dummy-proof input valid in case of live Testnet deployment? Or is it only for testing purposes?",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211456158301298758",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:34:15.906+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you can always use it, see https://docs.minaprotocol.com/zkapps/o1js-reference/classes/Proof#dummy for the inputs",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Mina Documentation",
+          "url": "https://docs.minaprotocol.com/zkapps/o1js-reference/classes/Proof",
+          "timestamp": null,
+          "description": "Website for documentation about Mina Protocol",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/_PJlmeDNad-_70g7jbEdYnu0Z3mezgosb1bPK642OJE/https/docs.minaprotocol.com/img/common/mina-logo.png",
+            "width": 1120,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "418492902088507403",
+              "name": "creepyk19",
+              "discriminator": "0000",
+              "nickname": "MahmoudK19",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1211457353719742554",
+      "type": "Reply",
+      "timestamp": "2024-02-26T03:39:00.916+04:00",
+      "timestampEdited": "2024-02-26T03:39:54.181+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "What came to mind regarding your proposed solution is to have two optimistic proving methods: \n1. proveDuplicate() -> checks whether the message is duplicate and generates proof - otherwise revert\n2. proveNonDuplicate() -> checks whether the message is non-duplicate and generates proof - otherwise revert\n- This proves the honesty of the caller but an easy thing to do for the challenge would be exiting proof generation in case of a duplicate message - but the **it still should be processed** statement is contradictory with **the message details do not need to be checked** - which is the same as the former solution",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "192258292544700426",
+          "name": "3221229683",
+          "discriminator": "0000",
+          "nickname": "ember",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1211455111524651048",
+        "channelId": "1211443081518383175",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1211457965962567700",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:41:26.886+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The message being processed means it gets submitted to the smart contract",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211459268369457162",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:46:37.404+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don’t know this revert terminology- but I would read the tutorials about rollups and think how this could be a rollup",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "418492902088507403",
+              "name": "creepyk19",
+              "discriminator": "0000",
+              "nickname": "MahmoudK19",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1211459407033147392",
+      "type": "Reply",
+      "timestamp": "2024-02-26T03:47:10.464+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "By revert I meant exiting proof generation when breaking an assert check",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "192258292544700426",
+          "name": "3221229683",
+          "discriminator": "0000",
+          "nickname": "ember",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1211455111524651048",
+        "channelId": "1211443081518383175",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1211459795169579079",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:48:43.003+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This makes sense but the trust side of it is not quite convincing to me - what if the message is non-duplicate and the dummy verifies true?",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211460741492899860",
+      "type": "Default",
+      "timestamp": "2024-02-26T03:52:28.624+04:00",
+      "timestampEdited": "2024-02-26T03:53:13.041+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I get that the usage of a dummy proof helps to save some off-chain computation generating a proof but the validity of a dummy proof for an operational zkApp would break the purpose of a ZKP as in --> I got a proof --> is it dummy or legit?",
+      "author": {
+        "id": "418492902088507403",
+        "name": "creepyk19",
+        "discriminator": "0000",
+        "nickname": "MahmoudK19",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1211466568400379954",
+      "type": "Default",
+      "timestamp": "2024-02-26T04:15:37.867+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah this is why verifyIf exists, I believe",
+      "author": {
+        "id": "192258292544700426",
+        "name": "3221229683",
+        "discriminator": "0000",
+        "nickname": "ember",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "418492902088507403",
+              "name": "creepyk19",
+              "discriminator": "0000",
+              "nickname": "MahmoudK19",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1211574312549748786",
+      "type": "Default",
+      "timestamp": "2024-02-26T11:23:46.074+04:00",
+      "timestampEdited": "2024-02-26T11:23:53.805+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes exactly - the dummy proof does not verify, but you can use verifyIf to implement exactly the strategy that @ember describes!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "418492902088507403",
+              "name": "creepyk19",
+              "discriminator": "0000",
+              "nickname": "MahmoudK19",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/418492902088507403/e99e24ca97beabaeb951397d19355c05.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "192258292544700426",
+          "name": "3221229683",
+          "discriminator": "0000",
+          "nickname": "ember",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/192258292544700426/avatars/51c1b2617db4f40414b845f4749d10a9.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 19
+}

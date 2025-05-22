@@ -1,0 +1,491 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1217445509711663194",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Multisend",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:15:17.2741313+04:00",
+  "messages": [
+    {
+      "id": "1217445509711663194",
+      "type": "Default",
+      "timestamp": "2024-03-13T16:13:48.559+04:00",
+      "timestampEdited": "2024-03-13T17:25:38.029+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I want to create a non-zkapp transaction with MINA transfer to multiple accounts. How to do that?\n\nI am trying this code, the transaction is submitted succesfully but fails\n\n```\nconst publicKey = PublicKey.fromPrivateKey(feepayerKey);\nconst to1 = PublicKey.fromBase58(\"B62qmvLPFStEbXEhNQXjzjFigi82WvPGDxNzrreUboGkLipyVTdXQ1o\");\nconst to2 = PublicKey.fromBase58(\"B62qrzoLfoHUeKfA5j2eMhigCJrxaEtsoRpTCiPgqQGwBzQ3q3epriA\");\n\nconst tx = await Mina.transaction({sender: publicKey, fee: 2100000000}, () => {\n  const au = AccountUpdate.createSigned(publicKey);\n  au.send({to: to1, amount: 200000000});\n  au.send({to: to2, amount: 300000000});\n});\n\nawait tx.prove();\n// console.log(tx.toPretty());\nconst sentTx = await tx.sign([feepayerKey]).send();\n```",
+      "author": {
+        "id": "151383322759528448",
+        "name": "qwadratic",
+        "discriminator": "0000",
+        "nickname": "qwadratic",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1217478196111347835",
+      "type": "Default",
+      "timestamp": "2024-03-13T18:23:41.604+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\nconst tx = await Mina.transaction({sender: publicKey, fee: 100000000}, () => {\n  const au = AccountUpdate.createSigned(publicKey);\n  au.balance.subInPlace(1000000000);\n  au.send({to: to1, amount: 100000000});\n  au.send({to: to2, amount: 200000000});\n});\n```\n\nthis code worked for me",
+      "author": {
+        "id": "151383322759528448",
+        "name": "qwadratic",
+        "discriminator": "0000",
+        "nickname": "qwadratic",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1217504366966079548",
+      "type": "Reply",
+      "timestamp": "2024-03-13T20:07:41.222+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So have you been able to get the multiple transfers done yet ?",
+      "author": {
+        "id": "985621652421345342",
+        "name": "evanssherilyn.",
+        "discriminator": "0000",
+        "nickname": "0DD||Erilyn",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/985621652421345342/a8a6e6dcbcd3ed13c21af9a51da0717b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "151383322759528448",
+          "name": "qwadratic",
+          "discriminator": "0000",
+          "nickname": "qwadratic",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1217445509711663194",
+        "channelId": "1217445509711663194",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1217508863931191346",
+      "type": "Reply",
+      "timestamp": "2024-03-13T20:25:33.382+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yes , just posted a snippet that allowed me to do it. \n\nnow I am trying to sign a tx with multiple senders and single receiver",
+      "author": {
+        "id": "151383322759528448",
+        "name": "qwadratic",
+        "discriminator": "0000",
+        "nickname": "qwadratic",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "985621652421345342",
+          "name": "evanssherilyn.",
+          "discriminator": "0000",
+          "nickname": "0DD||Erilyn",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/985621652421345342/a8a6e6dcbcd3ed13c21af9a51da0717b.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1217504366966079548",
+        "channelId": "1217445509711663194",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1217509681770135602",
+      "type": "Default",
+      "timestamp": "2024-03-13T20:28:48.37+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That's Awesome",
+      "author": {
+        "id": "985621652421345342",
+        "name": "evanssherilyn.",
+        "discriminator": "0000",
+        "nickname": "0DD||Erilyn",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/985621652421345342/a8a6e6dcbcd3ed13c21af9a51da0717b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1217509720089432124",
+      "type": "Default",
+      "timestamp": "2024-03-13T20:28:57.506+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Im glad u were be able to do it right \\",
+      "author": {
+        "id": "985621652421345342",
+        "name": "evanssherilyn.",
+        "discriminator": "0000",
+        "nickname": "0DD||Erilyn",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/985621652421345342/a8a6e6dcbcd3ed13c21af9a51da0717b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1217758816280776764",
+      "type": "Reply",
+      "timestamp": "2024-03-14T12:58:46.666+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This code works for me:\n```typescript\nconst transaction = await Mina.transaction(\n      { sender: sender1, fee: \"100000000\", memo: \"2 payments\" },\n      () => {\n        const senderUpdate1 = AccountUpdate.createSigned(sender1);\n        senderUpdate1.balance.subInPlace(1000000000);\n        senderUpdate1.send({ to: receiver1, amount: AMOUNT });\n        const senderUpdate2 = AccountUpdate.createSigned(sender2);\n        senderUpdate2.send({ to: receiver1, amount: AMOUNT });\n      }\n    );\n    await transaction.sign([deployer1, deployer2]).send();\n```\nAs I understand, the max number of senders can be 7 or 8, then you will reach max account updates allowed.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "151383322759528448",
+          "name": "qwadratic",
+          "discriminator": "0000",
+          "nickname": "qwadratic",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1217508863931191346",
+        "channelId": "1217445509711663194",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1217818127849619587",
+      "type": "Default",
+      "timestamp": "2024-03-14T16:54:27.646+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is creating a new signed `AccountUpdate` and calling `AccountUpdate.send` method enough or should we also use `AccountUpdate.subInPlace` method?\n\nThe code below works.\n```ts\nconst localBlockchain = Mina.LocalBlockchain({})\nMina.setActiveInstance(localBlockchain)\n\nconst berzan = localBlockchain.testAccounts[0]\nconst john = localBlockchain.testAccounts[1]\n\nassert.deepEqual(Mina.getBalance(berzan.publicKey), UInt64.from(1000 * 10 ** 9))\nassert.deepEqual(Mina.getBalance(john.publicKey), UInt64.from(1000 * 10 ** 9))\n\nlet tx: Mina.Transaction\n\ntx = await Mina.transaction(berzan.publicKey, () => {\n    const au = AccountUpdate.createSigned(berzan.publicKey)\n    // au.balance.subInPlace(50 * 10 ** 9)\n    au.send({ to: john.publicKey, amount: 50 * 10 ** 9 })\n})\n\ntx.sign([berzan.privateKey])\nawait tx.prove()\nawait tx.send()\n\nassert.deepEqual(Mina.getBalance(berzan.publicKey), UInt64.from(950 * 10 ** 9))\nassert.deepEqual(Mina.getBalance(john.publicKey), UInt64.from(1050 * 10 ** 9))\n```\n\nBut the code below doesn't work.\n```ts\nconst localBlockchain = Mina.LocalBlockchain({})\nMina.setActiveInstance(localBlockchain)\n\nconst berzan = localBlockchain.testAccounts[0]\nconst john = localBlockchain.testAccounts[1]\n\nassert.deepEqual(Mina.getBalance(berzan.publicKey), UInt64.from(1000 * 10 ** 9))\nassert.deepEqual(Mina.getBalance(john.publicKey), UInt64.from(1000 * 10 ** 9))\n\nlet tx: Mina.Transaction\n\ntx = await Mina.transaction(berzan.publicKey, () => {\n    const au = AccountUpdate.createSigned(berzan.publicKey)\n    au.balance.subInPlace(50 * 10 ** 9)\n    au.send({ to: john.publicKey, amount: 50 * 10 ** 9 })\n})\n\ntx.sign([berzan.privateKey])\nawait tx.prove()\nawait tx.send()\n\nassert.deepEqual(Mina.getBalance(berzan.publicKey), UInt64.from(950 * 10 ** 9))\nassert.deepEqual(Mina.getBalance(john.publicKey), UInt64.from(1050 * 10 ** 9))\n```",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1217818161642999818",
+      "type": "Default",
+      "timestamp": "2024-03-14T16:54:35.703+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And I noticed that when `AccountUpdate.subInPlace` is used \"Invalid fee excess\" error happens.\nIs the reason that `AccountUpdate.send` already creates another `AccountUpdate` and updates the balance itself? `AccountUpdate.send`: https://github.com/o1-labs/o1js/blob/ee3bd4a333cee8ee2f1fdf28ed38f29aff60394b/src/lib/account-update.ts#L667",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "o1js/src/lib/account-update.ts at ee3bd4a333cee8ee2f1fdf28ed38f29af...",
+          "url": "https://github.com/o1-labs/o1js/blob/ee3bd4a333cee8ee2f1fdf28ed38f29aff60394b/src/lib/account-update.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/o1js development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/_UW0JWx3GVmb0X-FLU-PzVKNZzoQQ2HUi1feIvL9iOM/https/opengraph.githubassets.com/c1f56ad390448518b123297bd62699ff89c23ffb4bdee9f73a8426dbf29be2ab/o1-labs/o1js",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1217835146968039424",
+      "type": "Default",
+      "timestamp": "2024-03-14T18:02:05.32+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You need it only if you are creating a new account",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "151383322759528448",
+              "name": "qwadratic",
+              "discriminator": "0000",
+              "nickname": "qwadratic",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+            },
+            {
+              "id": "991037531615264808",
+              "name": "berzanorg",
+              "discriminator": "0000",
+              "nickname": "berzan",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 10
+}

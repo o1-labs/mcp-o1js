@@ -1,0 +1,731 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1082609561862676510",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How does the Prover function work? (doc)",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T17:04:12.0657504+04:00",
+  "messages": [
+    {
+      "id": "1082609561862676510",
+      "type": "Default",
+      "timestamp": "2023-03-07T14:23:53.461+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is there a technical doc giving an overview of the Prover function and how it works in-browser?",
+      "author": {
+        "id": "403793032006205450",
+        "name": "zonujp",
+        "discriminator": "0000",
+        "nickname": "Zonu",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/403793032006205450/b59c47ea76ed74a68359d4d57bc788e2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "719523315815022613",
+              "name": "jierenchen",
+              "discriminator": "0000",
+              "nickname": "jierenchen",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1082665202727784488",
+      "type": "Default",
+      "timestamp": "2023-03-07T18:04:59.277+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The prover function is generated at zkApp compile time. A dev uses SnarkyJS to write a zkApp, and during compilation the zkApp is passed through the Snarky compiler (an OCaml DSL) and the Kimchi compiler, which produces the **prover index**.\n\nTo create a proof, the prover expects:\n\n- A prover index, containing a representation of the circuit (and optionally pre-computed values to be used in the proof creation).\n- The (filled) registers table, representing parts of the execution trace of the circuit.\n\nSo a user who uses the zkApp will run the SnarkyJS file in their browser. Under the hood, SnarkyJS will actually be taking the user's inputs (they can be public or private)  and using them to execute some computation using a circuit. It then produces a proof using Kimchi functionality which proves that the computation was executed correctly. This proof is represented as a string (I think). \n\nThis proof can then be used to verify the correctness of the aforementioned computation, with some set of inputs.",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "403793032006205450",
+              "name": "zonujp",
+              "discriminator": "0000",
+              "nickname": "Zonu",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/403793032006205450/b59c47ea76ed74a68359d4d57bc788e2.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1082666276981313576",
+      "type": "Default",
+      "timestamp": "2023-03-07T18:09:15.399+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "some links which may be useful: \nThe Mina Book, which gives in depth information on the mathematical details and some implementation info of the various moving parts of Mina: https://o1-labs.github.io/proof-systems/introduction.html\nDavid Wong's blog post, which gives a higher level overview of how these systems interact and has some good diagrams: https://minaprotocol.com/blog/kimchi-the-latest-update-to-minas-proof-system",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Introduction - Mina book",
+          "url": "https://o1-labs.github.io/proof-systems/introduction.html",
+          "timestamp": null,
+          "description": "",
+          "color": "#FFFFFF",
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "Kimchi: The latest update to Mina’s proof system",
+          "url": "https://minaprotocol.com/blog/kimchi-the-latest-update-to-minas-proof-system",
+          "timestamp": null,
+          "description": "We recently released an update to our proof system for Mina called\u00A0Kimchi. In this post, we’ll go through what Kimchi is and what’s different about it.",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/TjIEtzixozUA886U1KtesU23oJoYuuh0iyslPC4fdHI/https/minaprotocol.com/wp-content/uploads/1-1024x401.jpeg",
+            "width": 1024,
+            "height": 401
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1082666487023677510",
+      "type": "Default",
+      "timestamp": "2023-03-07T18:10:05.477+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "We may also be given some extra information/corrections by @Florian or @gregor",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        },
+        {
+          "id": "227173927712063508",
+          "name": "trivo",
+          "discriminator": "0000",
+          "nickname": "Florian",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1300439738003619890",
+              "name": "o1 Engineering",
+              "color": "#00368B",
+              "position": 130
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "918156487434596374",
+              "name": "MinaResearch Founding Member",
+              "color": "#A5BEF3",
+              "position": 108
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1082667256506482689",
+      "type": "Default",
+      "timestamp": "2023-03-07T18:13:08.936+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is Snarky and Kimchi functionality provided in SnarkyJS via these large OCaml -> JS transpiled files? https://github.com/o1-labs/snarkyjs/blob/main/src/node_bindings/snarky_js_node.bc.cjs",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "snarkyjs/snarky_js_node.bc.cjs at main · o1-labs/snarkyjs",
+          "url": "https://github.com/o1-labs/snarkyjs/blob/main/src/node_bindings/snarky_js_node.bc.cjs",
+          "timestamp": null,
+          "description": "Typescript/Javascript framework for zk-SNARKs and zkApps - snarkyjs/snarky_js_node.bc.cjs at main · o1-labs/snarkyjs",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/MwGpBqYYuijXSIAoiGFv7VYNEeRDutHWPeonK72cHTU/https/opengraph.githubassets.com/57ba04f8dc1ac9c2b8f298066bc5037e16c7ca13d30c0dd1fd35d3c7352f66c5/o1-labs/snarkyjs",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1082841884113772646",
+      "type": "Default",
+      "timestamp": "2023-03-08T05:47:03.402+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is there any benchmarking of prover times? How fast is it?",
+      "author": {
+        "id": "403793032006205450",
+        "name": "zonujp",
+        "discriminator": "0000",
+        "nickname": "Zonu",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/403793032006205450/b59c47ea76ed74a68359d4d57bc788e2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1082853183912693780",
+      "type": "Default",
+      "timestamp": "2023-03-08T06:31:57.484+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It would be interesting to understand how snarky_js_node.bc.cjs is transpiled from OCaml. Basically how the JS in /snarkyjs links to the OCaml in /snarky and how that links to the Rust in /proof-systems (I assume it does?)",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1082900106795294781",
+      "type": "Default",
+      "timestamp": "2023-03-08T09:38:24.771+04:00",
+      "timestampEdited": "2023-03-08T09:38:30.294+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think I got it.. https://github.com/o1-labs/proof-systems/tree/master/kimchi\n\nThe prover.rs is compiled to WASM which is run with the prover index, and inputs in SnarkyJS?",
+      "author": {
+        "id": "403793032006205450",
+        "name": "zonujp",
+        "discriminator": "0000",
+        "nickname": "Zonu",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/403793032006205450/b59c47ea76ed74a68359d4d57bc788e2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "proof-systems/kimchi at master · o1-labs/proof-systems",
+          "url": "https://github.com/o1-labs/proof-systems/tree/master/kimchi",
+          "timestamp": null,
+          "description": "The proof systems used by Mina. Contribute to o1-labs/proof-systems development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/uJ0rfetRzd05gjcTh3y-grmdd6SCsZGr5mNWJ_l4uUQ/https/opengraph.githubassets.com/57ba04f8dc1ac9c2b8f298066bc5037e16c7ca13d30c0dd1fd35d3c7352f66c5/o1-labs/proof-systems",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1082997659591245894",
+      "type": "Default",
+      "timestamp": "2023-03-08T16:06:03.17+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Kimchi is written in Rust, and is used by SnarkyJS via WASM.\n\nTheres a twitter thread with some discussion about it here: https://twitter.com/cryptograthor/status/1633157571594043394",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "",
+          "url": "https://twitter.com/cryptograthor/status/1633157571594043394",
+          "timestamp": "2023-03-07T21:28:02.325+04:00",
+          "description": "optimization question to anyone working on @MinaProtocol's snarkyJS\n\nI would expect that exposing JS bindings to a wasm backend would be more efficient than a native js module; \n\nwould love to to petition a tweet thread about the design decisions made in snarkyjs",
+          "color": "#1DA1F2",
+          "author": {
+            "name": "Thor Kamphefner (Uncl\uD83D\uDDA4ak) (@cryptograthor)",
+            "url": "https://twitter.com/cryptograthor",
+            "iconUrl": "https://images-ext-1.discordapp.net/external/NP60NlC87ADkjRu4KtCSmeaCw4zD7mZu2t4aFRim5qU/https/pbs.twimg.com/profile_images/1516130725485064198/xgwpkpwc_400x400.jpg"
+          },
+          "footer": {
+            "text": "Twitter",
+            "iconUrl": "https://images-ext-1.discordapp.net/external/bXJWV2Y_F3XSra_kEqIYXAAsI3m1meckfLhYuWzxIfI/https/abs.twimg.com/icons/apple-touch-icon-192x192.png"
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "403793032006205450",
+              "name": "zonujp",
+              "discriminator": "0000",
+              "nickname": "Zonu",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/403793032006205450/b59c47ea76ed74a68359d4d57bc788e2.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1083121304997220372",
+      "type": "Default",
+      "timestamp": "2023-03-09T00:17:22.532+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> Is Snarky and Kimchi functionality provided in SnarkyJS via these large OCaml -> JS transpiled files?\nYeah @angus_m, these large files are the compilation output from OCaml. So whatever we use from OCaml (e.g., snarky-ml, Pickles, Mina transaction stuff) is all contained in those files, What we use from Rust (Kimchi) is contained in additional Wasm files",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "301752126491721730",
+          "name": "blockbeard",
+          "discriminator": "0000",
+          "nickname": "angus_m",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1083121481480929391",
+      "type": "Reply",
+      "timestamp": "2023-03-09T00:18:04.609+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "403793032006205450",
+              "name": "zonujp",
+              "discriminator": "0000",
+              "nickname": "Zonu",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/403793032006205450/b59c47ea76ed74a68359d4d57bc788e2.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "403793032006205450",
+          "name": "zonujp",
+          "discriminator": "0000",
+          "nickname": "Zonu",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/403793032006205450/b59c47ea76ed74a68359d4d57bc788e2.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1082900106795294781",
+        "channelId": "1082609561862676510",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1083125382431121468",
+      "type": "Default",
+      "timestamp": "2023-03-09T00:33:34.668+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Very cool",
+      "author": {
+        "id": "403793032006205450",
+        "name": "zonujp",
+        "discriminator": "0000",
+        "nickname": "Zonu",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/403793032006205450/b59c47ea76ed74a68359d4d57bc788e2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 12
+}

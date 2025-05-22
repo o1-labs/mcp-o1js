@@ -1,0 +1,267 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1124012773668569239",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Developer DAO hackathon - performance measurements?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T15:26:02.3435362+04:00",
+  "messages": [
+    {
+      "id": "1124012773668569239",
+      "type": "Default",
+      "timestamp": "2023-06-29T20:25:28.39+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi\n\nI'm considering joining the Developer DAO hackathon. I have this vague idea about measuring the proof generation performance and related things. Would this be an acceptable topic - would it be in the 'blog' category or...?",
+      "author": {
+        "id": "511272055623122961",
+        "name": "laurip",
+        "discriminator": "0000",
+        "nickname": "LauriP",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/511272055623122961/d57c3968960fb6a823b75cbd5530d6cf.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1124295658707353630",
+      "type": "Default",
+      "timestamp": "2023-06-30T15:09:33.439+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think this could be an interesting and useful thing to write about! At present, there is not up to date or comprehensive benchmarking data about proof generation performance. This is mainly due to the code changing a lot as its in active development. I wrote this answer which gives a few related points a month or so ago...\n\nAt present, there is not really any comprehensive or up to date benchmarking data to go on. Here's an old sheet as a starting point though:\nhttps://docs.google.com/spreadsheets/d/1RCWQXQ4eXl9JpMej6ObW1Ky8jJyRo74XpgMVnIxqTo4/edit#gid=0\n\nHere's a collection of somewhat related points:\n1. SnarkyJS runs in the browser, so performance may vary based on the JS engine being used. for example, proving was very slow on apple M1 chips due to how the V8 js engine was using the cores (and also possibly something to do with the apple silicon) ((this has had work done on it since i originally wrote this coment))\n\n2. generally more powerful hardware will run zkApps faster, but there may be limits and tradeoffs which have not been discovered yet\n\n3. The main factor affecting how long a zkApp will take to run is the number of constraints a circuit has. This can be determined using the  `Circuit.constraintSystem() `\nmethod. \nSo when optimising, the first step should be to minimise circuit constraints (more conversation on this here:  https://discord.com/channels/484437221055922177/915745847692636181/1085496084912152667)\n\nThere was also these numbers given as to the current hard limits on zkApp performance:\n\n**zkApp limits**\n- no limit on number of methods\n- no limit on number of private inputs (but there's currently a bug that prevents more than a couple of 1000 afair)\n- max account updates in a transaction: about 7-12 depending on the type of authorization on the account update.\n- max field elements contained in all events/actions: 16 (counted separately for events/actions)\n- max circuit size: 2^15 (I'll post more about what this means soon)",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Discord - A New Way to Chat with Friends & Communities",
+          "url": "https://discord.com/channels/484437221055922177/915745847692636181/1085496084912152667)",
+          "timestamp": null,
+          "description": "Discord is the easiest way to communicate over voice, video, and text.  Chat, hang out, and stay close with your friends and communities.",
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "benchmarking",
+          "url": "https://docs.google.com/spreadsheets/d/1RCWQXQ4eXl9JpMej6ObW1Ky8jJyRo74XpgMVnIxqTo4/edit",
+          "timestamp": null,
+          "description": "Tabellenblatt1\n\nAWS,GC\nName,r6a.2xlarge,r6a.8xlarge,r6a.4xlarge,r6i.8xlarge,r6i.4xlarge,c6i.8xlarge,c6i.4xlarge,c2-standard-60,c2-standard-30 ,c2-standard-16,c2d-highcpu-112,c2d-highcpu-56,c2d-highcpu-32,c2d-highcpu-16,c2d-highcpu-8,c2d-highmem-112,c2d-highmem-56,c2d-highmem-32,c2d-highmem-16\nvCPU,8",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/BR9Hy-zVtYhgDSBAJnqartKnyQmVIoVRj-w6JZs7rzQ/https/lh3.googleusercontent.com/docs/ADP-6oE0N4FLHD5VQ7DNGrTZ99QO824QuPUeTt8BKBf4_wee_QnsooLV_FjbYOMBjoM-mnUpEel_Sul6CJS8e69EmjRAD4PZ1k3RXU9Mcu31ck7_%3Dw1200-h630-p",
+            "width": 1200,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1124363934250582026",
+      "type": "Default",
+      "timestamp": "2023-06-30T19:40:51.597+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks! Sounds a bit like it doesn't make too much sense to measure, since performance changes so often.",
+      "author": {
+        "id": "511272055623122961",
+        "name": "laurip",
+        "discriminator": "0000",
+        "nickname": "LauriP",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/511272055623122961/d57c3968960fb6a823b75cbd5530d6cf.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1124369109342232666",
+      "type": "Default",
+      "timestamp": "2023-06-30T20:01:25.435+04:00",
+      "timestampEdited": "2023-06-30T20:01:35.263+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "*max events field elements: 100\n*circuit size: 2^16 afaik",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

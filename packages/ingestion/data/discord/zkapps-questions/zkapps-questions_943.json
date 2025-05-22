@@ -1,0 +1,299 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1082151063001509939",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "What is the difference between Encoding.bytesToFields() and Encoding.Bijective.Fp.fromBytes()",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T16:55:20.3632653+04:00",
+  "messages": [
+    {
+      "id": "1082151063001509939",
+      "type": "Default",
+      "timestamp": "2023-03-06T08:01:58.814+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In terms of encoding, it looks like both these functions accomplish the same thing. They both output a Field[], but they aren't equivalent. I was trying to encode some bytecode of a solidity smart contract by doing the following:\n1. Encode bytecode using the typescript TextEncoder() function to get an output of type Uint8Array\n2 . Input that result into either Encoding.bytesToFields() or Encoding.Bijective.Fp.fromBytes() to get an output of type Field[]\n3. Input that result into a Poseidon hash to get a unique single Field element. \n\nHowever, when doing this, the Poseidon hashes I get are different depending on the encoder function I used. Can anyone briefly explain why they are different and what are the pros/cons of using one over the other?",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1082732314099986525",
+      "type": "Default",
+      "timestamp": "2023-03-07T22:31:39.875+04:00",
+      "timestampEdited": "2023-03-07T23:04:14.203+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The code for both of these is in https://github.com/o1-labs/snarkyjs/blob/b5e7c38/src/lib/encoding.ts\n\n`bytesToFields`:\n```ts\n/**\n * Encodes a {@link Uint8Array} into {@link Field} elements.\n */\nfunction bytesToFields(bytes: Uint8Array) {\n  // we encode 248 bits (31 bytes) at a time into one field element\n  let fields = [];\n  let currentBigInt = 0n;\n  let bitPosition = 0n;\n  for (let byte of bytes) {\n    currentBigInt += BigInt(byte) << bitPosition;\n    bitPosition += 8n;\n    if (bitPosition === 248n) {\n      fields.push(Field(currentBigInt.toString()));\n      currentBigInt = 0n;\n      bitPosition = 0n;\n    }\n  }\n  // encode the final chunk, with an added STOP byte to make the mapping invertible\n  currentBigInt += BigInt(STOP) << bitPosition;\n  fields.push(Field(currentBigInt.toString()));\n  return fields;\n}\n```\nNow, the `Bijective` object has this comment preceding it: \n```\n// bijective fields <--> bytes mapping\n// this is suitable for converting *arbitrary* fields AND bytes back and forth\n// the interpretation of the fields/bytes array is as digits of a single big integer\n// which implies the small caveat that trailing zeroes in the field/bytes array get ignored\n// another caveat: the algorithm is O(n^(1 + t)) with t > 0; ~1MB of field elements take about 1-2s to convert\n```\nSo, the bytes are converted into fields in different ways - one chunks the bytes up into fields with a `for` loop and inserts a STOP byte, and the other converts the bytes array into a single big integer before being encoded into fields.\n\nThis may explain why the resulting encoded fields are different using each method. \n\nI think it would be good to clarify a couple of things though:\n- What are the performance considerations of using one over the other?\n- What are Fp and Fq? How do we use them?",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1084895937316536342",
+      "type": "Default",
+      "timestamp": "2023-03-13T21:49:07.848+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor has also provided the distinction between the two on another question:\n\nbytesFromFields can only be used to decode back from a fields representation created with bytesToFields.\n\nTo go from original fields to bytes you can use Encoding.Bijective.Fp.toBytes",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1084898504918454343",
+      "type": "Default",
+      "timestamp": "2023-03-13T21:59:20.012+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Fp and Fq refer to our Field / scalar field respectively",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1084900685293813872",
+      "type": "Default",
+      "timestamp": "2023-03-13T22:07:59.854+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "aha okay thanks Gregor",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1085093411771645972",
+      "type": "Default",
+      "timestamp": "2023-03-14T10:53:49.427+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Re performance - the Bijective methods are more expensive but both should be perfectly fine for typical use cases that require encoding less than, say, 10s of 1000s of field elements",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1085501326949097472",
+      "type": "Default",
+      "timestamp": "2023-03-15T13:54:43.984+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think in the end we probably want to consolidate those methods so it's less confusing",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 7
+}

@@ -1,0 +1,1016 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1198984167816450108",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Send MINA to zkApp from within smart contract",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:04:00.4055524+04:00",
+  "messages": [
+    {
+      "id": "1198984167816450108",
+      "type": "Default",
+      "timestamp": "2024-01-22T17:35:01.656+04:00",
+      "timestampEdited": "2024-01-22T17:35:32.8+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here's my code:\n```\n  @method publishBountyQuest(quest: BountyQuest, privKey: PrivateKey) {\n    let builder = privKey.toPublicKey();\n    let accountUpdate = AccountUpdate.create(builder);\n    let balance = accountUpdate.account.balance.get();\n\n    let questTokenReward = quest.tokenRewardAmount;\n    balance.assertGreaterThanOrEqual(questTokenReward)\n    let zkAppAddress = this.address;\n    accountUpdate.send({zkAppAddress , questTokenReward})\n\n    this.openBountyQuest.set(quest);\n  }\n```\n\nI feel like i'm overcomplicating it lol. But basically, how do I send MINA to the zkapp based on the amount of token reward (uint64) specified in the `BountyQuest` struct.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1198987014062755921",
+      "type": "Default",
+      "timestamp": "2024-01-22T17:46:20.254+04:00",
+      "timestampEdited": "2024-01-22T17:46:59.443+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "wait, I think i got it:\n\nThe error disappeared after I changed the send transaction line to:\n```\n    accountUpdate.send({to: zkAppAddress, amount: questTokenReward})\n\n```\nI just it was just a syntax error haha",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE04",
+            "code": "smile",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f604.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "871834187785728052",
+              "name": "deleted_user_22c91ac41ff5",
+              "discriminator": "0000",
+              "nickname": "deleted_user_22c91ac41ff5",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+            },
+            {
+              "id": "991037531615264808",
+              "name": "berzanorg",
+              "discriminator": "0000",
+              "nickname": "berzan",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4C",
+            "code": "ok_hand",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44c.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "871834187785728052",
+              "name": "deleted_user_22c91ac41ff5",
+              "discriminator": "0000",
+              "nickname": "deleted_user_22c91ac41ff5",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+            },
+            {
+              "id": "991037531615264808",
+              "name": "berzanorg",
+              "discriminator": "0000",
+              "nickname": "berzan",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1199024190397894656",
+      "type": "Default",
+      "timestamp": "2024-01-22T20:14:03.783+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for sharing anyway! This little nugget will be helpful to someone in the future!",
+      "author": {
+        "id": "456226577798135808",
+        "name": "Deleted User",
+        "discriminator": "0000",
+        "nickname": "Deleted User",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199137551743713380",
+      "type": "Default",
+      "timestamp": "2024-01-23T03:44:31.234+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, so I'm still stuck, what's the simplest way to send MINA tokens into a zkapp account from within the zkapp smart contract's function?",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199137746464292885",
+      "type": "Default",
+      "timestamp": "2024-01-23T03:45:17.659+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Does the function have to return an AccountUpdate?",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199143525883838495",
+      "type": "Default",
+      "timestamp": "2024-01-23T04:08:15.58+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "LFG!",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1199143525657354290",
+          "url": "https://cdn.discordapp.com/attachments/1198984167816450108/1199143525657354290/image.png?ex=680ad26f&is=680980ef&hm=c78ffefcf0d7a31822159bdb87dc503f0fb45f1d018916a160e268f7a37b7dc2&",
+          "fileName": "image.png",
+          "fileSizeBytes": 45826
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199143603855954070",
+      "type": "Default",
+      "timestamp": "2024-01-23T04:08:34.17+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sometimes, the simplest of console logs are enough to make you excited \uD83E\uDD23",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199143714287780012",
+      "type": "Default",
+      "timestamp": "2024-01-23T04:09:00.499+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok, I know this is probably really simple, but I'll write out how I fixed it regardless for anyone else that might need it:",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199145929299730582",
+      "type": "Default",
+      "timestamp": "2024-01-23T04:17:48.599+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Essentially, when you want a method inside a zkApp to be able to \"remove\" funds from your account (in my case, a builder calls the `publishBountyQuest` method, which sends tokens from your wallet into the zkApp, storing it for an open bounty which can later be claimed by a hunter with the correct solution), you do the following inside the method:\n```\n    let sendMINA = AccountUpdate.create(this.sender)\n    sendMINA.send({to: this.address, amount: UInt64.from(1000)})\n    sendMINA.requireSignature();\n```",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199146461384937602",
+      "type": "Default",
+      "timestamp": "2024-01-23T04:19:55.458+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "1. Create an AccountUpdate from the public key of whoever calls the function\n2. Call `.send()` on the AccountUpdate object\n3. (What I initially missed) Make sure to call `.requireSignature()` at the end after whatever accountt updates you do",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199293673746223134",
+      "type": "Reply",
+      "timestamp": "2024-01-23T14:04:53.62+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't think that this is what you want. You require a signature for receiving money, which doesn't make sense.\n\nHave you tried just doing this?\n```ts\nthis.send({to: this.sender, amount})\n```",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1199145929299730582",
+        "channelId": "1198984167816450108",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1199310087576113183",
+      "type": "Default",
+      "timestamp": "2024-01-23T15:10:06.982+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "seem similar from what I'm trying to achieve, but in my cas is from the user who calls the smartcontract https://discord.com/channels/484437221055922177/1195756165167059116",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199316968864501852",
+      "type": "Reply",
+      "timestamp": "2024-01-23T15:37:27.609+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "not exactly, so what you've suggested is sending money from contract -> caller. I want more of a deposit function, aka tokens go from caller -> contract",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "141272134633783297",
+          "name": "faseris",
+          "discriminator": "0000",
+          "nickname": "Faserisko",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1199293673746223134",
+        "channelId": "1198984167816450108",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1199317405193736252",
+      "type": "Reply",
+      "timestamp": "2024-01-23T15:39:11.638+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ah right, btw you have this exact example in docs https://docs.minaprotocol.com/zkapps/o1js/interact-with-mina#signing-transactions-and-explicit-account-updates",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Mina Documentation",
+          "url": "https://docs.minaprotocol.com/zkapps/o1js/interact-with-mina",
+          "timestamp": null,
+          "description": "Website for documentation about Mina Protocol",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/_PJlmeDNad-_70g7jbEdYnu0Z3mezgosb1bPK642OJE/https/docs.minaprotocol.com/img/common/mina-logo.png",
+            "width": 1120,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1199316968864501852",
+        "channelId": "1198984167816450108",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1199317927850151956",
+      "type": "Reply",
+      "timestamp": "2024-01-23T15:41:16.249+04:00",
+      "timestampEdited": "2024-01-23T15:41:31.808+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh wow. I was literally reading that and figured it out from the intro explanations. All I had to do was just keep reading LMAO",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "141272134633783297",
+          "name": "faseris",
+          "discriminator": "0000",
+          "nickname": "Faserisko",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1199317405193736252",
+        "channelId": "1198984167816450108",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1199318074017452062",
+      "type": "Default",
+      "timestamp": "2024-01-23T15:41:51.098+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I need to set aside a block of time and just read the entire docs and examples one day haha",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1199634013791465492",
+      "type": "Reply",
+      "timestamp": "2024-01-24T12:37:17.01+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@devtonite great you've figure it out, just one comment:\n\nyou're using `send({ to: this.address, ...})`.\nif you do it this way, `send()` will create a new account update for the receiver (`to`), which is your contract. since the zkapp method call itself creates an account update for the contract, you end up creating two account updates which could be combined into a single one.\n\nmost of the time this wouldn't be an issue, but sometimes you need to save account updates, for example because you're hitting the supported limits. in that case, you can make `send()` reuse the contract's existing account update by using one of the following versions:\n\n* `send({ to: this.self, ... })` -- `this.self` directly refers to the contract account update created for this method call. `send()` accepts an account update instead of an address, which it will use.\n* ``send({ to: this, ... })` -- even simpler alias for the same thing. send accepts a `SmartContract` and will use the account update `this.self` on it",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1199145929299730582",
+        "channelId": "1198984167816450108",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1199662091691360256",
+      "type": "Reply",
+      "timestamp": "2024-01-24T14:28:51.303+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "thanks for the tip. Turns out (at least in my case), you actually need to call send with one of ur suggested options or the txn can't be proven",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1199634013791465492",
+        "channelId": "1198984167816450108",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1199662543023656981",
+      "type": "Default",
+      "timestamp": "2024-01-24T14:30:38.909+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I didn't realize before because I had proofs disabled when testing, so when I enabled them, the error showed:\n```\nConstraint unsatisfied (unreduced):\n\n    rule_main\n    step_main\n\n    Constraint:\n    ((basic(Equal(Var 9664)(Constant 0)))(annotation()))\n    Data:\n    Equal 22728763053689833667304986269834762413433802447984862857497854409534121660698 0\n```",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1200038566567350363",
+      "type": "Default",
+      "timestamp": "2024-01-25T15:24:49.908+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah this is a known bug \uD83D\uDE2C \uD83D\uDE1E",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1200238614878093492",
+      "type": "Reply",
+      "timestamp": "2024-01-26T04:39:45.142+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ahh gotcha. no worries, that's good to know. I do also have a follow up question:\n\nIf our code runs and compiles when proofs are disabled, they should still in theory, run when they are enabled then right? (except for this known issue obviously?)",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1200038566567350363",
+        "channelId": "1198984167816450108",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1200239006479306782",
+      "type": "Default",
+      "timestamp": "2024-01-26T04:41:18.507+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm asking because I read some devs hear talking about how we don't need to have proofs enabled when writing circuits. Are there any exceptions to that? Because the last thing I want is to progress a lot into the dev cycle only to realize the code won't prove later haha (This last one almost gave me a heart attack but you're fix came in clutch)",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1200440689369038899",
+      "type": "Default",
+      "timestamp": "2024-01-26T18:02:43.455+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@devtonite, no, I wouldn't rely on running without proofs. There are many things that are different in a proof under the hood and some errors that only show up when compiling or proving.\n\nFor example, a classic problem is building a different circuit every time it runs. That only shows during proving.\n\nDon't get me wrong - it can save you time to not prove every single time, and many things are kind of orthogonal to proving. For example, getting your account update layout right.\n\nBut I strongly recommend doing a proof at least once in a while and setting up your tests so that you can easily switch proving on. I personally wouldn't trust the code otherwise",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1200900468503740527",
+      "type": "Reply",
+      "timestamp": "2024-01-28T00:29:43.343+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "gotcha! thanks for that. Yeah that's what i've started doing now haha.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1200440689369038899",
+        "channelId": "1198984167816450108",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 24
+}

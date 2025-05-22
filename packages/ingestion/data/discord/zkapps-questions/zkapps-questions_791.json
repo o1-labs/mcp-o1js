@@ -1,0 +1,312 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1123859783229898802",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error on Deploy",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T15:28:55.8406463+04:00",
+  "messages": [
+    {
+      "id": "1123859783229898802",
+      "type": "Default",
+      "timestamp": "2023-06-29T10:17:32.627+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am trying to deploy contract on local instance but its giving me errors, here is the code\n\n```ts\nlet proofsEnabled = false;\nif (proofsEnabled) await Airdrop.compile();\n\nlet Local = Mina.LocalBlockchain({ proofsEnabled: proofsEnabled });\nMina.setActiveInstance(Local);\n\n// Fee Payer Account\nlet feePayerKey = Local.testAccounts[0].privateKey;\nlet feePayer = Local.testAccounts[0].publicKey;\n\n// zkApp Account\nlet zkappKey = PrivateKey.random();\nlet zkappAddress = zkappKey.toPublicKey();\n\n// Test Accounts\nlet account1Key = PrivateKey.random();\nlet account1Address = account1Key.toPublicKey();\n\nlet account2Key = PrivateKey.random();\nlet account2Address = account2Key.toPublicKey();\n\nlet zkapp = new Airdrop(zkappAddress);\nlet tx;\n\nconsole.log('---------- Deploy zkApp  ----------');\ntx = await Mina.transaction(feePayer, () => {\n    const feePayerUpdate = AccountUpdate.fundNewAccount(feePayer, 3);\n    feePayerUpdate.send({ to: account1Address, amount: 1e12 });\n    feePayerUpdate.send({ to: account2Address, amount: 0 });\n    zkapp.deploy();\n});\nawait tx.sign([zkappKey, feePayerKey]).send();\n```\n\nhere is the error\n\n```\n> zkdrop@0.1.0 build\n> tsc\n\n---------- Deploy zkApp  ----------\nC:\\Projects\\zkDrop\\zkDrop\\node_modules\\snarkyjs\\dist\\node\\bindings\\compiled\\_node_bindings\\snarky_js_node.bc.cjs:7470\n         throw err;\n         ^\n\nError: [[],[[\"Overflow\"]],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Cancelled\"]]]\n    at Object.sendTransaction (snarkyjs/dist/node/lib/mina.js:249:24)\n    at async sendTransaction (snarkyjs/dist/node/lib/mina.js:745:12)\n    at async Object.send (snarkyjs/dist/node/lib/mina.js:176:24)\n    at async file:///C:/Projects/zkDrop/zkDrop/build/src/Airdrop.js:118:1\n```",
+      "author": {
+        "id": "665550588582297622",
+        "name": "envoy_",
+        "discriminator": "0000",
+        "nickname": "Envoy_",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/665550588582297622/b76deb013a7fa98921d3437a0a72189c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1123864186179551232",
+      "type": "Default",
+      "timestamp": "2023-06-29T10:35:02.372+04:00",
+      "timestampEdited": "2023-06-29T10:35:14.951+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor can you help please",
+      "author": {
+        "id": "665550588582297622",
+        "name": "envoy_",
+        "discriminator": "0000",
+        "nickname": "Envoy_",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/665550588582297622/b76deb013a7fa98921d3437a0a72189c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1123947735935111168",
+      "type": "Default",
+      "timestamp": "2023-06-29T16:07:02.186+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "overflow means one account is trying to pay more than it has in its balance. I assume the number 1e12 is too large",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1123948862932008960",
+      "type": "Reply",
+      "timestamp": "2023-06-29T16:11:30.883+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it works till 1e11, but not 12",
+      "author": {
+        "id": "665550588582297622",
+        "name": "envoy_",
+        "discriminator": "0000",
+        "nickname": "Envoy_",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/665550588582297622/b76deb013a7fa98921d3437a0a72189c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1123947735935111168",
+        "channelId": "1123859783229898802",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1123948978984190022",
+      "type": "Default",
+      "timestamp": "2023-06-29T16:11:58.552+04:00",
+      "timestampEdited": "2023-06-29T16:12:04.458+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "also are there any array types we can use or do we have to use merkle trees?",
+      "author": {
+        "id": "665550588582297622",
+        "name": "envoy_",
+        "discriminator": "0000",
+        "nickname": "Envoy_",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/665550588582297622/b76deb013a7fa98921d3437a0a72189c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1123951732746113044",
+      "type": "Default",
+      "timestamp": "2023-06-29T16:22:55.1+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you can construct arrays types\n```ts\nclass MyArray5 extends Struct({ value: Provable.Array(Field, 5) }) {}\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "665550588582297622",
+              "name": "envoy_",
+              "discriminator": "0000",
+              "nickname": "Envoy_",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/665550588582297622/b76deb013a7fa98921d3437a0a72189c.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 6
+}

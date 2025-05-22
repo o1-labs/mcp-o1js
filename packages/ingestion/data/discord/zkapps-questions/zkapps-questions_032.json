@@ -1,0 +1,1020 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1332022769256370186",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Action/Reducer vs. OffchainState",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T15:13:31.8962826+04:00",
+  "messages": [
+    {
+      "id": "1332022769256370186",
+      "type": "Default",
+      "timestamp": "2025-01-23T20:22:55.977+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello! \n\nI have a design in my mind that uses 3 smart contracts, where activity/state update of one contract will be used in the other two.\n\nI wanted to use Action & Reducers to deal with concurrency at some level, but there is also OffchainState API. \n\nAs much as i know, it is possible to make one contracts OffchainState instance to be linked to another contract with correct ways. I also wonder if it is possible to make it via actions, where one contracts action will be used in the other. (or, a commitment/proof of the existence of that action.). This two contracts will be used consecutively, so 5 actionState hash pre block will not be a problem for the integrity of the product. (Can it be for other reasons?)\n\nWhich one would be most performant? Using actions or OffchainState API?",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1332099294748086333",
+      "type": "Default",
+      "timestamp": "2025-01-24T01:27:01.076+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can use actions from one contract inside of another contract \uD83D\uDE42  It would be a bit like this composability example https://github.com/o1-labs/o1js/blob/main/src/examples/zkapps/composability.ts and you could use the on chain `actionState` to retrieve the actions for the other contract\n\n`const pendingActions = otherContract.reducer.getActions({ fromActionState: otherContract.actionState.getAndRequireEquals() });`\n\nInternally, the reducer checks the actions it loads against an on chain commitment to the actions the account has dispatched",
+      "author": {
+        "id": "1292887486267133973",
+        "name": "hattyhattington17",
+        "discriminator": "0000",
+        "nickname": "HattyHattington17",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1292887486267133973/d684efd4acb9c29d02df9e1ef1979bf4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "o1js/src/examples/zkapps/composability.ts at main · o1-labs/o1js",
+          "url": "https://github.com/o1-labs/o1js/blob/main/src/examples/zkapps/composability.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/o1js development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1332099838833332235",
+      "type": "Default",
+      "timestamp": "2025-01-24T01:29:10.796+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the offchain state API uses action/reducer internally but I'm not sure what the exact performance tradeoffs would be \uD83E\uDD14",
+      "author": {
+        "id": "1292887486267133973",
+        "name": "hattyhattington17",
+        "discriminator": "0000",
+        "nickname": "HattyHattington17",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1292887486267133973/d684efd4acb9c29d02df9e1ef1979bf4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1219796664735502398",
+              "name": "tycho_br",
+              "discriminator": "0000",
+              "nickname": "TychoB",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1332103475026198551",
+      "type": "Default",
+      "timestamp": "2025-01-24T01:43:37.732+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you sooo much!",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1332103697857253418",
+      "type": "Reply",
+      "timestamp": "2025-01-24T01:44:30.859+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Still a worse case scenario would be to wait ~6-8 minutes for both contracts to settle, isn't it \uD83D\uDE04",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1292887486267133973",
+          "name": "hattyhattington17",
+          "discriminator": "0000",
+          "nickname": "HattyHattington17",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1292887486267133973/d684efd4acb9c29d02df9e1ef1979bf4.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1332099294748086333",
+        "channelId": "1332022769256370186",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1332105489831432223",
+      "type": "Default",
+      "timestamp": "2025-01-24T01:51:38.099+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No problem! With the offchain storage API you'd be waiting for settlement to see any changes on the offchain state object, but if you used actions directly you'd have access to any actions that were dispatched immediately (or as soon as the archive node you connected to became aware of them)",
+      "author": {
+        "id": "1292887486267133973",
+        "name": "hattyhattington17",
+        "discriminator": "0000",
+        "nickname": "HattyHattington17",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1292887486267133973/d684efd4acb9c29d02df9e1ef1979bf4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD25",
+            "code": "fire",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f525.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1219796664735502398",
+              "name": "tycho_br",
+              "discriminator": "0000",
+              "nickname": "TychoB",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1334900386863251477",
+      "type": "Default",
+      "timestamp": "2025-01-31T18:57:33.478+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In any case, for a deployed app there will be a need for distributing the state information, right? at time T, offchainCommitment would be X. After one update occured, (at time T+5)  i would need a server to send most recent state to the new client for making it possible to create their own comitment - either by using action & reducers or using OffchainState.",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334900614236344361",
+      "type": "Default",
+      "timestamp": "2025-01-31T18:58:27.688+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This seems like a general problem: For a live app (of course there will be exceptions), there should be a server that serves necessary updated data to the new users.",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334902653976842322",
+      "type": "Default",
+      "timestamp": "2025-01-31T19:06:34+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "for offchain state, all the state updates are already stored as actions, so any archive node plays the role of that server",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334903271717998614",
+      "type": "Default",
+      "timestamp": "2025-01-31T19:09:01.281+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and the offchain state abstracts that away, it tries to rebuild the latest state automatically behind the scenes, from fetched actions\n(not sure if abstracting it away was a good idea, the archive node is a bit unreliable and slow, and it would be good to enable getting those actions in a different way)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334904877083525131",
+      "type": "Reply",
+      "timestamp": "2025-01-31T19:15:24.03+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Okay, what about inclusion check cases? With a tree of height N, a change would cause around log(N) change right? In that case, for next client to make inclusion check, newly updated witness (or, whole tree in the case of IndexedMerkleMap ) would need to be served to the client. So there is a dependency on a server for such cases",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1334902653976842322",
+        "channelId": "1332022769256370186",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1334905708038328434",
+      "type": "Default",
+      "timestamp": "2025-01-31T19:18:42.145+04:00",
+      "timestampEdited": "2025-01-31T19:20:42.746+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the idea is that a client downloads all state updates and rebuilds the tree locally.\nthat's admittedly a bit naive if the tree is very large. a less naive version could either\n* add a server to hold the tree and serve witnesses, or\n* at least give the client the possibility to specify a path that is of interest to them, and only update that path from state updates",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334906783214469302",
+      "type": "Default",
+      "timestamp": "2025-01-31T19:22:58.487+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "well I don't think the second point really works",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334906857935867926",
+      "type": "Default",
+      "timestamp": "2025-01-31T19:23:16.302+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it needs additional book keeping",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334907074936705075",
+      "type": "Default",
+      "timestamp": "2025-01-31T19:24:08.039+04:00",
+      "timestampEdited": "2025-01-31T19:24:24.478+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "e.g. a server could treat the merkle map as a merkle mountain range, and serve the current \"roots\" of that mountain range. that would allow every client to keep their path up to date",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1219796664735502398",
+              "name": "tycho_br",
+              "discriminator": "0000",
+              "nickname": "TychoB",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1334907127051059296",
+      "type": "Default",
+      "timestamp": "2025-01-31T19:24:20.464+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Exactly! A server is needed in such situations to maximize the UX.",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334907401542959196",
+      "type": "Default",
+      "timestamp": "2025-01-31T19:25:25.908+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I mean it depends on the app. If it has hundreds or 1000s of state updates, then downloading all of them is no problem",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1219796664735502398",
+              "name": "tycho_br",
+              "discriminator": "0000",
+              "nickname": "TychoB",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1334907439698546740",
+      "type": "Reply",
+      "timestamp": "2025-01-31T19:25:35.005+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Interesting - i still don't see why client side handling is this \"keeping up to date\" stuff.",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1334907074936705075",
+        "channelId": "1332022769256370186",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1334907448150196334",
+      "type": "Reply",
+      "timestamp": "2025-01-31T19:25:37.02+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah okay",
+      "author": {
+        "id": "1219796664735502398",
+        "name": "tycho_br",
+        "discriminator": "0000",
+        "nickname": "TychoB",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1219796664735502398/6510dff389b4eb6b26db39c4a0e57e0c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1334907401542959196",
+        "channelId": "1332022769256370186",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 19
+}

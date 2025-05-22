@@ -1,0 +1,143 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1125774153702703114",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error converting Field to string",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T15:16:03.8196278+04:00",
+  "messages": [
+    {
+      "id": "1125774153702703114",
+      "type": "Default",
+      "timestamp": "2023-07-04T17:04:34.115+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i an storing some string data in a map, but getting this error while converting\n\n```ts\nlet map = new MerkleMap();\nlet initialRoot = map.getRoot();\n\nconsole.log(initialRoot);\nconst uri = 'QmW9rWRLLHStvHAmb9nWQVDtbNaWTNGRrWNmsP7HmCTeao';\nconst uriToField = Field.fromFields(Encoding.stringToFields(uri));\nconsole.log('URI to Field: ', uriToField);\n\nmap.set(Field(1), uriToField);\n\nconst value = map.get(Field(1));\n\nconst str = Encoding.stringFromFields(value.toFields());\n\nconsole.log(str);\n```\n```\nC:\\Projects\\zkTalents\\contracts\\node_modules\\snarkyjs\\dist\\node\\bindings\\compiled\\_node_bindings\\snarky_js_node.bc.cjs:7470\n         throw err;\n         ^\n\nError: Error (bytesFromFields): Invalid encoding.\n```",
+      "author": {
+        "id": "665550588582297622",
+        "name": "envoy_",
+        "discriminator": "0000",
+        "nickname": "Envoy_",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/665550588582297622/b76deb013a7fa98921d3437a0a72189c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1125827161106944041",
+      "type": "Default",
+      "timestamp": "2023-07-04T20:35:12.065+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`bytesFromFields` can only be used to decode back from a fields representation created with `bytesToFields`.\nTo go from original fields to bytes you can use `Encoding.Bijective.Fp.toBytes`",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1125843359945203832",
+      "type": "Default",
+      "timestamp": "2023-07-04T21:39:34.169+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think the problem here is probably that stringToFields gives you multiple field elements, and you are only picking the first one (with Field.fromFields, which is an internal function and not suitable to map any Field array to a single Field).",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "665550588582297622",
+              "name": "envoy_",
+              "discriminator": "0000",
+              "nickname": "Envoy_",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/665550588582297622/b76deb013a7fa98921d3437a0a72189c.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 3
+}

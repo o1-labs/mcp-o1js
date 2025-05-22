@@ -1,0 +1,659 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1191954019522969761",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "O1js types serialization",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:23:56.5739762+04:00",
+  "messages": [
+    {
+      "id": "1191954019522969761",
+      "type": "Default",
+      "timestamp": "2024-01-03T07:59:43.689+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "To generate proof in service worker I follow the example \nhttps://github.com/o1-labs/docs2/blob/main/examples/zkapps/04-zkapp-browser-ui/ui/src/pages/zkappWorker.ts\nhttps://github.com/o1-labs/docs2/blob/main/examples/zkapps/04-zkapp-browser-ui/ui/src/pages/zkappWorkerClient.ts\nI want to call the proof generation in the service worker\n```ts\nexport const gameRecord = Experimental.ZkProgram({\n    publicOutput: GameRecordPublicOutput,\n    methods: {\n        checkGameRecord: {\n            privateInputs: [Bricks, GameInputs, Bool],\n            method: checkGameRecord,\n        },\n    },\n});\n```\nIn service worker client I call\n```ts\n  async proveGameRecord({\n    bricks, inputs, debug\n  }: {\n    bricks: Bricks, inputs: GameInputs, debug: Bool\n  }) {\n    console.log('Args on frontend', bricks, inputs, debug);\n    \n    const result = this._call('proveGameRecord', {\n        bricks, inputs, debug\n    });\n    return result;\n  }\n\n```\nIn service worker I call \n```ts\n  proveGameRecord: async (args: {bricks: Bricks, inputs: GameInputs, debug: Bool}) => {\n    console.log('[Worker] proof checking');\n    console.log('args', args);\n    return await state.gameRecord?.checkGameRecord(args.bricks, args.inputs, args.debug);\n  };\n```\n\nThe problem is, when o1js args are passed to the worker, their type info is dropped and worker fails to prove\n\n```\nGameHub.js:309 Uncaught (in promise) TypeError: bricks.bricks[i].value.sub is not a function\n    at loadGameContext (GameHub.js:309:58)\n    at checkGameRecord (GameHub.js:325:25)\n    at Object.proveGameRecord (zknoidWorker.ts:29:147)\n    at eval (zknoidWorker.ts:34:58)\n```\n\nIf there a way to serialize o1js struct to pass to service worker and then deserialize it there and do not drop type info?",
+      "author": {
+        "id": "529966018140045313",
+        "name": "asimaranov",
+        "discriminator": "0000",
+        "nickname": "asimaranov | xRaise x ZkNoid",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/529966018140045313/fb18445ae70174559ef8c0f4eb00df2f.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1191954020219240489",
+          "url": "https://cdn.discordapp.com/attachments/1191954019522969761/1191954020219240489/image.png?ex=680b08af&is=6809b72f&hm=5bfa09969350e8551bfdc247d21973e3a9dae7cc088a32afec0ebfc30571fc6f&",
+          "fileName": "image.png",
+          "fileSizeBytes": 219106
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1192031946876923995",
+      "type": "Default",
+      "timestamp": "2024-01-03T13:09:23.018+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "just use the `comlink` library to set up the worker messaging, works like a charm. one thing to watch out for  is 'worker initialization', since o1js import is async, your worker will take 1-2s to be ready to accept the comlink messages",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1192032125524901908",
+      "type": "Default",
+      "timestamp": "2024-01-03T13:10:05.611+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if you're still having troubles with certain data types even with comlink, just do `.toJSON()/.fromJSON() or .toFields()/.fromFields()` on your arguments",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1192033581137154130",
+      "type": "Default",
+      "timestamp": "2024-01-03T13:15:52.656+04:00",
+      "timestampEdited": "2024-01-03T13:16:47.793+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can use toJSON and JsonProof for proofs:\n```typescript\nconst str = JSON.stringify(proof.toJSON(), null, 2);\nconst proof: RedactedMinaNFTMapStateProof =\n      RedactedMinaNFTMapStateProof.fromJSON(JSON.parse(str) as JsonProof)\n\n```\nFor Struct, I usually convert first to a fields array using toFields() and then use Field.toJSON()\nCode examples:\n- Web, conversion to strings\nhttps://github.com/dfstio/minanft-lib/blob/master/src/plugins/redactedmap.ts#L16\nhttps://github.com/dfstio/minanft-lib/blob/master/src/redactedminanft.ts#L142\n- AWS lambda, conversion from strings\nhttps://github.com/dfstio/minanft-api/blob/master/src/api/map_proof.ts#L47\n\nBtw, on AWS Lambda, you can get zero compilation time on hot start with o1js >= 0.14.2 and multiple parallel instances calculating proofs.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1192035023826722946",
+      "type": "Default",
+      "timestamp": "2024-01-03T13:21:36.62+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks. Btw, can I pass not all the args for a zkprogram function but PublicOutput to generate a proof? Or the only way is to call zkProgram.fuctionToProof(all the args here)?",
+      "author": {
+        "id": "529966018140045313",
+        "name": "asimaranov",
+        "discriminator": "0000",
+        "nickname": "asimaranov | xRaise x ZkNoid",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/529966018140045313/fb18445ae70174559ef8c0f4eb00df2f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1192035230031290419",
+      "type": "Default",
+      "timestamp": "2024-01-03T13:22:25.783+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "public output is going to be a return from your circuit, to run your circuit you have to provide the publicInput + privateInput",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1192038961837789204",
+      "type": "Default",
+      "timestamp": "2024-01-03T13:37:15.515+04:00",
+      "timestampEdited": "2024-01-03T14:06:33.078+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I mean for now we have ZkProgram\n```ts\nexport const GameRecord = Experimental.ZkProgram({\n    publicOutput: GameRecordPublicOutput,\n    methods: {\n        checkGameRecord: {\n            privateInputs: [Bricks, GameInputs, Bool],\n            method: checkGameRecord,\n        },\n    },\n});```\nAnd function from it's method ```checkGameRecord``` can be called directly and it returns PublicOutput\n```ts\nexport function checkGameRecord(\n    bricks: Bricks,\n    gameInputs: GameInputs,\n    debug: Bool\n): GameRecordPublicOutput {\n    const gameContext = loadGameContext(bricks, debug);\n    for (let i = 0; i < gameInputs.tiks.length; i++) {\n        gameContext.processTick(gameInputs.tiks[i]);\n    }\n    gameContext.winable.assertTrue();\n    for (let i = 0; i < gameContext.bricks.bricks.length; i++) {\n        /// Check that all bricks is destroyed\n        gameContext.bricks.bricks[i].value.assertEquals(UInt64.from(1));\n    }\n    return new GameRecordPublicOutput({ score: gameContext.score });\n}```\nDirect call of this function returns immediately and ```mockProof``` receives this direct function output. I'm wondering whether I can pass only this direct function return value to service worker to generate the proof instead of all args passing to worker and calling function on ZkProgram",
+      "author": {
+        "id": "529966018140045313",
+        "name": "asimaranov",
+        "discriminator": "0000",
+        "nickname": "asimaranov | xRaise x ZkNoid",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/529966018140045313/fb18445ae70174559ef8c0f4eb00df2f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1194251831405199370",
+      "type": "Default",
+      "timestamp": "2024-01-09T16:10:24.733+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@asimaranov | xRaise x ZkNoid I'm not fully sure I understood what you're asking, but just to clarify: to create a proof, you have to call the method in the same JS context. calling the method and creating the proof are inextricably linked together, currently in o1js",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "529966018140045313",
+          "name": "asimaranov",
+          "discriminator": "0000",
+          "nickname": "asimaranov | xRaise x ZkNoid",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/529966018140045313/fb18445ae70174559ef8c0f4eb00df2f.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 8
+}

@@ -1,0 +1,701 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1103534222473449592",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "This function can't be run outside of a checked computation",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T15:53:11.1938777+04:00",
+  "messages": [
+    {
+      "id": "1103534222473449592",
+      "type": "Default",
+      "timestamp": "2023-05-04T08:11:01.312+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I must be mistaken, I thought `@method`s were checked computations, but I'm getting this error on code that is all strictly part of a `@method`. What's going on here? What function is the error even referring to? Any insights are greatly appreciated. Thanks in advance!\n\nRelevant part of the smart contract method\n```typescript\n// compute the winners\n// winners receive equal amount of remaining account balance\nlet maxElem = Field(0).sub(1);\nlet winning: [PublicKey[], Field] = [[], maxElem];\nfor (let i = 0; i < this.submissions.length; i++) {\n  let smallestDelta = maxElem;\n  let guesses = this.submissions[i].guesses;\n  for (let j = 0; j < guesses.length; j++) {\n    let delta;\n    if (guesses[j].greaterThanOrEqual(this.secretNumber)) {\n      delta = guesses[j].sub(this.secretNumber);\n    } else {\n      delta = this.secretNumber.sub(guesses[j]);\n    }\n    if (delta.lessThan(smallestDelta)) {\n      smallestDelta = delta;\n    }\n  }\n  if (smallestDelta.lessThanOrEqual(winning[1])) {\n    winning[0].push(this.submissions[i].player);\n  }\n}\nlet winners = winning[0];\nfor (let i = 0; i < winners.length; i++) {\n  this.send({\n    to: winners[i],\n    amount: this.account.balance.get().div(winners.length),\n  });\n}\n```\nThe full error is included as a picture because it brings this post over the character limit.",
+      "author": {
+        "id": "460896124602023937",
+        "name": "isaac_quantifier",
+        "discriminator": "0000",
+        "nickname": "Isaac (Quantifier)",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/460896124602023937/b7f8488ea3b58d5c8e7c8adfc1a7f23b.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1103534222653784135",
+          "url": "https://cdn.discordapp.com/attachments/1103534222473449592/1103534222653784135/Screenshot_2023-05-04_000929.png?ex=680b0b55&is=6809b9d5&hm=550a3363d2ce5f1245c41d8bd99b7a46ebe7d9c5ed764e7228f3d3b043776d37&",
+          "fileName": "Screenshot_2023-05-04_000929.png",
+          "fileSizeBytes": 255354
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1103562158459064330",
+      "type": "Default",
+      "timestamp": "2023-05-04T10:02:01.77+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @Isaac (Quantifier), it looks like this: https://github.com/o1-labs/snarkyjs/issues/858\nExpect a fix in ~1 week as I'm rewriting the `Field` / `Bool` API surfaces in JS.\nAs a quick fix, assuming that your secretNumber fits in 64 bits, you can do:\n```diff\n- if (guesses[j].greaterThanOrEqual(this.secretNumber)) {\n+ if (UInt64.from(guesses[j]).greaterThanOrEqual(UInt64.from(this.secretNumber))) {\n```\n(The method is run multiple times in different ways, one of them as a not checked computation)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Field.greaterThan not working outside circuit · Issue #858 · o1-lab...",
+          "url": "https://github.com/o1-labs/snarkyjs/issues/858",
+          "timestamp": null,
+          "description": "reproduction: await isReady; let x = Field(1).greaterThan(0); throws: Error: This function can't be run outside of a checked computation. from here: https://github.com/o1-labs/snarky/blob/045d1...",
+          "color": "#1E2327",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "460896124602023937",
+          "name": "isaac_quantifier",
+          "discriminator": "0000",
+          "nickname": "Isaac (Quantifier)",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/460896124602023937/b7f8488ea3b58d5c8e7c8adfc1a7f23b.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1103670399209844836",
+      "type": "Default",
+      "timestamp": "2023-05-04T17:12:08.376+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Awesome! Thanks @gregor",
+      "author": {
+        "id": "460896124602023937",
+        "name": "isaac_quantifier",
+        "discriminator": "0000",
+        "nickname": "Isaac (Quantifier)",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/460896124602023937/b7f8488ea3b58d5c8e7c8adfc1a7f23b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1108203025425764354",
+      "type": "Default",
+      "timestamp": "2023-05-17T05:23:10.678+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @gregor , I'm facing similar error, but my number is 253 bits, uint 64 is not long enough, what should I use?",
+      "author": {
+        "id": "819464344256774144",
+        "name": "icerdesign",
+        "discriminator": "0000",
+        "nickname": "icerdesign",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/819464344256774144/e4c3a7b7dcb066f2daef76a525d65664.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1108227277382234182",
+      "type": "Default",
+      "timestamp": "2023-05-17T06:59:32.795+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```ts\n    const mazeExist = this.maze.get().greaterThan(Field(0));\n    mazeExist.assertTrue();\n```\nHere is my code, it give me `This function can't be run outside of a checked computation` error.\nAfter I change to:\n```ts\n    this.maze.get().assertGreaterThan(Field(0));\n```\nIt works, but I don't know why.",
+      "author": {
+        "id": "819464344256774144",
+        "name": "icerdesign",
+        "discriminator": "0000",
+        "nickname": "icerdesign",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/819464344256774144/e4c3a7b7dcb066f2daef76a525d65664.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1110839849491120198",
+      "type": "Default",
+      "timestamp": "2023-05-24T12:00:58.525+04:00",
+      "timestampEdited": "2023-05-24T12:02:31.086+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@icerdesign I should mention that comparisons are very expensive in a SNARK, for your use case I'd recommend to just use\n```ts\nthis.maze.equals(0).assertFalse();\n```\nOr, even more efficient but also maybe \"too clever\":\n```ts\nthis.maze.inv(); // asserting that this.maze is != 0\n```\ntaking the inverse proves that the field element is not zero, with a single constraint \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "819464344256774144",
+          "name": "icerdesign",
+          "discriminator": "0000",
+          "nickname": "icerdesign",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/819464344256774144/e4c3a7b7dcb066f2daef76a525d65664.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1110840706991394886",
+      "type": "Default",
+      "timestamp": "2023-05-24T12:04:22.969+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(I'm adding `assertNotEquals()` in my current PR to enable maximally efficient \"not equals\" checks)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1111458273367961600",
+      "type": "Default",
+      "timestamp": "2023-05-26T04:58:22.267+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Very \"sweet\" code, thanks!",
+      "author": {
+        "id": "819464344256774144",
+        "name": "icerdesign",
+        "discriminator": "0000",
+        "nickname": "icerdesign",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/819464344256774144/e4c3a7b7dcb066f2daef76a525d65664.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1111458733613129728",
+      "type": "Default",
+      "timestamp": "2023-05-26T05:00:11.998+04:00",
+      "timestampEdited": "2023-05-26T05:00:56.277+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "However, I still want to understand what is the error mean: `This function can't be run outside of a checked computation`",
+      "author": {
+        "id": "819464344256774144",
+        "name": "icerdesign",
+        "discriminator": "0000",
+        "nickname": "icerdesign",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/819464344256774144/e4c3a7b7dcb066f2daef76a525d65664.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1111494632585564180",
+      "type": "Default",
+      "timestamp": "2023-05-26T07:22:50.98+04:00",
+      "timestampEdited": "2023-05-26T07:26:06.116+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@icerdesign - gregor mentioned that this is fixed in an upcoming PR.  Here is the line with the new implementation: https://github.com/o1-labs/snarkyjs/blob/dae4a08c3ab3d3de078e8bdba8473d23d4347e13/src/lib/field.ts#L409\n\nFor now you can't call greaterThan and lessThan on a field.  I don't know exactly why, but I guess it has to do with the check `if (this.isConstant() && isConstant(y)) {` which allows us to read the value of the field and compare it in typescript outside of the proof.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "snarkyjs/field.ts at dae4a08c3ab3d3de078e8bdba8473d23d4347e13 · o1-...",
+          "url": "https://github.com/o1-labs/snarkyjs/blob/dae4a08c3ab3d3de078e8bdba8473d23d4347e13/src/lib/field.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/snarkyjs development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/CnSQNOS84X23eF8fcNTjUfMMnkPNCiNwfOxzAotSIK4/https/opengraph.githubassets.com/183e975324398448d329eea82c732fda8d6617f745dccce55f9208de8c125bbb/o1-labs/snarkyjs",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "819464344256774144",
+              "name": "icerdesign",
+              "discriminator": "0000",
+              "nickname": "icerdesign",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/819464344256774144/e4c3a7b7dcb066f2daef76a525d65664.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "819464344256774144",
+          "name": "icerdesign",
+          "discriminator": "0000",
+          "nickname": "icerdesign",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/819464344256774144/e4c3a7b7dcb066f2daef76a525d65664.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 10
+}

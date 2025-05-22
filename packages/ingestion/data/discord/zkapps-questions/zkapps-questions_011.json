@@ -1,0 +1,1487 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1351958070565146666",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Receiving DynamicProof as Public Input causes ZKProgram to fail to compile",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T15:08:50.0505262+04:00",
+  "messages": [
+    {
+      "id": "1351958070565146666",
+      "type": "Default",
+      "timestamp": "2025-03-19T20:38:42.189+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi, I'm trying to verify a proof from a circuit within another circuit. If I understand correctly, then DynamicProofs allow exactly that. However, when I try to compile the circuit, I receive an error that I am now allowed to use DynamicProofs directly despite having already created a class which extends Dynamic Proof.\n\nRelevant code:\n```typescript\n// Compile the verification key for AES128CTR\nconst { verificationKey: vk_data } = await AES128Ctr.compile();\nconst vk = new VerificationKey(vk_data);\n\nclass SideLoadedAESProof extends DynamicProof<\n  AES128CTRPublicInput,\n  AES128CtrPublicOutput\n> {\n  publicInput: AES128CTRPublicInput;\n  publicOutput: AES128CtrPublicOutput;\n  maxProofsVerified: 1;\n}\n\nconst AES128CTR256 = ZkProgram({\n  name: \"aes-verify-ctr-256\",\n  publicInput: SideLoadedAESProof,\n\n  methods: {\n    verifyAESCTR256: {\n      privateInputs: [],\n\n      async method(proof: SideLoadedAESProof) {\n        proof.verify(vk);\n        proof.publicInput.ctr.assertEquals(NUM_BLOCKS - 1);\n\n        // // Verify the ciphers\n        // const cipher_internal_hash = Poseidon.hashPacked(\n        //   Provable.Array(Field, NUM_BLOCKS),\n        //   [\n        //     Poseidon.hashPacked(Byte16, input.ciphers[0]),\n        //     Poseidon.hashPacked(Byte16, input.ciphers[1]),\n        //   ],\n        // );\n\n        // cipher_internal_hash.assertEquals(proof.publicOutput.cipher_hash);\n      },\n    },\n  },\n});\n```\n\nError:\n```\nYou cannot use the `Proof` class directly. Instead, define a subclass:\n    class MyProof extends Proof<PublicInput, PublicOutput> { ... }\n```\n\nI am currently using version 2.20 of o1js",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f440.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "201337099700535297",
+              "name": "45930",
+              "discriminator": "0000",
+              "nickname": "45930",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1351983675100762203",
+      "type": "Default",
+      "timestamp": "2025-03-19T22:20:26.786+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you share the rest of your code so we can reproduce the issue?",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1351983839630852097",
+      "type": "Default",
+      "timestamp": "2025-03-19T22:21:06.013+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I guess specifically `AES128Ctr` and the types `AES128CTRPublicInput` and `AES128CtrPublicOutput`.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1351991706760908903",
+      "type": "Default",
+      "timestamp": "2025-03-19T22:52:21.683+04:00",
+      "timestampEdited": "2025-03-19T22:56:26.459+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```typescript\nclass AES128CTRPublicInput extends Struct({\n  cipher: Byte16,\n  iv: Byte16,\n  key_hash: Field,\n  ctr: Field,\n}) {}\n\nclass AES128CtrPublicOutput extends Struct({\n  cipher_hash: Field,\n}) {}\n```",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1351992130549317693",
+      "type": "Default",
+      "timestamp": "2025-03-19T22:54:02.722+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```typescript\nconst AES128Ctr = ZkProgram({\n  name: \"aes-verify-ctr-base\",\n  publicInput: AES128CTRPublicInput,\n  publicOutput: AES128CtrPublicOutput,\n\n  methods: {\n    // base case for a singleton block\n    base: {\n      privateInputs: [Byte16, Byte16],\n\n      async method(input: AES128CTRPublicInput, message: Byte16, key: Byte16) {\n        // Assert that the key hash is correct\n        Poseidon.hashPacked(Byte16, key).assertEquals(input.key_hash);\n        // Assert that ctr = 0\n        Field(0).assertEquals(input.ctr);\n\n        // ctr = 0, so iv passed as is\n        const cipher = computeCipher(input.iv, key, message);\n        cipher.assertEquals(input.cipher);\n\n        // TODO: Check whether we need a separator within our hash?\n        const output = new AES128CtrPublicOutput({\n          cipher_hash: Poseidon.hashPacked(Byte16, cipher),\n        });\n\n        return { publicOutput: output };\n      },\n    },\n```",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1351992216192811120",
+      "type": "Default",
+      "timestamp": "2025-03-19T22:54:23.141+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```typescript\ninductive: {\n      privateInputs: [\n        SelfProof<AES128CTRPublicInput, AES128CtrPublicOutput>,\n        Byte16,\n        Byte16,\n      ],\n      async method(\n        input: AES128CTRPublicInput,\n        previousProof: SelfProof<AES128CTRPublicInput, AES128CtrPublicOutput>,\n        message: Byte16,\n        key: Byte16,\n      ) {\n        previousProof.verify();\n\n        // Perform necessary assertions, including matches iv, key_hashes, correct counter, and correct cipher\n        input.iv.assertEquals(previousProof.publicInput.iv);\n        // This ensures that key is the same for all blocks\n        input.key_hash.assertEquals(previousProof.publicInput.key_hash);\n        Poseidon.hashPacked(Byte16, key).assertEquals(input.key_hash);\n\n        // This ensures that counter is correclty incremented\n        input.ctr.assertEquals(previousProof.publicInput.ctr.add(Field(1)));\n\n        // TODO: Implement addition of the IV and the counter in Byte16 to reduce constraints\n        const cipher = computeCipher(\n          Byte16.fromField(input.iv.toField().add(input.ctr)),\n          key,\n          message,\n        );\n        cipher.assertEquals(input.cipher);\n\n        // TODO: Check whether we need a separator within our hash?\n        const output = new AES128CtrPublicOutput({\n          cipher_hash: Poseidon.hashPacked(Provable.Array(Field, 2), [\n            previousProof.publicOutput.cipher_hash,\n            Poseidon.hashPacked(Byte16, cipher),\n          ]),\n        });\n        return { publicOutput: output };\n      },\n    },\n  },\n});\n```",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1351992458585706496",
+      "type": "Default",
+      "timestamp": "2025-03-19T22:55:20.932+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sorry discord doesn't handle the formatting well and doesn't allow me to output the entire zkProgram in one message",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1351992686923485417",
+      "type": "Default",
+      "timestamp": "2025-03-19T22:56:15.372+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`Byte16` is a `Struct` wrapping a 2D `Field` Array and `computeCipher` returns a `Byte16`",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1352044059929219193",
+      "type": "Reply",
+      "timestamp": "2025-03-20T02:20:23.651+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you share the full project so I can debug in my local?",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "388741051634024449",
+          "name": "scaraven",
+          "discriminator": "0000",
+          "nickname": "scaraven",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1351992458585706496",
+        "channelId": "1351958070565146666",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1352103306616373329",
+      "type": "Default",
+      "timestamp": "2025-03-20T06:15:49.162+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Proofs aren't supposed to be public inputs, that's why it's not working - you'll have to use private inputs for that",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "388741051634024449",
+              "name": "scaraven",
+              "discriminator": "0000",
+              "nickname": "scaraven",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1352103556487975022",
+      "type": "Default",
+      "timestamp": "2025-03-20T06:16:48.736+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "We should represent this more clearly in either the public input type or at least throw an error message",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1352220505922605056",
+      "type": "Default",
+      "timestamp": "2025-03-20T14:01:31.654+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have now tried modifying the code as so:\n```typescript\nclass AES128CTR256PublicInput extends Struct({\n  proof_input: AES128CTRPublicInput,\n  proof_output: AES128CtrPublicOutput,\n  ciphers: Provable.Array(Byte16, NUM_BLOCKS),\n}) {}\n\n// Compile the verification key for AES128CTR\nconst { verificationKey: vk_data } = await AES128Ctr.compile();\nconst vk = new VerificationKey(vk_data);\n\nconst AES128CTR256 = ZkProgram({\n  name: \"aes-verify-ctr-256\",\n  publicInput: AES128CTR256PublicInput,\n\n  methods: {\n    verifyAESCTR256: {\n      privateInputs: [SideLoadedAESProof],\n\n      async method(input: AES128CTR256PublicInput, proof: SideLoadedAESProof) {\n        proof.verify(vk);\n        proof.publicInput.ctr.assertEquals(NUM_BLOCKS - 1);\n\n        // Assert that the proof input and output are consistent\n        proof.publicOutput.assertEquals(input.proof_output);\n        proof.publicInput.assertEquals(input.proof_input);\n\n        // Verify the ciphers\n        const cipher_internal_hash = Poseidon.hashPacked(\n          Provable.Array(Field, NUM_BLOCKS),\n          [\n            Poseidon.hashPacked(Byte16, input.ciphers[0]),\n            Poseidon.hashPacked(Byte16, input.ciphers[1]),\n          ],\n        );\n\n        cipher_internal_hash.assertEquals(proof.publicOutput.cipher_hash);\n      },\n    },\n  },\n});\n```",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1352220733819846728",
+      "type": "Reply",
+      "timestamp": "2025-03-20T14:02:25.989+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "However,  I still get the same compilation error",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "227173927712063508",
+          "name": "trivo",
+          "discriminator": "0000",
+          "nickname": "Florian",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1300439738003619890",
+              "name": "o1 Engineering",
+              "color": "#00368B",
+              "position": 130
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "918156487434596374",
+              "name": "MinaResearch Founding Member",
+              "color": "#A5BEF3",
+              "position": 108
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1352103306616373329",
+        "channelId": "1351958070565146666",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1352221014603595777",
+      "type": "Default",
+      "timestamp": "2025-03-20T14:03:32.933+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@boray , the server does not allow me posting links, so I have DM'd",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "401088306210799616",
+              "name": "borays",
+              "discriminator": "0000",
+              "nickname": "boray",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "401088306210799616",
+          "name": "borays",
+          "discriminator": "0000",
+          "nickname": "boray",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1352223953527246901",
+      "type": "Reply",
+      "timestamp": "2025-03-20T14:15:13.627+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can now post links \uD83D\uDE42",
+      "author": {
+        "id": "496781174954393611",
+        "name": "marc.nl",
+        "discriminator": "0000",
+        "nickname": "Marc",
+        "color": "#1ABC9C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "903130973582004274",
+            "name": "Moderator",
+            "color": "#1ABC9C",
+            "position": 139
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "849712902709313547",
+            "name": "node-working-group",
+            "color": "#99AAB5",
+            "position": 94
+          },
+          {
+            "id": "1246045923654762496",
+            "name": "berkeley-pre-release",
+            "color": "#98C79F",
+            "position": 84
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "807079219691257886",
+            "name": "spp",
+            "color": null,
+            "position": 76
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1204127049657360444",
+            "name": "UMT-Support",
+            "color": "#1ABC9C",
+            "position": 38
+          },
+          {
+            "id": "1161352609064558642",
+            "name": "TW2-Support",
+            "color": "#B9F506",
+            "position": 32
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1263420553184677889",
+            "name": "Role Manager",
+            "color": null,
+            "position": 13
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/496781174954393611/803ed6ce16d03f760b0e0319f0cc8dc7.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "388741051634024449",
+          "name": "scaraven",
+          "discriminator": "0000",
+          "nickname": "scaraven",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1352221014603595777",
+        "channelId": "1351958070565146666",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1352224035894853664",
+      "type": "Default",
+      "timestamp": "2025-03-20T14:15:33.265+04:00",
+      "timestampEdited": "2025-03-20T14:19:27.809+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/scaraven/mina-aes/tree/ctr_mode",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - scaraven/mina-aes at ctr_mode",
+          "url": "https://github.com/scaraven/mina-aes/tree/ctr_mode",
+          "timestamp": null,
+          "description": "A provable AES implementation using o1js for the Mina Protocol - GitHub - scaraven/mina-aes at ctr_mode",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/7ItIpo0CCmrtBMU6SdRzh-ZvZCf5coNdkZ2EKqmOPHc/https/opengraph.githubassets.com/effab72744af67aa0dccdaae07b6d91f24b7985d8391c7b50df25c763b87ba31/scaraven/mina-aes",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1354509127958790246",
+      "type": "Default",
+      "timestamp": "2025-03-26T21:35:41.668+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Okay, I've figured out the problem. `SideLoadedAESProof` needs to be defined as so:\n```typescript\nclass SideLoadedAESProof extends DynamicProof<\n  AES128CTRPublicInput,\n  AES128CtrPublicOutput\n> {\n  static publicInputType = AES128CTRPublicInput;\n  static publicOutputType = AES128CtrPublicOutput;\n  static maxProofsVerified = 1 as const;\n}\n```",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "✅",
+            "code": "white_check_mark",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2705.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "401088306210799616",
+              "name": "borays",
+              "discriminator": "0000",
+              "nickname": "boray",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1354509215552639111",
+      "type": "Default",
+      "timestamp": "2025-03-26T21:36:02.552+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Turns out I was overwriting the wrong variables which the compiler was not happy with",
+      "author": {
+        "id": "388741051634024449",
+        "name": "scaraven",
+        "discriminator": "0000",
+        "nickname": "scaraven",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/388741051634024449/0b64a596f11b3e1a40d41f787a7df5de.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 18
+}

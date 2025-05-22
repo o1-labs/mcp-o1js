@@ -1,0 +1,1375 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1266031847377207316",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Recursion with multiple public inputs",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:40:13.5285456+04:00",
+  "messages": [
+    {
+      "id": "1266031847377207316",
+      "type": "Default",
+      "timestamp": "2024-07-25T17:58:34.149+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Like the title says\n\nFrom here\nhttps://docs.minaprotocol.com/zkapps/o1js/recursion\n\nI want to for example do the following, could this work?\n\n```\nlet RollupAdd = ZkProgram({\n  name: \"rollup-add-example\",\n  publicInput: [ Field, Field ],\n\n  methods: {\n    baseCase: {\n      privateInputs: [ Field ],\n      async method(publicInput: [ Field, Field ], x: Field) {\n        publicInput[0].assertEquals(x);\n        publicInput[1].assertEquals(x);\n      },\n    },\n\n    step: {\n      privateInputs: [SelfProof, SelfProof],\n\n      async method(\n        publicInput: [ Field, Field ],\n        left: SelfProof<[ Field, Field ], void>,\n        right: SelfProof<[ Field, Field ], void>\n      ) {\n        left.verify();\n        right.verify();\n        left[0].publicInput.add(right[0].publicInput).assertEquals(publicInput[0]);\n        left[1].publicInput.add(right[1].publicInput).assertEquals(publicInput[1]);\n      },\n    },\n  },\n});\n```",
+      "author": {
+        "id": "484098399969476609",
+        "name": "evan02048",
+        "discriminator": "0000",
+        "nickname": "evan",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "621112916862828556",
+            "name": "partners-taskforce",
+            "color": null,
+            "position": 69
+          },
+          {
+            "id": "1308126741033648159",
+            "name": "SP-LA",
+            "color": null,
+            "position": 47
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/484098399969476609/7598bb38403f41cf737d2e73b76a5550.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266041960708440078",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:38:45.355+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hello @evan \nHere's a breakdown of the code:\n\n1. The `RollupAdd` ZkProgram has a public input that is an array of two `Field` values.\n2. The `baseCase` method takes a single private input `x` of type `Field`, and asserts that the two elements of the public input array are equal to `x`.\n3. The `step` method takes two private inputs, which are `SelfProof` instances. These represent the recursive proofs from the previous steps.\n   - The method verifies the two input proofs.\n   - It then asserts that the sum of the public inputs of the left and right proofs is equal to the public input of the current step.\n\nThis setup allows you to recursively build a proof for adding two sequences of numbers, where each sequence is represented by a `Field` value in the public input array.\n\nThe key aspects of this implementation are:\n\n- Using an array as the public input to represent the two sequences being added.\n- Verifying the previous proofs as private inputs in the `step` method.\n- Asserting that the sum of the public inputs of the left and right proofs equals the public input of the current step.\n\nThis should work as expected, and you can use this ZkProgram to create and verify recursive proofs for the \"rollup-add-example\" use case.",
+      "author": {
+        "id": "1124009975421870230",
+        "name": "torvix5",
+        "discriminator": "0000",
+        "nickname": "!   Torvix",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1124009975421870230/966ca3b650950a3e88edceba491c1239.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD14",
+            "code": "thinking",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f914.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "227173927712063508",
+              "name": "trivo",
+              "discriminator": "0000",
+              "nickname": "Trivo",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/227173927712063508/f18de10caa3900b8ef5799de9b4c3079.png?size=512"
+            },
+            {
+              "id": "496781174954393611",
+              "name": "marc.nl",
+              "discriminator": "0000",
+              "nickname": "Marc",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/496781174954393611/803ed6ce16d03f760b0e0319f0cc8dc7.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "484098399969476609",
+          "name": "evan02048",
+          "discriminator": "0000",
+          "nickname": "evan",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "621112916862828556",
+              "name": "partners-taskforce",
+              "color": null,
+              "position": 69
+            },
+            {
+              "id": "1308126741033648159",
+              "name": "SP-LA",
+              "color": null,
+              "position": 47
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/484098399969476609/7598bb38403f41cf737d2e73b76a5550.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1266041998305923074",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:38:54.319+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if u have any question, plz dm",
+      "author": {
+        "id": "1124009975421870230",
+        "name": "torvix5",
+        "discriminator": "0000",
+        "nickname": "!   Torvix",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1124009975421870230/966ca3b650950a3e88edceba491c1239.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266042164966592645",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:39:34.054+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think on the above though, it doesn't work with multiple public inputs?",
+      "author": {
+        "id": "484098399969476609",
+        "name": "evan02048",
+        "discriminator": "0000",
+        "nickname": "evan",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "621112916862828556",
+            "name": "partners-taskforce",
+            "color": null,
+            "position": 69
+          },
+          {
+            "id": "1308126741033648159",
+            "name": "SP-LA",
+            "color": null,
+            "position": 47
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/484098399969476609/7598bb38403f41cf737d2e73b76a5550.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266042195677413488",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:39:41.376+04:00",
+      "timestampEdited": "2024-07-25T18:39:46.275+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I was just trying struct instead rn",
+      "author": {
+        "id": "484098399969476609",
+        "name": "evan02048",
+        "discriminator": "0000",
+        "nickname": "evan",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "621112916862828556",
+            "name": "partners-taskforce",
+            "color": null,
+            "position": 69
+          },
+          {
+            "id": "1308126741033648159",
+            "name": "SP-LA",
+            "color": null,
+            "position": 47
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/484098399969476609/7598bb38403f41cf737d2e73b76a5550.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266042249318498385",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:39:54.165+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The public (in, out) put can be any provable data structure - it can be primitive `Field` elements or composite data sturctures such as `Struct`s",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266042323196710983",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:40:11.779+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\n\nconst ProvableArray = Provable.Array(Field, 2);\n\n\nlet MyProgram = ZkProgram({\n  name: 'example-with-output',\n  publicOutput: ProvableArray,\n\n  methods: {\n    baseCase: {\n      privateInputs: [],\n      async method() {\n        return [Field(0), Field(0)];\n      },\n    },\n  },\n});\n```",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266042603326013613",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:41:18.567+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Awesome thanks! Yep that makes sense re provable array too vs struct",
+      "author": {
+        "id": "484098399969476609",
+        "name": "evan02048",
+        "discriminator": "0000",
+        "nickname": "evan",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "621112916862828556",
+            "name": "partners-taskforce",
+            "color": null,
+            "position": 69
+          },
+          {
+            "id": "1308126741033648159",
+            "name": "SP-LA",
+            "color": null,
+            "position": 47
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/484098399969476609/7598bb38403f41cf737d2e73b76a5550.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266042734368657548",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:41:49.81+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "is there somewhre on the docs with all the provable types too to see?",
+      "author": {
+        "id": "484098399969476609",
+        "name": "evan02048",
+        "discriminator": "0000",
+        "nickname": "evan",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "621112916862828556",
+            "name": "partners-taskforce",
+            "color": null,
+            "position": 69
+          },
+          {
+            "id": "1308126741033648159",
+            "name": "SP-LA",
+            "color": null,
+            "position": 47
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/484098399969476609/7598bb38403f41cf737d2e73b76a5550.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266042890862329866",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:42:27.121+04:00",
+      "timestampEdited": "2024-07-25T18:42:36.449+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://docs.minaprotocol.com/zkapps/tutorials/common-types-and-functions",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Mina Documentation",
+          "url": "https://docs.minaprotocol.com/zkapps/tutorials/common-types-and-functions",
+          "timestamp": null,
+          "description": "Website for documentation about Mina Protocol",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/_PJlmeDNad-_70g7jbEdYnu0Z3mezgosb1bPK642OJE/https/docs.minaprotocol.com/img/common/mina-logo.png",
+            "width": 1120,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266042907366916096",
+      "type": "Default",
+      "timestamp": "2024-07-25T18:42:31.056+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think that's the only one",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1266077265226240081",
+      "type": "Reply",
+      "timestamp": "2024-07-25T20:59:02.608+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey Evan sir, trivo told me you can make a struct of all the inputs you need and pass it in the publicInput field",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "484098399969476609",
+          "name": "evan02048",
+          "discriminator": "0000",
+          "nickname": "evan",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "621112916862828556",
+              "name": "partners-taskforce",
+              "color": null,
+              "position": 69
+            },
+            {
+              "id": "1308126741033648159",
+              "name": "SP-LA",
+              "color": null,
+              "position": 47
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/484098399969476609/7598bb38403f41cf737d2e73b76a5550.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1266031847377207316",
+        "channelId": "1266031847377207316",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1266077385829257327",
+      "type": "Reply",
+      "timestamp": "2024-07-25T20:59:31.362+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah this ☝️",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "227173927712063508",
+          "name": "trivo",
+          "discriminator": "0000",
+          "nickname": "Florian",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1300439738003619890",
+              "name": "o1 Engineering",
+              "color": "#00368B",
+              "position": 130
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "918156487434596374",
+              "name": "MinaResearch Founding Member",
+              "color": "#A5BEF3",
+              "position": 108
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1266042323196710983",
+        "channelId": "1266031847377207316",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1266077639614009404",
+      "type": "Default",
+      "timestamp": "2024-07-25T21:00:31.869+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/Doot-Foundation/Doot_L1Contracts/blob/devnet/src/Aggregation.ts",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Doot_L1Contracts/src/Aggregation.ts at devnet · Doot-Foundation/Doo...",
+          "url": "https://github.com/Doot-Foundation/Doot_L1Contracts/blob/devnet/src/Aggregation.ts",
+          "timestamp": null,
+          "description": "The fallback layer that gets updated every 2 hours. Serves as a Proof for the protocol and as a fail-safe if by any means the web application crashes. - Doot-Foundation/Doot_L1Contracts",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/KCizSYkRKaE4mAypzxU6e6-wQN2Ox4M_tuGS2VZ7D6M/https/opengraph.githubassets.com/2c9ea89b63cebf54b267ad4f71e1daa4525a7fa33ce166a445712124a0ced302/Doot-Foundation/Doot_L1Contracts",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 14
+}

@@ -1,0 +1,338 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1130926219232301076",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "TypeError: Cannot read properties of undefined (reading 'value')",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:42:45.0376612+04:00",
+  "messages": [
+    {
+      "id": "1130926219232301076",
+      "type": "Default",
+      "timestamp": "2023-07-18T22:17:02.258+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Trying to change nullifierMessage in the Guardian Struct.\n\n**Guardian.ts**\n```import { Field, PublicKey, Poseidon, Struct } from 'snarkyjs';\n\nexport class Guardian extends Struct({\n  publicKey: PublicKey,\n  guardianId: Field,\n  nullifierMessage: Field,\n  isVoted: Boolean,\n}) {\n  /**\n   * @notice Create a guardian with props\n   * @param publicKey public key of the guardian\n   * @param guardianId id of the guardian\n   * @param nullifierMessage nullifier message of the guardian\n   * @returns Guardian a guardian object\n   */\n  static from(\n    publicKey: PublicKey,\n    guardianId: Field,\n    nullifierMessage: Field\n  ) {\n    return new Guardian({\n      publicKey,\n      guardianId,\n      nullifierMessage,\n      isVoted: false,\n    });\n  }\n\n  /**\n   * @notice Create an empty guardian\n   * @returns Guardian, an empty guardian object\n   */\n  static empty() {\n    return Guardian.from(PublicKey.empty(), Field(0), Field(0));\n  }\n\n  /**\n   * @returns hash of the Guardian\n   */\n  hash(): Field {\n    return Poseidon.hash(\n      this.publicKey\n        .toFields()\n        .concat(this.guardianId.toFields())\n        .concat(this.nullifierMessage.toFields())\n    );\n  }\n\n  /**\n   * @notice Set the nullifier message of the guardian\n   * @param newNullifierMessage: Field, a new nullifier message of the guardian\n   * @returns Guardian, a guardian object with updated nullifier message\n   */\n  setNullifierMessage(newNullifierMessage: Field) {\n    return new Guardian({\n      publicKey: this.publicKey,\n      guardianId: this.guardianId,\n      nullifierMessage: newNullifierMessage,\n      isVoted: this.isVoted,\n    });\n  }\n\n  /**\n   * @notice Set the isVoted of the guardian\n   * @returns Guardian, a guardian object with updated isVoted\n   */\n  vote(): Guardian {\n    return new Guardian({\n      publicKey: this.publicKey,\n      guardianId: this.guardianId,\n      nullifierMessage: this.nullifierMessage,\n      isVoted: true,\n    });\n  }\n}\n```\n\n\ncontinue..",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1130926376900374619",
+      "type": "Default",
+      "timestamp": "2023-07-18T22:17:39.849+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "**GuardianZkApp functions**\n```\n/**\n   * @notice Verify the guardian\n   * @param guardian a guardian object\n   * @param path a guardian witness\n   * @returns Bool true if the guardian is verified successfully\n   */\n  @method\n  public verifyGuardian(guardian: Guardian, path: GuardianWitness): Bool {\n    if (guardian === Guardian.empty()) {\n      return Bool(false);\n    }\n    const commitment = this.committedGuardians.getAndAssertEquals();\n    commitment.assertEquals(path.calculateRoot(guardian.hash()));\n\n    return Bool(true);\n  }\n\n/**\n   * @notice: Edit a guardian in the Merkle Tree\n   * @param sender a sender account\n   * @param guardian a guardian object\n   * @param newNullifierMessage Field, a new nullifier message of the guardian\n   * @param path GuardianWitness, a guardian witness\n   * @returns Bool true if the guardian is edited successfully\n   */\n  @method\n  public editGuardian(\n    sender: PublicKey,\n    guardian: Guardian,\n    newNullifierMessage: Field,\n    path: GuardianWitness\n  ): Bool {\n    this.sender.assertEquals(sender);\n\n    this.onlyOwner(sender);\n\n    this.verifyGuardian(guardian, path);\n\n    // we update the guardian with new nullifierMessage\n    let newGuardian = guardian.setNullifierMessage(newNullifierMessage);\n\n    // we calculate the new Merkle Root, based on the guardian changes\n    let newCommitment = path.calculateRoot(newGuardian.hash());\n\n    this.committedGuardians.set(newCommitment);\n\n    this.emitEvent('GuardianChanged', {\n      id: guardian.guardianId,\n      commitment: newCommitment,\n    });\n    return Bool(true);\n  }\n```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1130926668719083580",
+      "type": "Default",
+      "timestamp": "2023-07-18T22:18:49.424+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "**GuardianZkApp.test**\n```\ndescribe('editGuardian', () => {\n    it('should able to edit nullifier message', async () => {\n      await localDeploy();\n\n      const guardian = Guardian.from(\n        guardian1Account,\n        Field(1),\n        nullifierMessage\n      );\n      guardianTree.setLeaf(0n, guardian.hash());\n      await _addGuardian(deployerAccount, guardian);\n\n      const committedGuardians = zkApp.committedGuardians.getAndAssertEquals();\n      expect(committedGuardians).toEqual(guardianTree.getRoot());\n      const counter = zkApp.counter.getAndAssertEquals();\n      expect(counter).toEqual(Field(1));\n\n      let w = guardianTree.getWitness(0n);\n      let witness = new GuardianWitness(w);\n\n      const newNullifierMessage = Field(888);\n      const editedGuardian = Guardian.from(\n        guardian1Account,\n        Field(1),\n        newNullifierMessage\n      );\n      const tx = await Mina.transaction(deployerAccount, () => {\n        zkApp.editGuardian(deployerAccount, guardian, newNullifierMessage, witness);\n      });\n      await tx.prove();\n      await tx.sign([deployerKey]).send();\n```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1130926784318296185",
+      "type": "Default",
+      "timestamp": "2023-07-18T22:19:16.985+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Error:\n```\n● GuardianZkApp › editGuardian › should able to edit nullifier message\n\n    TypeError: Cannot read properties of undefined (reading 'value')\n\n      at node_modules/snarkyjs/src/lib/ml/fields.ts:8:40\n          at Array.map (<anonymous>)\n      at Object.to (snarkyjs-codespace/contracts/node_modules/snarkyjs/src/lib/ml/fields.ts:8:27)\n      at Object.update (snarkyjs-codespace/contracts/node_modules/snarkyjs/src/lib/hash.ts:58:20)\n      at hashWithPrefix (snarkyjs-codespace/contracts/node_modules/snarkyjs/src/lib/events.ts:37:21)\n      at Object.pushEvent (snarkyjs-codespace/contracts/node_modules/snarkyjs/src/lib/events.ts:49:23)\n      at GuardianZkApp.emitEvent (snarkyjs-codespace/contracts/node_modules/snarkyjs/src/lib/zkapp.ts:1029:40)\n      at GuardianZkApp.editGuardian (snarkyjs-codespace/contracts/src/guardians/GuardianZkApp.ts:168:10)\n      at GuardianZkApp.wrappedMethod (snarkyjs-codespace/contracts/node_modules/snarkyjs/src/lib/zkapp.ts:306:29)```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1130949350516867133",
+      "type": "Default",
+      "timestamp": "2023-07-18T23:48:57.186+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Solved!!!\n\n**Smart contract**\n```\n@method\n  public editGuardian(\n    sender: PublicKey,\n    guardian: Guardian,\n    newNullifierMessage: Field,\n    path: GuardianWitness\n  ): Bool {\n    this.sender.assertEquals(sender);\n    this.onlyOwner(sender);\n    const commitment = this.committedGuardians.getAndAssertEquals();\n    commitment.assertEquals(path.calculateRoot(guardian.hash()));\n\n    const newGuardian = guardian.setNullifierMessage(newNullifierMessage);\n    const newCommittedGuardians = path.calculateRoot(newGuardian.hash());\n    this.committedGuardians.set(newCommittedGuardians);\n\n    this.emitEvent('GuardianChanged', {\n      guardianId: guardian.guardianId,\n      commitment: newCommittedGuardians,\n    });\n    return Bool(true);\n  }\n```\n\n**TEST**\n```\nit('should able to edit nullifier message', async () => {\n      await localDeploy();\n\n      const guardian = Guardian.from(\n        guardian1Account,\n        Field(1),\n        nullifierMessage\n      );\n      guardianTree.setLeaf(0n, guardian.hash());\n      await _addGuardian(deployerAccount, guardian);\n\n      const committedGuardians = zkApp.committedGuardians.getAndAssertEquals();\n      expect(committedGuardians).toEqual(guardianTree.getRoot());\n      const counter = zkApp.counter.getAndAssertEquals();\n      expect(counter).toEqual(Field(1));\n\n      let w = guardianTree.getWitness(0n);\n      let witness = new GuardianWitness(w);\n\n      const newNullifierMessage = Field(888);\n      \n      const tx = await Mina.transaction(deployerAccount, () => {\n        zkApp.editGuardian(deployerAccount, guardian, newNullifierMessage, witness);\n      });\n      await tx.prove();\n      await tx.sign([deployerKey]).send();\n\n      const editedGuardian = guardian.setNullifierMessage(newNullifierMessage);\n      guardianTree.setLeaf(0n, editedGuardian.hash());\n\n      const editedCommittedGuardians = zkApp.committedGuardians.getAndAssertEquals();\n      expect(editedCommittedGuardians).toEqual(guardianTree.getRoot());\n    });\n```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1135763271882920046",
+      "type": "Default",
+      "timestamp": "2023-08-01T06:37:45.478+04:00",
+      "timestampEdited": "2023-08-01T06:37:58.876+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi there, did you resolved this error ? Any idea ? I am currently stucked in this error exactly. It happens in the browser but not in Node",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD14",
+            "code": "thinking",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f914.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 6
+}

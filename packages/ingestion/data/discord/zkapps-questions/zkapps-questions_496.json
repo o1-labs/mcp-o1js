@@ -1,0 +1,2998 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1187521420364894218",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to commit the hash of a file onchain in a provable way?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:37:04.9422391+04:00",
+  "messages": [
+    {
+      "id": "1187521420364894218",
+      "type": "Default",
+      "timestamp": "2023-12-22T02:26:09.696+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I need one function that hashes a file and stores that hash on chain, and another function that verifies the hash stored on chain matches the local file. Both functions would take in the file as input in some encoding. I was trying stringsToFields and bytesToFields until I realized that neither can be proven inside the circuit.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187521596949270579",
+      "type": "Default",
+      "timestamp": "2023-12-22T02:26:51.797+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I feel like i'm missing something simple here and going about it in a roundabout way lol, any advice or ideas are welcome.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187588448102662144",
+      "type": "Default",
+      "timestamp": "2023-12-22T06:52:30.354+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here's how i'm currently doing it: \n1. Convert the file (.txt in this case) into a utf-8 string. \n2. Apply stringToFields() to get a Field []. \n3. Now, in order to prove that I computed the Poseidon hashes correctly, I created a struct of 8 Field elements and a function that converts a Field [] into an array of these 8 Field structs.\n4. Each 8 Field struct goes into a zkProgram recursive function that computes the Poseidon hashes of each set, using publicInput and publicOutput to basically aggregate all the Fields\n5. the last set of 8 (truncating extra fields for now to reduce my headaches xD) turns into a final recursive proof, which can be submitted on chain as the commitment of the unit test.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187589372321726525",
+      "type": "Default",
+      "timestamp": "2023-12-22T06:56:10.705+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The idea here is that later down the line, when the raw unit test is revealed, anyone can run this again to verify that the unit test hash submitted on chain is INDEED the hash that is computed from the unit test that was revealed. But again, this just seems like unneccesary computation but I have no idea how else this could be done, since arrays must have a fixed size and you can't prove something like stringToFields or bytesToFields inside a circuit.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187651903660761140",
+      "type": "Default",
+      "timestamp": "2023-12-22T11:04:39.338+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm solving a similar problem in my project. I calculate SHA3-512 for all files and put the hash on-chain. It allows you to quickly check the integrity of the whole file off-chain by comparing on-chain and off-chain hashes.\n\nTo verify the file on-chain, I convert the file to Merkle Tree by using a tree.fill(), which is, btw very sloooooow. Then I put Merkle Tree root on-chain. It allows to prove any part of the file, including situations when only part of the file is disclosed to the verifier.\n\nYou can check the node code at\nhttps://github.com/dfstio/minanft-lib/blob/master/src/storage/file.ts#L180\nand web code at\nhttps://github.com/dfstio/minanftio/blob/minanft/src/blockchain/file.js#L21",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187801757988958228",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:00:07.394+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@devtonite You can achieve that with the following approach:\n\n1. Hash the file off-Mina/O1JS (e.g. how @DFST does it in in getFileData()\n2. Compute the Poseidon hash of the hash from step 1, in a verifiable manner (using O1JS ZKProgram or method on a SmartContract).\n3. Store the hash from 2 on-chain\n\nPlease note, step 2 is crutial, otherwise you're not proving that you have that file locally, and anyone will be easily to make the claim that they have the file, by simply re-using the Hash value. By verifiably hashing the hash from point 1, your computation proves that it has access to some hash (which in our logic is derived from some file), whose \"verifiable Poseidon hash\" computes to a certain value.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            },
+            {
+              "id": "1043967769953173565",
+              "name": "devtonite001",
+              "discriminator": "0000",
+              "nickname": "devtonite",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        },
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1187802655238651944",
+      "type": "Reply",
+      "timestamp": "2023-12-22T21:03:41.315+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "there isn't any more efficient way that is practical right now with O1JS",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187589372321726525",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1187802706971201556",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:03:53.649+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you could employ advanced cryptography to do it but it's probably not worth your time",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187802814639001650",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:04:19.319+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "however you should try to do as much hashing in a single proof as possible since the overhead is mostly in the proof generation/verification",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187802927260242020",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:04:46.17+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the proper way would be to implement a folding scheme and implement a verifier for that and do the hashing with the folding scheme (like Nova)",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187802974752350269",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:04:57.493+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this is probably necessary if you want to hash huge files",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187803198535249940",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:05:50.847+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If someone however implements a way to verify a WASM program or anything similar to O1JS, you could use some pre-existing stuff for that, compile verifier to WASM, and prove execution of that, which would be needlessly inefficient, but asymptotically much much better than what you'd have to do naively",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187803474117791804",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:06:56.551+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Las if you compute a commitment with any digest with pre-image resistance, second image resistance, and collision existence, you're effectively compressing the file into a fixed-lenght",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "140202196758167552",
+          "name": "las0",
+          "discriminator": "0000",
+          "nickname": "Las",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1187803555231440936",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:07:15.89+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "From there just hash that fixed-length in O1JS",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187803575829668040",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:07:20.801+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ah right I'm dumb, you can just hash it outside the circuit",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187803989631324242",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:08:59.459+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Las not dumb at all! These are little details that you'll get used to \uD83D\uDE04",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "140202196758167552",
+          "name": "las0",
+          "discriminator": "0000",
+          "nickname": "Las",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1187804414837280838",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:10:40.836+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "A general mindset that you will find useful with Zero-Knowledge applications is that everything must be fixed. All zero-knowledge circuits operate on a known set of data, with known dimensions (size in bytes). As such, when you're thinking of commiting somehting, think first about how you can \"cryptographically compress it into fixed-lenght\".",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187805176208310393",
+      "type": "Default",
+      "timestamp": "2023-12-22T21:13:42.361+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For example, you can't have a circuit that directly accepts an array of numbers. But you can have a circuit that accepts a number, and a previous commitment (e.g. recursive proof). Then, your circuit would extend the existing commitment with the new number, while outputting a fixed/known amount of data (size in bytes). As a general rule, you turn an arbitrary amount of data into fixed size through the use of hashing.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187856161295306892",
+      "type": "Reply",
+      "timestamp": "2023-12-23T00:36:18.153+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok that's seems to make sense. I was basically doing the same thing but by computing the Poseidon hash off chain, and then commiting it on chain as the \"testCommitHash.\" But then I later realized that my smart contract wasn't checking anything because one could just copy the onchain hash and use it as their input (LMAO). Which is what eventually led me to the hacky solution I've come up with above.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187651903660761140",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1187856549033549915",
+      "type": "Reply",
+      "timestamp": "2023-12-23T00:37:50.597+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "THERE IT IS! I knew I was missing a simple idea. As I just mentioned, I was basically doing what you described in step 1, but was indeed missing step 2. Just Poseidon hash the single hash again to put that on chain. I'll try that right now.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "♥️",
+            "code": "hearts",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2665.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1122802332166520932",
+              "name": "illya.papi",
+              "discriminator": "0000",
+              "nickname": "illya",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187801757988958228",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1187856657590521897",
+      "type": "Reply",
+      "timestamp": "2023-12-23T00:38:16.479+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Just add time to hash inputs and check every time that time is higher than previous)",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187856161295306892",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1187856669640773693",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:38:19.352+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Regarding the merkle tree approach for verifying it onchain, I'll have to see if my use case needs that.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187856759688282212",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:38:40.821+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm still learning how merkle trees work atm",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187857140208111717",
+      "type": "Reply",
+      "timestamp": "2023-12-23T00:40:11.544+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "do you mean add the \"current time\" as an additional input along side the file? so there's a time value connected to every hash?",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187856657590521897",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1187857284357963776",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:40:45.912+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm not sure I quite follow haha",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187857300728336405",
+      "type": "Reply",
+      "timestamp": "2023-12-23T00:40:49.815+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187857140208111717",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1187857313374154903",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:40:52.83+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ah gotcha",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187857322526130197",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:40:55.012+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "thanks!",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187857359570214912",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:41:03.844+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Kind of salt",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187857390318657637",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:41:11.175+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "perfect yes that makes sense",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187857512947523634",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:41:40.412+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "that will also help me with being able to determine who submitted valid code solutions prior to the revealing on the unit test for testing",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187857606845415445",
+      "type": "Default",
+      "timestamp": "2023-12-23T00:42:02.799+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so other users can't spam submissions once they ALREADY know the unit test that's going to be computed",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187858567391363133",
+      "type": "Reply",
+      "timestamp": "2023-12-23T00:45:51.811+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm indeed starting to better understand this concept as I build. Well said!",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC9C",
+            "code": "purple_heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f49c.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1122802332166520932",
+              "name": "illya.papi",
+              "discriminator": "0000",
+              "nickname": "illya",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187805176208310393",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1187922543684898826",
+      "type": "Default",
+      "timestamp": "2023-12-23T05:00:04.948+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@devtonite I’m glad I helped, let me know if you have any further questions!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1187923089116377128",
+      "type": "Default",
+      "timestamp": "2023-12-23T05:02:14.989+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@devtonite on a related note, I wrote a blog post about recursive zkSNARKs in O1JS and Mina. You’ll find it very useful in understanding the deeper intricacies of the topics discussed on this thread.\n\nYou can find it here: https://illya.sh/blog/posts/zk-snarks-recursive-proof-private-intput-visibility/",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Recursive zkSNARK Proof as a Private Input - What Is Visible To The...",
+          "url": "https://illya.sh/blog/posts/zk-snarks-recursive-proof-private-intput-visibility/",
+          "timestamp": null,
+          "description": "In this blog post, we will explore the dynamic intersection of blockchain, privacy, and cryptography, focusing on the pivotal role of zero-knowledge proofs, especially zkSNARKs and their recursive variations. These innovative technologies are revolutionizing our approach to digital privacy and authenticity. Here, we delve into their practical ap...",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/fECO-u4ykgweYgq4btoKwXTwmFKAPU23yrrQWNY3ueQ/https/illya.sh/blog/posts/recursive-zksnark-proof-as-a-private-input---what-is-visible-to-the-verifier.png",
+            "width": 1200,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1187978816912642088",
+      "type": "Reply",
+      "timestamp": "2023-12-23T08:43:41.531+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "awesome.Thanks for the resource! I'll be checking it out first thing in the morning xD",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187923089116377128",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1188074543307305110",
+      "type": "Reply",
+      "timestamp": "2023-12-23T15:04:04.482+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No problem! Let me know if something is unclear or if you have furhter questions!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187978816912642088",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1188619245303644281",
+      "type": "Reply",
+      "timestamp": "2023-12-25T03:08:31.558+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hey friend, I'm in the middle of reading through the calculator example, and i'd just like to say thank you for such a valuable resource \uD83D\uDE4F",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC9C",
+            "code": "purple_heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f49c.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1122802332166520932",
+              "name": "illya.papi",
+              "discriminator": "0000",
+              "nickname": "illya",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1188074543307305110",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1188619559062741063",
+      "type": "Default",
+      "timestamp": "2023-12-25T03:09:46.364+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've already learned so much. Really appreciate the code example especially, I didn't even know we could refactor our functions out of the ZKProgram and have separate circuits for the base and recursive case. It makes so much sense now in retrospect, but prior to reading your blog, I always found writing our o1js smart contracts kinda overwhelming and cumbersome to read.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC9C",
+            "code": "purple_heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f49c.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1122802332166520932",
+              "name": "illya.papi",
+              "discriminator": "0000",
+              "nickname": "illya",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1188619714528813116",
+      "type": "Default",
+      "timestamp": "2023-12-25T03:10:23.43+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Like, OF COURSE we can refactor LOL, It just did not occur to me until I saw your example. So thanks again for that, it's been helpful already.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC9C",
+            "code": "purple_heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f49c.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1122802332166520932",
+              "name": "illya.papi",
+              "discriminator": "0000",
+              "nickname": "illya",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1188830917708492850",
+      "type": "Reply",
+      "timestamp": "2023-12-25T17:09:38.192+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you for the kind words, and you are more than welcome! I’m ecstatic that you found value in it. These were questions and challenges that I also had at the start. As you continue learning, you will see that it will all start clicking together.\n\nI have more blog posts like this one coming!\n\nIf you have any questions, please let me know!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1188619245303644281",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1188838950526271569",
+      "type": "Reply",
+      "timestamp": "2023-12-25T17:41:33.365+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Absolutely. It was well deserved. I finished reading through it all last night. I'm going to slowly try to start reading through zkLocus' codebase more. I like the organization but it was a little challenging to follow, so i'll be taking it one step at a time haha.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1188830917708492850",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1188839106248200262",
+      "type": "Default",
+      "timestamp": "2023-12-25T17:42:10.492+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I was curious though, how did you implement the timing proof? I found the struct of start and end time but didn't understand where you get the time data from",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1189895819466383442",
+      "type": "Default",
+      "timestamp": "2023-12-28T15:41:10.556+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @devtonite apologies for the late reply, I just noticed it.\n\n>  I'm going to slowly try to start reading through zkLocus' codebase more. I like the organization but it was a little challenging to follow, so i'll be taking it one step at a time haha.\n\nThank you so much!  There is little documentation for now, but I will be adding all of that. In the last commits, you can see more parts of the API being documents.\n\nI suggest you start with the \"api\" module/folder: https://github.com/iluxonchik/zkLocus/tree/main/contracts/src/api\n\nIt contains the end-user API. This is the actual API that you would be using to create, verify and load Zero-Knowledge proofs.\n\nThe files in the \"tests\" folder is useful for understanding how to do something. For example, how do you use the integration oracle, how to generate, verify and load ZK proofs: https://github.com/iluxonchik/zkLocus/tree/main/contracts/src/tests\n\n> I was curious though, how did you implement the timing proof? I found the struct of start and end time but didn't understand where you get the time data from\n\nRegarding the time part, I have the structures ready, but I'm leaving the actual implementation for later. With regards to geolocation time, there are two important factors to consider:\n\n1. Obtaining time in a verifiable/authenticated manner. The most simple way would be an Oracle, similar to  https://github.com/zkLocus/integration-oracle\n2. Cryptographiclaly tying the time to a particular Geolcoation measurement. The simplest option is to have an Oracle that generates a proof of geolocation and time. I will expand the integration oracle with those options soon.\n\nRegarding how to implement it, think of this way:\n\n1. Obtain an authenticated geolocation. Let's call this Proof 1\n2. Pass Proof 1 as a recursive zkSNARK to a circuit grabs the public output of Proof 1 and adds to it a timestamp",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "zkLocus/contracts/src/api at main · iluxonchik/zkLocus",
+          "url": "https://github.com/iluxonchik/zkLocus/tree/main/contracts/src/api",
+          "timestamp": null,
+          "description": "Authenticate geographical location with service providers while preserving their privacy. Powered by ZK-SNARK proofs. Users can verify being within a certain region, following a certain path, or be...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/6W5Z_E1J0USwzffOHm3ECZl0HCq58806CJpGWY7nlB8/https/opengraph.githubassets.com/117b4a926aa231a8b2ca153e54da49880e916dfef31f3139b67254257726231e/iluxonchik/zkLocus",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "zkLocus/contracts/src/tests at main · iluxonchik/zkLocus",
+          "url": "https://github.com/iluxonchik/zkLocus/tree/main/contracts/src/tests",
+          "timestamp": null,
+          "description": "Authenticate geographical location with service providers while preserving their privacy. Powered by ZK-SNARK proofs. Users can verify being within a certain region, following a certain path, or be...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/6W5Z_E1J0USwzffOHm3ECZl0HCq58806CJpGWY7nlB8/https/opengraph.githubassets.com/117b4a926aa231a8b2ca153e54da49880e916dfef31f3139b67254257726231e/iluxonchik/zkLocus",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "GitHub - zkLocus/integration-oracle: A verified geolocation Oracle ...",
+          "url": "https://github.com/zkLocus/integration-oracle",
+          "timestamp": null,
+          "description": "A verified geolocation Oracle that allows for an easy integration with any existing system. It exposes an HTTPs endpoint which produces an authenticated geolocation. - GitHub - zkLocus/integration-...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/2NnRRxPPnGim1ACvXsBPPNUpVvltOLfl5aQWIeDKrWc/https/opengraph.githubassets.com/b50573cc881ccefde7f0c217e15029f12ce49db88e292b7b73b7a1d3a83fd42d/zkLocus/integration-oracle",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD25",
+            "code": "fire",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f525.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "991037531615264808",
+              "name": "berzanorg",
+              "discriminator": "0000",
+              "nickname": "berzan",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1189896542274981928",
+      "type": "Default",
+      "timestamp": "2023-12-28T15:44:02.887+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@devtonite when designing recursive zkSNARKs (which is what you can do with Mina) circuits it's useful to think that each circuit generates a cryptographic Zero-Knowledge commitment to somthing. \"Commitment\" is a synonym of hash (more specifically, a cryptographic hash). You can then pass those commitments into other ZK circuits and expand that commitment with more data. You can do it by hashing the first commitment with any additional data. Try making each circuit as small as possible.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1189899286335475713",
+      "type": "Default",
+      "timestamp": "2023-12-28T15:54:57.122+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@devtonite once again, thank you so much for the questions. I'll aslo be making some explanatory videos. Right now, the focus is on finalizing the product for the deadline of January 12th. Additionally, I'll be making a proposal for zkCohort 3, which is an expansion of zkLocus into a major use case.\n\nMy girlfriend is a lawyer (fields of cybersecurity & international law), and we're are also making a proposal for the United Nations. It relates to the application and enforcement of the International Law, with use-cases expanding to warfare. One of the use-cases reduction of casualties in national and international military conflicts. The system is built on Mina using zkLocus as the basis for a verifiable, authenticated geolocation.\n\nFor now, I'm the only person architecting, developing and managing the product. As such, it's really necessary to manage the time carefully \uD83D\uDE42\n\nAny questions or requests you have, please let me know! I will make sure that you'll get an answer. This also helps massively in terms of maximizing the value of the produced content\n\n\uD83D\uDC9C",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1189899826431803412",
+      "type": "Default",
+      "timestamp": "2023-12-28T15:57:05.891+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@devtonite oh, and regarding the time, I'll be working on implementing arbitrary metadata association to a geolocation proof. This includes, timestamps, videos, images, text, and anything that can be represented as bytes \uD83D\uDE04 \n\nThis means you can cryptographically associate geolcoation to a video, a tweet, a message, etc.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1043967769953173565",
+          "name": "devtonite001",
+          "discriminator": "0000",
+          "nickname": "devtonite",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1189909005250863104",
+      "type": "Reply",
+      "timestamp": "2023-12-28T16:33:34.292+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "or anything that can be represented as NFTs))",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1189899826431803412",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1189939121326657556",
+      "type": "Reply",
+      "timestamp": "2023-12-28T18:33:14.524+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yess!\n\n@DFST I know that you're working on NFTs on Mina. If you have any feedback, a use-case, or questions, please let me know. I can expand zkLocus with NFT-specific API and structure.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1189909005250863104",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1190073244900921415",
+      "type": "Reply",
+      "timestamp": "2023-12-29T03:26:12.076+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> Thank you so much!  There is little documentation for now, but I will be adding all of that. In the last commits, you can see more parts of the API being documents.\nNo problem, THANK YOU for all the usual guides and insight as you're building your project! I definitely will be looking forward to reading the documentation when it comes out! I think it would be a cool side project to be have geolocations attached to my test bounties as well  (would love to do that sometime in the future once I have my project up and running).",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1189895819466383442",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1190075137391870023",
+      "type": "Reply",
+      "timestamp": "2023-12-29T03:33:43.281+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is very insightful, I currently have my contract logic all in one Core.ts file and it's definitely still cumbersome to work on. But for now, I have the basic logic down and it (should) work for publishing and completing bounty at a time. Once i'm sure this is working as intended, I'll pivot to a recursive zkSNARKs implementation, at which point, I'm following this to a tee. Make the circuits small and many, where each adds a bit more info to the overall proof.",
+      "author": {
+        "id": "1043967769953173565",
+        "name": "devtonite001",
+        "discriminator": "0000",
+        "nickname": "devtonite",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1043967769953173565/ee4deb3221e9f70132de5f5044865371.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1189896542274981928",
+        "channelId": "1187521420364894218",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 51
+}

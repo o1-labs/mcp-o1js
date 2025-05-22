@@ -1,0 +1,502 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1092492982109872281",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Poseidon hash from snarkyjs gives different result than from rust mina_hasher",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T16:27:50.707898+04:00",
+  "messages": [
+    {
+      "id": "1092492982109872281",
+      "type": "Default",
+      "timestamp": "2023-04-03T20:57:04.473+04:00",
+      "timestampEdited": "2023-04-03T20:58:06.518+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am trying to use the `proof-systems` (https://github.com/o1-labs/proof-systems) rust crates to do off-chain signing and hashing and I want it to be compatible with the snarkyjs zkApp.\n\nI've managed to get the signing compatible, however when I create the hasher in rust from the same `Hashable`  as a signer, I don't get the same result as from snarkyjs.\n\nHere I have a hashable struct:\n```rust\n#[derive(Clone)]\nstruct FieldMessage {\n    a: BaseField,\n}\n\nimpl Hashable for FieldMessage {\n    type D = NetworkId;\n\n    fn to_roinput(&self) -> ROInput {\n        ROInput::new().append_field(self.a)\n    }\n\n    fn domain_string(network_id: NetworkId) -> Option<String> {\n        match network_id {\n            NetworkId::MAINNET => \"MinaSignatureMainnet\",\n            NetworkId::TESTNET => \"CodaSignature\",\n        }\n        .to_string()\n        .into()\n    }\n}\n```\n\nSinging this message with mina_signer and later verifying in snarkyjs gives me correct result. It works both ways.\n\n```rust\nlet mut ctx = mina_signer::create_kimchi::<FieldMessage>(NetworkId::TESTNET);\n\nlet message = FieldMessage {\n    a: BaseField::from_str(\"42\").unwrap(),\n};\n\nlet sig = ctx.sign(&keypair, &message);\n```\n\nI can verify the `sig` in snarkyjs without any problem.\n\nHowever when I try to hash the same message, I am getting different results.\n\n```rust\nlet mut hasher = mina_hasher::create_kimchi::<FieldMessage>(NetworkId::TESTNET);\n\nlet message = FieldMessage {\n    a: BaseField::from_str(\"42\").unwrap(),\n};\n\nprintln!(\"{}\", hasher.hash(&message).to_biguint());\n```\nOutput: `6024360620293091109018114191494398743357651516154396759568096808649183166469`\n\n```typescript\nconst msg = Field(42);\n\nconsole.log(Poseidon.hash([msg]).toBigInt());\n```\nOutput: `19021527552571990502182546635536113945580344348338130036510755963756352285063`\n\nIt took me a while until I figured out how to get the same signature with mina_signer, but I can't figure out why could be hash different when the signer uses it under the hood.",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - o1-labs/proof-systems: The proof systems used by Mina",
+          "url": "https://github.com/o1-labs/proof-systems",
+          "timestamp": null,
+          "description": "The proof systems used by Mina. Contribute to o1-labs/proof-systems development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/xEMuT7_th59YB2pstcO8ZBhv08-75IaxvO_4JqvjPjQ/https/opengraph.githubassets.com/73fd21d0d84a2f09df7a8865e15c9253c1fc4288e02481e40b8de18354de295d/o1-labs/proof-systems",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD14",
+            "code": "thinking",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f914.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1092498168333217852",
+      "type": "Default",
+      "timestamp": "2023-04-03T21:17:40.965+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "have you checked that the input `ints` are the same?",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1092498399049293946",
+      "type": "Default",
+      "timestamp": "2023-04-03T21:18:35.972+04:00",
+      "timestampEdited": "2023-04-03T21:34:29.776+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah. ~~Also the signature would't be the same if they were different.~~",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1092501731746783303",
+      "type": "Default",
+      "timestamp": "2023-04-03T21:31:50.549+04:00",
+      "timestampEdited": "2023-04-03T21:34:02.253+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The signatures aren't actually same, however I am able to verify them.\n\nThis is the output of the rust signature\n```rust\nprintln!(\"rx: {}\", sig.rx.to_biguint());\nprintln!(\"s: {}\", sig.s.to_biguint());\n```\n`rx: 2355699371162162418732455224022155827035515518102597379507638182244539807417`\n`s: 7173154303036995994640947449569687151947065351124071738617980679368330425992`\n\nThis is the output of snarkyjs signature\n```typescript\nconsole.log(Signature.create(privateKey, [Field(42)]).toJSON());\n```\n`r: '27354290796246441128016254499398427113502277843207177648268567682015344533216',`\n`s: '21825127653487075065119104974107049971612661951640615697929239414573088304502'`\n\nSo they are different, but when I try to verify the signature from rust in snarkyjs using same keypair and message it returns true.\n```typescript\nconst rustSig = new Signature(\n  Field(BigInt(\"2355699371162162418732455224022155827035515518102597379507638182244539807417\")),\n  Scalar.fromBigInt(BigInt(\"7173154303036995994640947449569687151947065351124071738617980679368330425992\"))\n);\n\nconsole.log(rustSig.verify(publicKey, [Field(42)]).toBoolean());\n```\n`true`",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1092516204784128030",
+      "type": "Default",
+      "timestamp": "2023-04-03T22:29:21.19+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/MartinOndejka/mina-testing/ here is the repo with full code examples, in case somebody wanted to try it",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1092560466833834095",
+      "type": "Default",
+      "timestamp": "2023-04-04T01:25:14.085+04:00",
+      "timestampEdited": "2023-04-04T01:32:55.366+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've managed to get the same result using `mina-poseidon` crate.\n```rust\nlet mut s = poseidon::ArithmeticSponge::<BaseField, PlonkSpongeConstantsKimchi>::new(\n    pasta::fp_kimchi::static_params(),\n);\n\ns.absorb(&msg.to_roinput().to_fields());\n\nprintln!(\"hash: {:?}\", s.squeeze().to_biguint());\n```\nOutput: `19021527552571990502182546635536113945580344348338130036510755963756352285063`\n\nI would still like to know how to get this with `mina-hasher` though..",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1092577174214680628",
+      "type": "Default",
+      "timestamp": "2023-04-04T02:31:37.435+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah right, Poseidon in snarkyjs doesn't init the state like the mina_hasher does https://github.com/o1-labs/snarkyjs/blob/main/src/lib/hash.ts#L39-L44",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "snarkyjs/hash.ts at main · o1-labs/snarkyjs",
+          "url": "https://github.com/o1-labs/snarkyjs/blob/main/src/lib/hash.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/snarkyjs development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/5cBLqqsWsV8FMNRkpVRpMy9HNujzJud4G1xV2k-20kA/https/opengraph.githubassets.com/7acbd0ef9b26a6c7ab985da10d4cebbd3e62a920c7c494141741051f439a3350/o1-labs/snarkyjs",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1092717106375692288",
+      "type": "Reply",
+      "timestamp": "2023-04-04T11:47:39.862+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That makes sense! There's a `hashWithPrefix` in that same file that we use internally in snarkyjs (and mina-signer) to hash with a special initial state. Depending on what you need this for, the mina-signer package (contained in the snarkyjs repo) could potentially give you all the hashing and signing tools you need",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "141272134633783297",
+          "name": "faseris",
+          "discriminator": "0000",
+          "nickname": "Faserisko",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1092577174214680628",
+        "channelId": "1092492982109872281",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1092753479015088168",
+      "type": "Default",
+      "timestamp": "2023-04-04T14:12:11.775+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor I need to use it in the golang, therefore I decided to create wasm module from those crates. Is there some better solution that you would recommend?",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1092876951372439572",
+      "type": "Default",
+      "timestamp": "2023-04-04T22:22:49.879+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sounds like a plan, not sure if using JS from go is easier \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 10
+}

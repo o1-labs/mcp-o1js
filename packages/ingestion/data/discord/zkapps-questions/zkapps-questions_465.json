@@ -1,0 +1,582 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1190012195468234822",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "What's with CircuitString?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:20:53.2122643+04:00",
+  "messages": [
+    {
+      "id": "1190012195468234822",
+      "type": "Default",
+      "timestamp": "2023-12-28T23:23:36.757+04:00",
+      "timestampEdited": "2023-12-28T23:26:14.81+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```ts\nfunction createStruct<A, T extends InferProvable<A> = InferProvable<A>>(\n  type: A\n): Struct<InferProvable<A>> & (new (...args: T[]) => T) {\n  return class extends Struct(type) {} as any;\n}\n\nclass MyStruct extends createStruct({\n  name1: UInt32,\n  name2: UInt64,\n  name3: Character,\n  name4: CircuitString\n}) {}\n\nconst myStruct = new MyStruct({\n  name1: UInt32.from(0),\n  name2: UInt64.from(0),\n  name3: Character.fromString(\"\"),\n  name4: CircuitString.fromString(\"\")\n});\n\nmyStruct.name1 // UInt32\nmyStruct.name2 // UInt64\nmyStruct.name3 // Character\nmyStruct.name4 // any\n```\n\nI need to define the correct return type for the function created `Struct`. All primitive provable types work fine and define the types correctly, but when I deal with the `CircuitString` it has the `any` type. What may be wrong? Maybe I incorrectly define the return type for the function?",
+      "author": {
+        "id": "226698101480488960",
+        "name": "magestrio",
+        "discriminator": "0000",
+        "nickname": "magestrio",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/226698101480488960/190005bed69ed1260a1c91fc5680180f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1193670404456321085",
+      "type": "Default",
+      "timestamp": "2024-01-08T01:40:01.746+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello @magestrio! I am not sure if this is the reason, but while CircuitString is an array (of Characters, which are basically Fields), the others are Structs. This can be causing TS to show return type of CircuitString as any in your example. If you can share with me why you need to reach the return type of CircuitString, maybe I can share another solution. Moreover, it is possible to extend (or rewrite) the CircuitString class according to your needs. This can also be a good way of achieving the functionality you need. Please let me know if this helps \uD83D\uDE42",
+      "author": {
+        "id": "523199492716101653",
+        "name": "yunusgurlek",
+        "discriminator": "0000",
+        "nickname": "Yunus Gürlek",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "226698101480488960",
+          "name": "magestrio",
+          "discriminator": "0000",
+          "nickname": "magestrio",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/226698101480488960/190005bed69ed1260a1c91fc5680180f.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1194110653812703384",
+      "type": "Default",
+      "timestamp": "2024-01-09T06:49:25.372+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello @Yunus Gürlek. Thank you for answer.\n\nThe main goal is to have predefined methods in Struct. For our case is serialization and deserialization and it's named `Schema`.\n\nI am wondering, why TS can show return type for `Struct`, but cannot for us?",
+      "author": {
+        "id": "226698101480488960",
+        "name": "magestrio",
+        "discriminator": "0000",
+        "nickname": "magestrio",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/226698101480488960/190005bed69ed1260a1c91fc5680180f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "523199492716101653",
+          "name": "yunusgurlek",
+          "discriminator": "0000",
+          "nickname": "Yunus Gürlek",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ]
+    },
+    {
+      "id": "1194248063745806426",
+      "type": "Default",
+      "timestamp": "2024-01-09T15:55:26.453+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @magestrio , I'd like to clarify what you want to achieve. Your `createStruct` looks very much like `Struct` itself. Is my understanding correct that the goal here is to add additional instance methods to the `class` that extends the Struct?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "226698101480488960",
+          "name": "magestrio",
+          "discriminator": "0000",
+          "nickname": "magestrio",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/226698101480488960/190005bed69ed1260a1c91fc5680180f.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1194249120202891425",
+      "type": "Default",
+      "timestamp": "2024-01-09T15:59:38.332+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Regarding your issue -- I think it's the missing (private) constructor on CircuitString",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1194249371911471134",
+      "type": "Default",
+      "timestamp": "2024-01-09T16:00:38.344+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's the constructor that helps `InferProvable` figure out the type in the case of `CircuitValues` like `UInt32`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1194249919595298837",
+      "type": "Default",
+      "timestamp": "2024-01-09T16:02:48.922+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It works with a type hint:\n```ts\nclass MyStruct extends createStruct({\n  name1: UInt32,\n  name2: UInt64,\n  name3: Character,\n  name4: CircuitString as ProvableExtended<CircuitString, string>,\n}) {}\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1194866511249158164",
+      "type": "Reply",
+      "timestamp": "2024-01-11T08:52:55.828+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @gregor. Yes, the goal is to have a class that act exactly like `Struct`, but also includes extra methods necessary for the application's logic",
+      "author": {
+        "id": "226698101480488960",
+        "name": "magestrio",
+        "discriminator": "0000",
+        "nickname": "magestrio",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/226698101480488960/190005bed69ed1260a1c91fc5680180f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1194248063745806426",
+        "channelId": "1190012195468234822",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1194868178979913838",
+      "type": "Reply",
+      "timestamp": "2024-01-11T08:59:33.446+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The method will be used by end-users, and it would be better to avoid imposing type hinting on them.",
+      "author": {
+        "id": "226698101480488960",
+        "name": "magestrio",
+        "discriminator": "0000",
+        "nickname": "magestrio",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/226698101480488960/190005bed69ed1260a1c91fc5680180f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1194249919595298837",
+        "channelId": "1190012195468234822",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 9
+}

@@ -1,0 +1,751 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1091582183178768456",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to hide PublicKey in Struct OffchainStorage",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T16:38:29.6932146+04:00",
+  "messages": [
+    {
+      "id": "1091582183178768456",
+      "type": "Default",
+      "timestamp": "2023-04-01T08:37:53.086+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm testing this: https://github.com/o1-labs/snarkyjs/blob/main/src/examples/zkapps/voting/off_chain_storage.ts\nusing: \n```\nimport {\n  Field,\n  Mina,\n  Poseidon,\n  PublicKey,\n  Struct,\n  isReady,\n  shutdown,\n} from 'snarkyjs';\nimport { OffChainStorage } from './off_chain_storage';\n\nclass Mock extends Struct({\n  publicKey: PublicKey,\n}) {\n  static from(publicKey: PublicKey) {\n    return new Mock({ publicKey });\n  }\n\n  static empty() {\n    return Mock.from(PublicKey.empty());\n  }\n\n  hash(): Field {\n    return Poseidon.hash(this.publicKey.toFields());\n  }\n}\nlet proofsEnabled = false;\n\ndescribe.only('OffChainStorage', () => {\n  let account1: PublicKey,\n    account2: PublicKey,\n    account3: PublicKey,\n    account4: PublicKey;\n  let offChainStorage: OffChainStorage<any>;\n  beforeAll(async () => {\n    await isReady;\n    offChainStorage = new OffChainStorage<Mock>(4);\n  });\n  beforeEach(() => {\n    const Local = Mina.LocalBlockchain({ proofsEnabled });\n    Mina.setActiveInstance(Local);\n    ({ publicKey: account1 } = Local.testAccounts[0]);\n    ({ publicKey: account2 } = Local.testAccounts[1]);\n    ({ publicKey: account3 } = Local.testAccounts[2]);\n    ({ publicKey: account4 } = Local.testAccounts[3]);\n  });\n  describe('#constructor', () => {\n    it('should have a new OffChainStorage', () => {\n      expect(offChainStorage.height).toEqual(4);\n      expect(offChainStorage.getRoot().toString()).toEqual(\n        '544619463418997333856881110951498501703454628897449993518845662251180546746'\n      );\n    });\n  });\n\n  it('#set', () => {\n    const mock1 = Mock.from(account1);\n    offChainStorage.set(0n, mock1);\n    expect(offChainStorage.get(0n).hash()).toEqual(mock1.hash());\n    console.log('offChainStorage.get(0n):', offChainStorage.get(0n));\n    console.log(\n      'Private public key:',\n      offChainStorage.get(0n).publicKey.toBase58()\n    );\n  });\n\n  afterAll(() => {\n    setTimeout(shutdown, 0);\n  });\n});\n```\nI'm expecting the PublicKey within the storage should be private",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1091582183422042192",
+          "url": "https://cdn.discordapp.com/attachments/1091582183178768456/1091582183422042192/Schermafbeelding_2023-04-01_om_06.35.52.png?ex=680b11a1&is=6809c021&hm=58d7b275b1d1b9c6cfdc876f77db830f67ea78e85c98f1ae266b19d18891f3ae&",
+          "fileName": "Schermafbeelding_2023-04-01_om_06.35.52.png",
+          "fileSizeBytes": 107800
+        }
+      ],
+      "embeds": [
+        {
+          "title": "snarkyjs/off_chain_storage.ts at main · o1-labs/snarkyjs",
+          "url": "https://github.com/o1-labs/snarkyjs/blob/main/src/examples/zkapps/voting/off_chain_storage.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/snarkyjs development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/oq0JeXuuivAou1p4-mDQZ2PRAd8cKIXb0by7Yvi9ECg/https/opengraph.githubassets.com/d759ad232b9901ffc41321d0c3cfc59df22a2d5b4faeb2a856ab455bdcfdf626/o1-labs/snarkyjs",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFD",
+            "code": "thumbsup_tone3",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fd.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "810793675033673730",
+              "name": "br0wn_d3v",
+              "discriminator": "0000",
+              "nickname": "br0wnD3v",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/810793675033673730/2c6f77b0a0462b53cc3ce467970054c8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1091582641662341181",
+      "type": "Default",
+      "timestamp": "2023-04-01T08:39:42.397+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "MerkleTree is private:\nhttps://github.com/o1-labs/snarkyjs/blob/adea00085d1339154510404c83fc75b9d492aec4/src/examples/zkapps/voting/off_chain_storage.ts#L12\n ``` private merkleTree;```\n\nHere you only save the hash of the Mock Struct: \nhttps://github.com/o1-labs/snarkyjs/blob/adea00085d1339154510404c83fc75b9d492aec4/src/examples/zkapps/voting/off_chain_storage.ts#L19\n``` set(key: bigint, value: V): this {\n    super.set(key, value);\n    this.merkleTree.setLeaf(key, value.getHash());\n    return this;\n  }```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "snarkyjs/off_chain_storage.ts at adea00085d1339154510404c83fc75b9d4...",
+          "url": "https://github.com/o1-labs/snarkyjs/blob/adea00085d1339154510404c83fc75b9d492aec4/src/examples/zkapps/voting/off_chain_storage.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/snarkyjs development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/oq0JeXuuivAou1p4-mDQZ2PRAd8cKIXb0by7Yvi9ECg/https/opengraph.githubassets.com/d759ad232b9901ffc41321d0c3cfc59df22a2d5b4faeb2a856ab455bdcfdf626/o1-labs/snarkyjs",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091586244850491434",
+      "type": "Default",
+      "timestamp": "2023-04-01T08:54:01.464+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I could hash it before creating new Mock, but it doesn't make sense for me: ```class StructMock extends Struct({\n  publicKey: Field,\n}) {\n  static from(publicKey: Field) {\n    const hashPublicKey = Poseidon.hash(publicKey.toFields());\n    return new StructMock({ publicKey: hashPublicKey });\n  }\n\n  static empty() {\n    return StructMock.from(Field(0));\n  }\n\n  hash(): Field {\n    return Poseidon.hash(this.publicKey.toFields());\n  }\n}```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091591642328350720",
+      "type": "Default",
+      "timestamp": "2023-04-01T09:15:28.323+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I guess extending Map to OffChainStorage doesn't make sense: ```extends Map<bigint, V>```. You should only put the data as hash within a MerkleTree, otherwise everyone can query your data.",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1091591642101850182",
+          "url": "https://cdn.discordapp.com/attachments/1091582183178768456/1091591642101850182/Schermafbeelding_2023-04-01_om_07.12.06.png?ex=680b1a70&is=6809c8f0&hm=09bfd726319fe8c424f3ca8c389c3e083e66459fe187eb32ef57340615d327d4&",
+          "fileName": "Schermafbeelding_2023-04-01_om_07.12.06.png",
+          "fileSizeBytes": 726819
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091592410288635944",
+      "type": "Default",
+      "timestamp": "2023-04-01T09:18:31.419+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can someone explain me the idea of this Map within OffchainStorage?",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091624850612834305",
+      "type": "Default",
+      "timestamp": "2023-04-01T11:27:25.795+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "data is stored in a map, hash of the data is stored in the tree. This means you can still access your raw data and yet you can verify it through the tree. if you want to ‘hide’ your data and never be able to reconstruct them from the map, you must hash it before passing it to offchain storage",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091682877613285396",
+      "type": "Default",
+      "timestamp": "2023-04-01T15:18:00.51+04:00",
+      "timestampEdited": "2023-04-01T15:18:22.773+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The public key shouldn't be cryptographically hidden, it's a simple data structure that stores data with a few helper functions",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091683014372757594",
+      "type": "Default",
+      "timestamp": "2023-04-01T15:18:33.116+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if you want something more complex, you have to do some cryptography",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1091690737554436108",
+      "type": "Default",
+      "timestamp": "2023-04-01T15:49:14.466+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks guys..",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 9
+}

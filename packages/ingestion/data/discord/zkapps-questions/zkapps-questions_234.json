@@ -1,0 +1,500 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1254034178140405810",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "External schnorr sig verification",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:52:13.9374009+04:00",
+  "messages": [
+    {
+      "id": "1254034178140405810",
+      "type": "Default",
+      "timestamp": "2024-06-22T15:24:06.897+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "How should I approach verification (in o1js) of a schnorr signature created by some external service using secp256k1 and bip340 encoding?\nDo I have to ensure that some additional parameters are aligned between the signer and the verifier?\nHow do I use bip340 encoded signatures?",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "699336963228041247",
+              "name": "reymom",
+              "discriminator": "0000",
+              "nickname": "reymom",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/699336963228041247/cc363e7ad861ae57fc6c48a943a6e9d0.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD14",
+            "code": "thinking",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f914.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "281785907202228244",
+              "name": "anks_",
+              "discriminator": "0000",
+              "nickname": "anks",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+            },
+            {
+              "id": "738036747455299764",
+              "name": "zkkirol",
+              "discriminator": "0000",
+              "nickname": "zkKirol",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1255500669029453864",
+      "type": "Default",
+      "timestamp": "2024-06-26T16:31:25.571+04:00",
+      "timestampEdited": "2024-06-26T16:32:23.721+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So it seems you're asking how to approach a complex development task?\n\nI would start by reading the bip340 spec (https://en.bitcoin.it/wiki/BIP_0340), especially the verification algorithm, and trying to match it with o1js primitives (`ForeignCurve` for the elliptic curve operations, `SHA256` for hashing the message)\n\nRe encoding of signatures, that's not something you have to worry about in provable code. You can decode the signature in normal code and verify it in the format that's convenient for o1js. This still proves that you have a valid signature of the message you care about, which is likely what you want.\n\nSame for the public key: represent it in the format that's convenient in o1js.\n\nHowever, you do have to recreate the encoding of the _message_ if you want to reason about the message in provable code.",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1256554748467871774",
+      "type": "Default",
+      "timestamp": "2024-06-29T14:19:57.693+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks!\nOkay, I see. I have a follow up question. \nLet's say I've managed to recover `r` and `s` from bip340 signature. I would like to use `mina-signer`'s Signature, which has the covenient toBase58 from {r,s} where r and s are bigints. It is not exported thought. How can I do it in another way?",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1256561709762609212",
+      "type": "Default",
+      "timestamp": "2024-06-29T14:47:37.395+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do what?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1256562008069898352",
+      "type": "Default",
+      "timestamp": "2024-06-29T14:48:48.517+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "mina signer doesn't do secp256k1 signatures so I'm not sure how it would help",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1256562140450390036",
+      "type": "Default",
+      "timestamp": "2024-06-29T14:49:20.079+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Or are you just asking about the base 58 conversion?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1256909734867505163",
+      "type": "Default",
+      "timestamp": "2024-06-30T13:50:33.046+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Then what eliptic curve does Mina's Schnorr use?",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1256915209126150195",
+      "type": "Default",
+      "timestamp": "2024-06-30T14:12:18.211+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh right, the pasta curves.",
+      "author": {
+        "id": "281785907202228244",
+        "name": "anks_",
+        "discriminator": "0000",
+        "nickname": "anks",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281785907202228244/6f18b736e9ac58046f16eafb14817c44.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1257330504487931984",
+      "type": "Default",
+      "timestamp": "2024-07-01T17:42:32.341+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i did some work on schnorr signature verification here: https://github.com/0xStruct/mina-anons/blob/main/lab/src/bip340Verify.ts",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "mina-anons/lab/src/bip340Verify.ts at main · 0xStruct/mina-anons",
+          "url": "https://github.com/0xStruct/mina-anons/blob/main/lab/src/bip340Verify.ts",
+          "timestamp": null,
+          "description": "building privacy-first social dApps powered by Mina o1js, bringing Mina into other blockchains and platforms - 0xStruct/mina-anons",
+          "color": "#1E2327",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1257331081674489908",
+      "type": "Default",
+      "timestamp": "2024-07-01T17:44:49.953+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i also wrote down a note comparing BIP340 signature and Mina signature: https://github.com/0xStruct/mina-anons/blob/main/lab/BIP340.README.md",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "mina-anons/lab/BIP340.README.md at main · 0xStruct/mina-anons",
+          "url": "https://github.com/0xStruct/mina-anons/blob/main/lab/BIP340.README.md",
+          "timestamp": null,
+          "description": "building privacy-first social dApps powered by Mina o1js, bringing Mina into other blockchains and platforms - 0xStruct/mina-anons",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/6kuh3hInYwO9NQH0XQOMtJToKficIAMurnA7TSCO9cA/https/opengraph.githubassets.com/4f8329c3f03f3e2e5ae387c13144ca8de53ecb69ad6968712d8b6880713a5d99/0xStruct/mina-anons",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 10
+}

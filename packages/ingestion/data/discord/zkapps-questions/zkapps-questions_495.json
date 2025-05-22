@@ -1,0 +1,400 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1190314856092549201",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "01JS 0.15.* Breaking Change In Type System",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:36:22.1206652+04:00",
+  "messages": [
+    {
+      "id": "1190314856092549201",
+      "type": "Default",
+      "timestamp": "2023-12-29T19:26:16.673+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello,\n\nI have just upgraded from 01JS 0.14.* to 0.15.*. I noticed that all of my code became broken due to a change in Type definitons.\n\nMore specifically, when accessing the publicOutput of a recursive proof.\n\nExample code where there is a problem:\n```\nexport function proveExactGeoPointFromProvider(geoPointProviderProof: GeoPointProviderCircuitProof, sha3_512: SHA3_512.provable ): GeoPointCommitment {\n    geoPointProviderProof.verify();\n    const geoPoint: GeoPoint = geoPointProviderProof.publicOutput; // ISSUE IS HERE\n    const geoPointHash: Field = geoPoint.hash();\n\n    return new GeoPointCommitment({\n        geoPointHash: geoPointHash\n    });\n}\n```\n\nThe error message is:\n```\nType '{ latitude: Int64; longitude: Int64; factor: Int64; }' is not assignable to type 'GeoPoint'.\n```\n\nRelated code:\n\n```\n/**\n * Set of ZK circuits that allow for the creation of a proof attesting to the validity of a geographical point. \n * \n * The output of this should be as an input to GeoPointInPolygon.\n */\nexport const GeoPointProviderCircuit = ZkProgram({\n    name: \"GeoPointProviderCircuit\",\n\n    publicOutput: GeoPoint,\n\n    methods: {\n        fromLiteralGeoPoint: {\n            privateInputs: [GeoPoint],\n            method: geoPointFromLiteral,\n        },\n\n        fromOracle: {\n            privateInputs: [GeoPointSignatureVerificationCircuitProof, GeoPoint],\n            method: exactGeoPointFromOracle,\n        },\n\n    },\n});\n\nexport class GeoPointProviderCircuitProof extends ZkProgram.Proof(GeoPointProviderCircuit) {}\n```\n(More related code in reply)",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1190314856549720064",
+          "url": "https://cdn.discordapp.com/attachments/1190314856092549201/1190314856549720064/Screenshot_2023-12-29_at_17.20.07.png?ex=680b00d8&is=6809af58&hm=8f70bcb0fe8cb97fe6834101e95c3903ceec448e32a001669c328872dd12906a&",
+          "fileName": "Screenshot_2023-12-29_at_17.20.07.png",
+          "fileSizeBytes": 90520
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1190314929056645235",
+      "type": "Default",
+      "timestamp": "2023-12-29T19:26:34.069+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(Related code continued)\n```\n/**\n * Represents a geographical point. The point is represented as a pair of latitude and longitude values.\n * The latitude and longitude values are represented as Field values. The Field values are scaled to\n * the desired factor, in order to represent the desired percision. The percision is represented as\n * a Field value. The percision is the number of decimal points that the latitude and longitude values\n * have. For example, if the percision is 7, then the latitude and longitude values are scaled to\n * 7 decimal points. The latitude and longitude values are scaled by multiplying them with 10^7.\n * 10^7 is the scale factor. `factor` is used instead of percision to optimize the efficency, as it prevent\n  the need to perform exponentiation computations\n */ \n\nexport class GeoPoint extends Struct({\n  latitude: Int64,\n  longitude: Int64,\n  factor: Int64, // see note in docs\n}) {\n  hash() {\n    return Poseidon.hash([\n      this.latitude.toField(),\n      this.longitude.toField(),\n      this.factor.toField(),\n    ]);\n  }\n\n  toFields(): Field[] {\n    return [\n      this.latitude.toField(),\n      this.longitude.toField(),\n      this.factor.toField(),\n    ];\n  }\n\n  assertIsValid(): void {\n    // First, asser that the provided latidude and logitude values are within the accepted range\n    this.latitude.div(this.factor).magnitude.assertLessThanOrEqual(UInt64.from(90));\n    this.longitude.magnitude.assertLessThanOrEqual(UInt64.from(180));\n    this.factor.magnitude.assertLessThanOrEqual(UInt64.from(10n ** 7n)); // maximum percision is 7 decimal points\n  }\n}\n```\n\nIs there a normalized way of correcting the issue? I chekced the CHANGELOG.md, but could not find any referrences to this.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1190316369238036581",
+      "type": "Default",
+      "timestamp": "2023-12-29T19:32:17.435+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I got the same errors some time ago due to my error; see https://github.com/o1-labs/o1js/issues/1317",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1190316793378656366",
+      "type": "Default",
+      "timestamp": "2023-12-29T19:33:58.558+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@DFST checking ,thank you!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1190317898909089873",
+      "type": "Default",
+      "timestamp": "2023-12-29T19:38:22.137+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "UPDATE: \uD83E\uDD26‍♀️\n\nI didn't run `npm run build` after the upgrade.\n\nI come from the magical Python ecosystem, and there we don't deal with compilation of types explicitly. This is my first project in TypeScript, so still building a solid mental model \uD83D\uDE04",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            },
+            {
+              "id": "991037531615264808",
+              "name": "berzanorg",
+              "discriminator": "0000",
+              "nickname": "berzan",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 5
+}

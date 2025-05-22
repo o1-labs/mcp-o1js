@@ -1,0 +1,234 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1132410432901103786",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Check tx inclusion in block from \"pending\"",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:43:48.45715+04:00",
+  "messages": [
+    {
+      "id": "1132410432901103786",
+      "type": "Default",
+      "timestamp": "2023-07-23T00:34:46.372+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "What is the correct way to check that a transaction has been included in a block, and is no longer \"pending\"? Use the block height? or something else?",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1132416605230469251",
+      "type": "Default",
+      "timestamp": "2023-07-23T00:59:17.97+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I believe I've successfully figured it out, but I welcome any corrections if I'm mistaken.\n\nI can run this query https://berkeley.graphql.minaexplorer.com/\n\n```\n{\n  zkapp(query: {hash: \"5JuvNZtZmA9qRxDBM8q6ET9WkTqyMbjtgffjFhVpt6KTvw8S1CD8\"}) {\n    blockHeight\n  }\n}\n\n```\n\nIf transaction is in pending query will fail. Otherwise it will return blockHeiht.",
+      "author": {
+        "id": "778210464097894430",
+        "name": "ffilipovicc98",
+        "discriminator": "0000",
+        "nickname": "ffilipovicc98",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/778210464097894430/5fd7d0bcca3597b0ebf1ead616ba321c.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "374663548174991362",
+              "name": "maht0rz",
+              "discriminator": "0000",
+              "nickname": "maht0rz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1133079561089843210",
+      "type": "Default",
+      "timestamp": "2023-07-24T20:53:38.964+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Depends what you're using, Mina GraphQL API, SnarkyJS, etc?\n\nThis query can also work as well, it will give you info on why it failed. You'll need to implement some polling and manual checking for your transaction hash.\n\n```graphql\nbestChain(maxLength: 1) {\n    transactions {\n      zkappCommands {\n        hash\n        failureReason {\n          failures\n          index\n        }\n      }\n    }\n  }\n```",
+      "author": {
+        "id": "147939956642414593",
+        "name": ".martman",
+        "discriminator": "0000",
+        "nickname": "o1martin",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "827666021543837728",
+            "name": "pre-release-access",
+            "color": "#98C79F",
+            "position": 85
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/147939956642414593/f70f8767c85f26db2e8c664abab37de1.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1134514280172093570",
+      "type": "Default",
+      "timestamp": "2023-07-28T19:54:42.649+04:00",
+      "timestampEdited": "2023-07-28T19:56:41.441+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Where can I find the different APIs to use ? I see there is more than one (https://berkeley.graphql.minaexplorer.com, https://proxy.berkeley.minaexplorer.com/graphql, others). How can it be done using Snarky alone having the tx hash ?",
+      "author": {
+        "id": "687695163988246532",
+        "name": "mario_zito",
+        "discriminator": "0000",
+        "nickname": "Mario | Socialcap",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/687695163988246532/51383682fc5393f7ef35ec027d85c28a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

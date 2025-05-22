@@ -1,0 +1,2343 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1053615296067420220",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "error - the proof could not be constructed - rest of division by vanishing polynomial",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T17:23:47.8103136+04:00",
+  "messages": [
+    {
+      "id": "1053615296067420220",
+      "type": "Default",
+      "timestamp": "2022-12-17T14:11:01.808+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i'm trying to make sure my method process 1 action at a time by using reduce to conditionally access an action when it is its turn to be processed, like this:\n\n```let actions = this.reducer.getActions({\n      fromActionHash: startOfActionsRange,\n      endActionHash: endOfActionsRange\n    })\n\n    let isCurrentAction = Bool(false);\n\n    let {state: state} = this.reducer.reduce(\n      actions,\n      Field,\n      (state: Field, action: WrdhomAccount) => {\n        \n        isCurrentAction = (Field(actions.length).sub(numberOfPendingActions)).equals(actionTurn);\n\n        return Circuit.if(\n          isCurrentAction,\n          (() => {\n            action.actionOrigin.equals(REGISTER);\n            state = action.hash();\n            isCurrentAction = Bool(false);\n            return state;\n          })(),\n          (() => {return Field(0)})()\n        )\n      },\n      { state: Field(0), actionsHash: startOfActionsRange }\n    )```\n\ni can execute the method when i call it like `myZkApp.myMethod()`, but when i try to create a transaction that only calls this method, i'm getting this error:\n\n```the proof could not be constructed: rest of division by vanishing polynomial\npanicked at 'thrown an error', src/plonk_proof.rs:822:5```\n\ndoes anyone has an idea of what's going on?",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "✅",
+            "code": "white_check_mark",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2705.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1054589099853484194",
+      "type": "Default",
+      "timestamp": "2022-12-20T06:40:34.723+04:00",
+      "timestampEdited": "2022-12-20T10:28:26.736+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "didn't include the whole method cause i ran out of space, but here it is:\n\n```    @method registerAccount(witness: WrdhomMerkleWitness) {\n  \n      let numberOfPendingActions = this.numberOfPendingActions.get();\n      this.numberOfPendingActions.assertEquals(numberOfPendingActions);\n  \n      let startOfActionsRange = this.startOfActionsRange.get();\n      this.startOfActionsRange.assertEquals(startOfActionsRange);\n  \n      let endOfActionsRange = this.endOfActionsRange.get();\n      this.endOfActionsRange.assertEquals(endOfActionsRange);\n  \n      let accountsRoot = this.accountsRoot.get();\n      this.accountsRoot.assertEquals(accountsRoot);\n  \n      let actionTurn = this.actionTurn.get();\n      this.actionTurn.assertEquals(actionTurn);\n  \n      let actions = this.reducer.getActions({\n        fromActionHash: startOfActionsRange,\n        endActionHash: endOfActionsRange\n      })\n  \n      let isCurrentAction = Bool(false);\n  \n      let {state: state} = this.reducer.reduce(\n        actions,\n        Field,\n        (state: Field, action: WrdhomAccount) => {\n          \n          isCurrentAction = (Field(actions.length).sub(numberOfPendingActions)).equals(actionTurn);\n  \n          return Circuit.if(\n            isCurrentAction,\n            (() => {\n              action.actionOrigin.equals(REGISTER);\n              state = action.hash();\n              isCurrentAction = Bool(false);\n              return state;\n            })(),\n            (() => {return Field(0)})()\n          )\n        },\n        { state: Field(0), actionsHash: startOfActionsRange }\n      )\n      \n      this.accountsRoot.set(witness.calculateRoot(state));\n      this.numberOfPendingActions.set(numberOfPendingActions.sub(Field(1)));\n      this.actionTurn.set(actionTurn.add(1));\n    }```",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1054651821894946878",
+      "type": "Default",
+      "timestamp": "2022-12-20T10:49:48.823+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "just realized that the condition i was trying to use to access the specific action is always the same, which i don't think is what is preventing the proof from being generated, but makes the pattern kind of useless\n\nstill curious about why the proof can't be generated tho",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055401356783013921",
+      "type": "Default",
+      "timestamp": "2022-12-22T12:28:11.866+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "thanks for posting this! as far as I can see, you are using `Field(actions.length)` and compare something to it. This is a different constant every time you run this, therefore the circuit at proving time doesn't match the circuit at compile time. This explains the error",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055401543857352734",
+      "type": "Default",
+      "timestamp": "2022-12-22T12:28:56.468+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`actions` will just be an empty array at compile time",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055402013917184021",
+      "type": "Default",
+      "timestamp": "2022-12-22T12:30:48.539+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you could use `reduce` to get the actions length as a circuit variable that's tied to the real actions \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055402416121597972",
+      "type": "Default",
+      "timestamp": "2022-12-22T12:32:24.432+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```ts\nlet {state: length} = this.reducer.reduce(actions, Field, (state, _) => state.add(1), { state: Field(0), ... })\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055417026136522802",
+      "type": "Reply",
+      "timestamp": "2022-12-22T13:30:27.731+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That's actually how I was getting the `numberOfPendingActions` while executing the method that sets the range of the actions to be processed! \uD83D\uDE03 \n\nI'll revisit this approach and see if I find a way to actually write a proper `isCurrentAction` condition to get the right action \uD83D\uDE43 \n\nBut in case I do find a proper `isCurrentAction` condition, based on what you explained about the behavior of `Circuit.if` in other question, this still wouldn't work because it will end up returning `Field(0)` every time the method is executed except by when it's the turn of the last action to be processed by the method, right? \uD83E\uDD14",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1055402416121597972",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1055418397573251072",
+      "type": "Default",
+      "timestamp": "2022-12-22T13:35:54.707+04:00",
+      "timestampEdited": "2022-12-22T13:38:10.45+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "can you describe in more detail what you're trying to do? As I understand, you want to make `reduce` execute some logic, but only _for one specific action_, and ignore the other actions. Right?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055418522290892870",
+      "type": "Default",
+      "timestamp": "2022-12-22T13:36:24.442+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You could simply make the index of the action part of the state",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055418898025029713",
+      "type": "Default",
+      "timestamp": "2022-12-22T13:37:54.024+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and have another field in the state that captures what you actually want to do with the action (not sure what that is yet)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055448193766269010",
+      "type": "Reply",
+      "timestamp": "2022-12-22T15:34:18.673+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sure! I basically have a method that a user executes to request signing-up into a service. This method emits an action which contains the public key of the user and the nth time this method has been executed (being tracked by the `accountNumber` Field of the contract).\n\nThen there's another method that when executed gets the actions up to that point, counts them using reduce, and sets the `numberOfPendingActions` Field, plus the `endOfActionsRange` Field as the action hash that reduce returns. This method can't be executed again until `numberOfPendingActions` becomes zero again (Which is accomplished by subtracting 1 from it each time one of the methods that process the pending actions is executed. Similarly, when this method that sets the range is executed, it sets the `actionTurn` Field to zero, and `actionTurn` is added 1 each time one of the methods that processes the actions is executed. The idea is to use `actionTurn` as the index for traversing the range of pending actions)\n\nThen we have methods to process the pending actions and those can only process an action if it was emitted by the proper method. For example, the method that processes the sign-up request, checks if the action was emitted by the sign-up request method that sets the action origin property to an id that signals that it was emitted by it. The idea is that anyone observing the emitted actions can build the merkle tree by using `accountNumber` as index and the hashed action as the leaf value. Then to set the merkle tree root, anyone keeping track of the tree can feed the witness corresponding as the next action in the queue, as the input to the method, which is used to calculate the new merkle tree root and set it on-chain. Then the method updates `numberOfPendingActions` and `actionTurn`.\n\nThat's why it's important that the method is able to generate a proof and doesn't need to be signed by the contract deployer. So it can be permissionless and decentralized.",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1055418397573251072",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1055449310877188146",
+      "type": "Default",
+      "timestamp": "2022-12-22T15:38:45.013+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Following this same dynamic we would have a method that emits an action that signals adding funds to the balance of an account, by setting the balance property of the emitted action to the value of mina sent to the contract. Then the people observing the actions would add the funds, update the account in the tree, feed the witness, hash the action, calculate the new root, set it on-chain, and update `numberOfPendingActions` and `actionTurn`.\n\nFinally, the idea is that the contract deployer can't spent those funds unless the user executes another method that would free funds by emitting an action subtracting an amount from their account balance and adding it to the spent balance action property, which would allow the contract to send mina from it (We would set the contract to `send: Permissions.proof` for this). \n\nThe goal is running a decentralized social network where the nodes storing and serving posts know that a user has funds, so they should service them, keeping track off-chain of how much the user has spent, and once in a while prompt the user to free funds to keep servicing them. (I wonder if ZkPrograms can be used to improve this dynamic by generating proofs that can be fed to the contract methods to prove that the user has approved to free funds; that the posts have data availability; and so on). Although I think this kind of pattern would be useful for more than just decentralized social networks \uD83D\uDE0B",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055466102655815790",
+      "type": "Default",
+      "timestamp": "2022-12-22T16:45:28.485+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> That's why it's important that the method is able to generate a proof and doesn't need to be signed by the contract deployer. So it can be permissionless and decentralized\nthis is of course always important for zkApps! the ability to create proofs is the whole existence reason for snarkyjs / Mina",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055466516134510622",
+      "type": "Default",
+      "timestamp": "2022-12-22T16:47:07.066+04:00",
+      "timestampEdited": "2022-12-22T16:54:36.386+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> Following this same dynamic we would have a method that emits an action that signals adding funds to the balance of an account, by setting the balance property of the emitted action to the value of mina sent to the contract.\nany reason to have this be done as an action? it seems more brittle for the case of balance deposits because nobody can force the reduce method to be executed (signature by the user who deposits funds is required)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055467140922220574",
+      "type": "Default",
+      "timestamp": "2022-12-22T16:49:36.027+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sounds pretty interesting!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1055470177204064256",
+      "type": "Default",
+      "timestamp": "2022-12-22T17:01:39.933+04:00",
+      "timestampEdited": "2022-12-22T17:02:58.201+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok your use case is a bit more complicated than I expected \uD83D\uDE04\nI guess this is roughly how I would structure a reduce call which only operates on one particular action:\n```ts\n      let indexOfActionWeWantProcessed = ...;\n\n      let stateType = provable({ index: Field, otherState: MyState });\n      let { state: { otherState } } = this.reducer.reduce(\n        actions,\n        stateType,\n        ({ index, otherState }, action) => {\n          let isCurrentAction = index.equals(indexOfActionWeWantProcessed);\n          let newState = processAction(action);\n          return {\n            index: index.add(1)\n            otherState: Circuit.if(isCurrentAction, newState, state);\n          };\n        },\n        { state: { index: Field(0), otherState: ... }, actionsHash }\n      )\n```\nI hope this helps you figure out the details, if not, happy to help more",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD25",
+            "code": "fire",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f525.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1050599472071180389",
+              "name": "chrlyz",
+              "discriminator": "0000",
+              "nickname": "chrlyz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1055640770557784134",
+      "type": "Reply",
+      "timestamp": "2022-12-23T04:19:32.558+04:00",
+      "timestampEdited": "2022-12-23T04:35:08.714+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks! It's not like that HAS to be done through an action, it's just what I came up with while exploring Mina. The way I started implementing that was through having the public key of the user funding its account as input, then instantiating an AccountUpdate using the public key and making a \"send\" update to the contract address. I'm assuming the action only gets emitted if the transaction is successfully accepted by the network, is this correct?",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1055467140922220574",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1055642553459933264",
+      "type": "Reply",
+      "timestamp": "2022-12-23T04:26:37.635+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Cool! I'll try to assimilate this \uD83E\uDDD0",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1055470177204064256",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1062289035604807741",
+      "type": "Default",
+      "timestamp": "2023-01-10T12:37:22.464+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey, @gregor! I was able to implement your suggestion on what I'm trying to do \uD83D\uDE4C \n\nAlthough I'm mystified by this bit:\n\n`otherState: Circuit.if(isCurrentAction, newState, state);`\n\nSince unlike with `index` we aren't providing a way to reduce it. My `otherState` has type `Field` so it's simple, but even then I thought I would have to do this for it to work:\n\n`otherState: state.otherState.add(Circuit.if(isCurrentAction, newState, state));`\n\nbut it seems to work just like in your suggestion. How does it knows how to reduce whatever `Circuit.if` returns each time \uD83E\uDD14",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1062411817218998282",
+      "type": "Default",
+      "timestamp": "2023-01-10T20:45:15.882+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Reducing just means calling the function you provide, to each of the actions in turn (and updating the state each time)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1062522661340709024",
+      "type": "Reply",
+      "timestamp": "2023-01-11T04:05:43.18+04:00",
+      "timestampEdited": "2023-01-11T04:07:22.166+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, I can see that for  `index: index.add(1)` , since we are adding 1 with each call, but for `Circuit.if` we are just returning `newState` or `state`, so I don't understand how is that getting updated, like we aren't adding the returned values anywhere, or doing anything with them, so how are those getting reduced?",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1062411817218998282",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1062528546720976946",
+      "type": "Default",
+      "timestamp": "2023-01-11T04:29:06.364+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Like I would expect `otherState` end up with its initial value every time, except for the last action, kind of like this returns `0` when `actionTurn` is `1` or `2`, and returns `3` when `actionTurn` is `3`:\n\n```\nlet actions = [1, 2, 3]\n\nlet actionTurn = 3\n\nlet result = actions.reduce( (acc, action) => { if (action === actionTurn) {return action} else {return 0} }) \n\nconsole.log(result)```",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1062528820105719819",
+      "type": "Default",
+      "timestamp": "2023-01-11T04:30:11.544+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sorry if I ask too many questions \uD83D\uDE05",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1062730846517346444",
+      "type": "Reply",
+      "timestamp": "2023-01-11T17:52:58.394+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For the example code you gave, in fact, only the processing result of the last action in the actions list will be returned, and the processing results of all previous actions will be discarded, but the reducer should be used for such logic: Accumulate the processing results of each action , that is, the processing of the previous action will affect the processing result of the next action.",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1062528546720976946",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1062831904639954944",
+      "type": "Reply",
+      "timestamp": "2023-01-12T00:34:32.528+04:00",
+      "timestampEdited": "2023-01-12T00:56:57.832+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi, @Comdex! What I don't understand is the logic for the accumulation in this case for the values `Circuit.if` is returning. Do you know how those are getting reduced? The behavior I'm observing is that I end up with the value when `isCurrentAction` equals `true`, which is the behavior I'm actually looking for, but I don't understand how this is happening, since `Circuit.if` is just returning `Field(0)` for `otherState` every time, except for when `isCurrentAction` equals `true`, but there's no reduce operation at all, the values are just getting returned \uD83E\uDD14",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "790104669237805096",
+          "name": "zkcomdex",
+          "discriminator": "0000",
+          "nickname": "Comdex",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1062730846517346444",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1063038091096506378",
+      "type": "Reply",
+      "timestamp": "2023-01-12T14:13:51.21+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In fact, your sample code does not perform the reduce operation, but the reducer method in the contract will default that you have performed the reduce operation, and will only return the processing result of the last action. This should be a wrong usage behavior.",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1062831904639954944",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1063038869601255454",
+      "type": "Default",
+      "timestamp": "2023-01-12T14:16:56.82+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You need to process the state parameter of the callback (this is the state after your last action processing) in the reducer method to return a new state, but your code obviously does not handle it this way.",
+      "author": {
+        "id": "790104669237805096",
+        "name": "zkcomdex",
+        "discriminator": "0000",
+        "nickname": "Comdex",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1063250082100690985",
+      "type": "Reply",
+      "timestamp": "2023-01-13T04:16:13.804+04:00",
+      "timestampEdited": "2023-01-13T04:16:27.906+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The thing is it works, and not even just for `Field`. It also works for `PublicKey` with the initial state as `PublicKey.empty()`, so I'm trying to understand why, and it also was @gregor's suggestion, so I think it might be the right way to do this (I'm suspecting that the reducer somehow defaults to storing the last true value returned by `Circuit.if` which would be cool, but I haven't tested this)",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "790104669237805096",
+          "name": "zkcomdex",
+          "discriminator": "0000",
+          "nickname": "Comdex",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "952432654849028116",
+              "name": "GCP",
+              "color": "#E1C97A",
+              "position": 113
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790104669237805096/858633b41269b686a02a6f9351eb5567.png?size=512"
+        },
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1063038869601255454",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1063328981950136361",
+      "type": "Default",
+      "timestamp": "2023-01-13T09:29:44.994+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I created a simple example where I replicate this behavior:\nhttps://github.com/chrlyz/snarkyjs_patterns/tree/f82613b45a7412226e7d196d8afc2f4d7469508d/src",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "snarkyjs_patterns/src at f82613b45a7412226e7d196d8afc2f4d7469508d ·...",
+          "url": "https://github.com/chrlyz/snarkyjs_patterns/tree/f82613b45a7412226e7d196d8afc2f4d7469508d/src",
+          "timestamp": null,
+          "description": "Contribute to chrlyz/snarkyjs_patterns development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/ofixnMxWXME6QCR9Yu5p1oFFnfrZdxZBSbQHs42EVuE/https/opengraph.githubassets.com/933d5bc2853580c1ec33b40cee866b436d3cf1c72663092c998fc1333a739643/chrlyz/snarkyjs_patterns",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1063451243017687080",
+      "type": "Default",
+      "timestamp": "2023-01-13T17:35:34.304+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@chrlyz I'll try to explain it again. `Reducer.reduce` works exactly like `Array.reduce` in JavaScript. It takes a list, and an initial state, and a function to map an state and an element from the list to the new state. It then applies that function to each element in the list, always taking the current state and updating it with the returned state.\n\nHere's an example for `Array.reduce` that is equivalent to the \"secret number\" example you posted:\n```ts\nlet secretNumber = 5;\nlet actions = [ 3, 4, 5 ,6 ];\n\nlet state = actions.reduce((state, action) => action === secretNumber ? action : state, 0);\nconsole.log(state); // 5\n```\nDoes that help with understanding how it works?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1050599472071180389",
+          "name": "chrlyz",
+          "discriminator": "0000",
+          "nickname": "chrlyz",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1063451944213033090",
+      "type": "Default",
+      "timestamp": "2023-01-13T17:38:21.482+04:00",
+      "timestampEdited": "2023-01-13T17:40:54.296+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you can unroll the logic like this:\n```ts\nlet secretNumber = 5;\nlet actions = [ 3, 4, 5 ,6 ];\nlet f = (state, action) => action === secretNumber ? action : state;\n\n// this is what reduce does:\nlet state = 0: // initial state\nstate = f(state, action[0]);\nstate = f(state, action[1]);\nstate = f(state, action[2]);\nstate = f(state, action[3]);\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1063453094660284496",
+      "type": "Default",
+      "timestamp": "2023-01-13T17:42:55.77+04:00",
+      "timestampEdited": "2023-01-13T17:43:13.198+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "here's how you could implement `Array.reduce` yourself (in plain JS)\n```ts\nfunction reduce(actions, f, state) {\n  for (let action of actions) {\n    state = f(state, action);\n  }\n  return state;\n}\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1063556963776069702",
+      "type": "Reply",
+      "timestamp": "2023-01-14T00:35:40.097+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you for taking the time to explain this in such a clear way, @gregor, I really appreciate it. It all makes sense now \uD83D\uDE4C",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1063451243017687080",
+        "channelId": "1053615296067420220",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 34
+}

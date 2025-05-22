@@ -1,0 +1,454 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1215408194269225050",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Custom Token With Unregulated Transfers",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:17:43.5132979+04:00",
+  "messages": [
+    {
+      "id": "1215408194269225050",
+      "type": "Default",
+      "timestamp": "2024-03-08T01:18:14.706+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Good evening,\n\nI'm currently deep diving into custom tokens on Mina. I've been reading numerous code snippets from GitHub, as well as re-reading the documentation.\n\nI understand that token transactions are done through Account Updates (a tree of Account Updates), and that token transfers can be proxied by manually building the Account Updates in a method of the Token Smart contract.\n\nI am currently looking for a way to have a Token Smart Contract whose methods **can transfer tokens between any two Token Accounts on this Token Smart Contract**.  Is this something possible to do?\n\nAdditionally, is it correct to understand that `this.mint()` calls must be signed by the Token Smart Contract zkApp?\n\nThe idea is to have all of the minting and custom token transfers between two accounts to be fully handled by the Token Smart Contract. The actual accounts owning the tokens would not be able to transfer those tokens themselves, all of the token operations must be performed on the zkApp. Is this feasible to implement?\n\nThank you.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215963313708728350",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:04:05.494+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is already the case in some sense.",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215963401382264843",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:04:26.397+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don’t think there’s any good documentation on how tokens work, so I’ll try to explain",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215964284421537862",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:07:56.93+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You have account updates, and I assume you're already familiar with them given what you wrote, but to be sure:\nAn account update is basically a tuple of the account id (public key + token id), the preconditions for when it can apply (time, account state, network state, etc.), and an update it should perform to that account, and that account only.\nAccount updates can also have children, and these children (or rather, their hash) are passed as input to the zkapp circuit.\n\nTokens are extremely simple, (almost?) all checks for the balance are omitted if it's not the MINA token,\nbut the \"caller\" of the account update for an account of that token must be the token owner.",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215964365501628456",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:08:16.261+04:00",
+      "timestampEdited": "2024-03-09T14:08:20.621+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The caller can be thought of as the parent account update's account id, but this isn't always the case due to inheritance.",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215964555042226318",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:09:01.451+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Because of this, **all** operations must be checked by the token owner, even if you allow no minting at all, and only simple transfers,\nyou must implemen that logic in your circuit!",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215964602689392690",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:09:12.811+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You must implement the logic to check that the balance change is zero.",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215964890343280680",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:10:21.393+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So this part:\n> The idea is to have all of the minting and custom token transfers between two accounts to be fully handled by the Token Smart Contract. The actual accounts owning the tokens would not be able to transfer those tokens themselves, all of the token operations must be performed on the zkApp. Is this feasible to implement?\nis always true, for all tokens, always.",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215965086854807632",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:11:08.245+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "All the ledger rules are defined in https://github.com/MinaProtocol/mina/blob/develop/src/lib/transaction_logic/zkapp_command_logic.ml",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "mina/src/lib/transaction_logic/zkapp_command_logic.ml at develop · ...",
+          "url": "https://github.com/MinaProtocol/mina/blob/develop/src/lib/transaction_logic/zkapp_command_logic.ml",
+          "timestamp": null,
+          "description": "Mina is a cryptocurrency protocol with a constant size blockchain, improving scaling while maintaining decentralization and security. - MinaProtocol/mina",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/IkawNC5KzwpYSp14a90XuZ2JbaadZP3qQeorq7QVUh0/https/opengraph.githubassets.com/796e23b91fb29aa3bcdd17ad86c177912722056a1961248234ea6b234342941e/MinaProtocol/mina",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215965319072321536",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:12:03.61+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Search for all occurrences of `account_update_token_is_default`",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216802600603750513",
+      "type": "Default",
+      "timestamp": "2024-03-11T21:39:07.083+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks a lot for the detailed answer @Las ! Yes, tokens are not very well documented, but I've gathered a lot of useful information from the O1JS source code and some existing code on github.\n\nI will write back with furhter questions or updated.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "140202196758167552",
+              "name": "las0",
+              "discriminator": "0000",
+              "nickname": "Las",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "140202196758167552",
+          "name": "las0",
+          "discriminator": "0000",
+          "nickname": "Las",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 11
+}

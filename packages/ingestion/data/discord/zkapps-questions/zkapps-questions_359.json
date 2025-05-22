@@ -1,0 +1,1132 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1215438717829775420",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error while generating proofs using webworkers",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:18:06.1449638+04:00",
+  "messages": [
+    {
+      "id": "1215438717829775420",
+      "type": "Default",
+      "timestamp": "2024-03-08T03:19:32.09+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The following code runs inside a web worker, I am using comlink, and all the parameters are converted to strings and then back to o1js types inside the worker\n```\nasync function getDepositProof(\n    ownerPvtKeyBase58: string,\n    amount: string,\n    currentEncryptedBalance: string[],\n    r: string,\n    merkelWitness: string\n) {\n    const ownerPrivateKey = PrivateKey.fromBase58(ownerPvtKeyBase58);\n    const currentBalance = EncryptedBalance.fromFields(currentEncryptedBalance.map((e) => Field(e)));\n    if (proofsEnabled) {\n                // following line gives error\n        const proof = await depositProofProgram.generate( \n            ownerPrivateKey,\n            UInt64.from(amount),\n            currentBalance,\n            Field(r),\n            MerkleMapWitness.fromJSON(merkelWitness)\n        );\n        return proof.toJSON();\n    }\n        ...\n}\n```\nBut I get the following error\n```\nprivateBalance.store.ts:146 Uncaught (in promise) Error: x.toString() was called on a variable field element `x` in provable code.\nThis is not supported, because variables represent an abstract computation, \nwhich only carries actual values during proving, but not during compiling.\n\nAlso, reading out JS values means that whatever you're doing with those values will no longer be\nlinked to the original variable in the proof, which makes this pattern prone to security holes.\n\nYou can check whether your field element is a variable or a constant by using x.isConstant().\n\nTo inspect values for debugging, use Provable.log(x). For more advanced use cases,\nthere is `Provable.asProver(() => { ... })` which allows you to use x.toString() inside the callback.\nWarning: whatever happens inside asProver() will not be part of the zk proof.\n```\nNot sure which Variable is causing this when generating the proof.  \nanyway to debug this?",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "625988499056754688",
+              "name": "iamdev",
+              "discriminator": "0000",
+              "nickname": "IaM [ZK] <DEV>",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1215717441305579530",
+      "type": "Default",
+      "timestamp": "2024-03-08T21:47:04.945+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It seems that the code of zkProgram raises the error. can you share  code of the `generate` method of your zkProgram ?",
+      "author": {
+        "id": "151383322759528448",
+        "name": "qwadratic",
+        "discriminator": "0000",
+        "nickname": "qwadratic",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1215757185607536672",
+      "type": "Default",
+      "timestamp": "2024-03-09T00:25:00.725+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The problem is that you are doing x.toString() in provable code. During the circuit compilation, `x` does not have a value. \n\nThe problematic part is inside of the `generate`  method, like @qwadratic pointed out above.\n\nTo solve your proble: either remove the `.toString()`  from `x` or use it inside of `Provable.asProver(() => { ... })`",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "151383322759528448",
+          "name": "qwadratic",
+          "discriminator": "0000",
+          "nickname": "qwadratic",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1215967725243863180",
+      "type": "Default",
+      "timestamp": "2024-03-09T14:21:37.286+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Does MerkleMapWitness.fromJSON(merkelWitness) produce the correct result?",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216043330828238928",
+      "type": "Default",
+      "timestamp": "2024-03-09T19:22:03.062+04:00",
+      "timestampEdited": "2024-03-09T19:38:00.111+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@qwadratic @illya As you can see, I am not calling any toString() inside the code.\n```\nexport function generateDepositProofOutput(\n  ownerPrivateKey: PrivateKey,\n  amount: UInt64,\n  currentEncryptedBalance: EncryptedBalance,\n  r: Field,\n  merkelWitness: MerkleMapWitness\n): DepositProofOutput {\n  const depositHash = Poseidon.hash([...amount.toFields(), r]);\n  const nullifierHash = Poseidon.hash([r]);\n  const [root, key] = merkelWitness.computeRootAndKey(depositHash);\n  // TODO check key == [deposit.getPath(), depositHash]\n  const owner = ownerPrivateKey.toPublicKey();\n\n  const currentBal = currentEncryptedBalance.decrypt(ownerPrivateKey);\n  const resultingEncryptedBalance = EncryptedBalance.from(\n    currentBal.add(amount),\n    owner\n  );\n  const encryptedAmount = EncryptedBalance.from(amount, owner);\n\n  return new DepositProofOutput({\n    rootHash: root,\n    nullifierHash: nullifierHash,\n    to: owner,\n    resultingBalance: resultingEncryptedBalance,\n    currentBalance: currentEncryptedBalance,\n    amount: encryptedAmount,\n  });\n}\nexport const depositProofProgram = Experimental.ZkProgram({\n  publicOutput: DepositProofOutput,\n  methods: {\n    generate: {\n      privateInputs: [\n        PrivateKey,\n        UInt64,\n        EncryptedBalance,\n        Field,\n        MerkleMapWitness,\n      ],\n      method: generateDepositProofOutput,\n    },\n  },\n});\n```",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "151383322759528448",
+          "name": "qwadratic",
+          "discriminator": "0000",
+          "nickname": "qwadratic",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+        },
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1216045851361808515",
+      "type": "Reply",
+      "timestamp": "2024-03-09T19:32:04.004+04:00",
+      "timestampEdited": "2024-03-09T20:07:45.233+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think it does.\nI logged the merkelWitness in the main thread and worker and got the same value.\nDo you know other ways?",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1215967725243863180",
+        "channelId": "1215438717829775420",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1216047376385703986",
+      "type": "Reply",
+      "timestamp": "2024-03-09T19:38:07.598+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "EncryptedBalance Class\n```\nexport class EncryptedBalance\n  extends Struct({\n    publicKey: Group,\n    cipherText: [Field, Field],\n  })\n  implements ToFieldable\n{\n  public static from(amount: UInt64, publicKey: PublicKey) {\n    return new EncryptedBalance(\n      Encryption.encrypt(amount.toFields(), publicKey)\n    );\n  }\n  public toFields(): Field[] {\n    return this.cipherText.concat(this.publicKey.toFields());\n  }\n\n  public static fromFields(fields: Field[]) {\n    if (fields.length !== 4) {\n      throw new Error(\"Invalid input\");\n    }\n    return new EncryptedBalance({\n      publicKey: Group.fromFields(fields.slice(2, 4)),\n      cipherText: [fields[0], fields[1]],\n    });\n  }\n}\n```",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1216043330828238928",
+        "channelId": "1215438717829775420",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1216061284068622386",
+      "type": "Default",
+      "timestamp": "2024-03-09T20:33:23.448+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@TheDude \n> Not sure which Variable is causing this when generating the proof.\n> anyway to debug this?\n\nthe usual first thing I recommend is to take a close look at the stack trace! it should point you right to where this comes from in your code (i.e. somewhere in the `generate()` method).\n\nDo you get the stack trace from the worker? If yes, then post it / check it more carefully yourself.\n\nAnother question - is this even related to being run in a worker?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "368163996219604992",
+          "name": "thedude_og",
+          "discriminator": "0000",
+          "nickname": "TheDude",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+        }
+      ]
+    },
+    {
+      "id": "1216090349517148191",
+      "type": "Default",
+      "timestamp": "2024-03-09T22:28:53.191+04:00",
+      "timestampEdited": "2024-03-09T22:29:16.304+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor \nI didn't find the stack trace from the browser very helpful.\nThe proof generation was working when I used it inside jest tests.",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [
+        {
+          "id": "1216090349060227223",
+          "url": "https://cdn.discordapp.com/attachments/1215438717829775420/1216090349060227223/message.txt?ex=680b2ba5&is=6809da25&hm=584f7594c3036bd23e77361dad408357c66e1648acaa6f71d9a0d364ef79c707&",
+          "fileName": "message.txt",
+          "fileSizeBytes": 6998
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1216092488125911153",
+      "type": "Default",
+      "timestamp": "2024-03-09T22:37:23.075+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is the only thing I am doing differently than the test cases\n```\n    const currentBalance = EncryptedBalance.fromFields(currentEncryptedBalance.map((e) => Field(e)));\n```",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216108676058714112",
+      "type": "Reply",
+      "timestamp": "2024-03-09T23:41:42.579+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok yeah the minification makes that hard to interpret. Nonetheless, it does tell you that the error happens in `EncryptedBalance.check()`!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "368163996219604992",
+          "name": "thedude_og",
+          "discriminator": "0000",
+          "nickname": "TheDude",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1216090349517148191",
+        "channelId": "1215438717829775420",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1216109329837723658",
+      "type": "Reply",
+      "timestamp": "2024-03-09T23:44:18.452+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So can you reproduce the error in a simpler environment than browser + workers? In a nodejs script you'll get a nice stack trace. It will be faster to run than the browser setup. And then you can add logs etc to answer these questions for yourself - where is it that toString is called etc",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "368163996219604992",
+          "name": "thedude_og",
+          "discriminator": "0000",
+          "nickname": "TheDude",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1216092488125911153",
+        "channelId": "1215438717829775420",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1216109832961261759",
+      "type": "Default",
+      "timestamp": "2024-03-09T23:46:18.406+04:00",
+      "timestampEdited": "2024-03-09T23:46:28.074+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have one idea of a potential problem: `EncryptedBalance` defines a custom static `fromFields` method (overrides the autogenerated one), but not a matching _static_ `toFields()` method. Since these two don't match, o1js will serialize to fields differently than fromFields, and so a function like `witness()` would likely break. `witness()` calls `check()` so that might be it",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1216109971792461834",
+      "type": "Default",
+      "timestamp": "2024-03-09T23:46:51.506+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@TheDude you define an instance method `toFields` but o1js uses a static method",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "368163996219604992",
+          "name": "thedude_og",
+          "discriminator": "0000",
+          "nickname": "TheDude",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+        }
+      ]
+    },
+    {
+      "id": "1216483845122293760",
+      "type": "Reply",
+      "timestamp": "2024-03-11T00:32:29.854+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Adding the `static toFields()` fixed the error. \uD83D\uDE4F",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1216109971792461834",
+        "channelId": "1215438717829775420",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1216483853690998804",
+      "type": "Default",
+      "timestamp": "2024-03-11T00:32:31.897+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the trace from the nodejs script showed it was failing at a `check()` for a group element inside the EncryptedBalance I think.",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4C",
+            "code": "ok_hand",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44c.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 16
+}

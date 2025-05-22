@@ -1,0 +1,103 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1259536094790418533",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Checking if a runtimeMethod parameter Public Key is empty or not",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:48:53.7260434+04:00",
+  "messages": [
+    {
+      "id": "1259536094790418533",
+      "type": "Default",
+      "timestamp": "2024-07-07T19:46:46.047+04:00",
+      "timestampEdited": "2024-07-07T19:47:13.395+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In my protokit project, I'm trying to write a test case to check if provived public key is empty or not but getting this error:   ** Error in inclusion of tx, skipping Error: Cannot decode type Function, it has to be either a Struct, CircuitValue or built-in snarkyjs type.Caused by: PublicKey: not a valid group element**\n\nHere is the test case:\n```\n       const tx5 = await appChain.transaction(alice, () => {\n                mrln.slash(UInt64.from(identityCommitmentAlice), PublicKey.empty(), dummyProof);\n            });\n            await tx5.sign();\n            await tx5.send();\n            const block5 = await appChain.produceBlock();\n            expect(block5?.transactions[0].statusMessage).toBe('MRLN: empty receiver address');\n            block5?.transactions[0].status.assertEquals(false);\n```\n\nContract runtime Method;\n```\n    @runtimeMethod()\n    public slash(identityCommitment: UInt64, receiver: PublicKey, proof: MRLNProof) {\n        assert(receiver.isEmpty().equals(false), 'MRLN: empty receiver address');\n\n        const member = this.members.get(identityCommitment).value;\n        assert(member.address.isEmpty().equals(false));\n        assert((member.address.equals(receiver)).equals(false));\n\n        proof.verify();\n\n        const newWithdrawalState = new Withdrawal({ blockNumber: UInt64.from(0), amount: UInt64.from(0), receiver: PublicKey.empty() })\n        this.withdrawals.set(identityCommitment, newWithdrawalState);\n\n        const newMemberState = new User({ address: PublicKey.empty(), messageLimit: UInt64.from(0), index: UInt64.from(0) })\n        this.members.set(identityCommitment, newMemberState);\n\n        const FEE_RECEIVER = this.FEE_RECEIVER.get().value;\n        const FEE_PERCENTAGE = this.FEE_PERCENTAGE.get().value;\n\n...\n\n    }```\n\nAny ideas how can I solve it?\n\nThank you for your help!",
+      "author": {
+        "id": "860489000699559956",
+        "name": "d0x471b",
+        "discriminator": "0000",
+        "nickname": "Deniz",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/860489000699559956/45359e95fc7e171a0336260a4a731e64.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1259536095071174836",
+          "url": "https://cdn.discordapp.com/attachments/1259536094790418533/1259536095071174836/image.png?ex=6809b426&is=680862a6&hm=bfa2dd0c6a61945371dc66a037e4ba3c2a14b56d660ba08f6907dcd595952452&",
+          "fileName": "image.png",
+          "fileSizeBytes": 369019
+        },
+        {
+          "id": "1259536095390208091",
+          "url": "https://cdn.discordapp.com/attachments/1259536094790418533/1259536095390208091/image.png?ex=6809b426&is=680862a6&hm=5af6f4e123f5cdb94eb98766ef3a7195c8f8e55660ec832eaac9cb75467bcd8e&",
+          "fileName": "image.png",
+          "fileSizeBytes": 60448
+        },
+        {
+          "id": "1259536095675154534",
+          "url": "https://cdn.discordapp.com/attachments/1259536094790418533/1259536095675154534/image.png?ex=6809b426&is=680862a6&hm=3aa697cd55253bcf31f188d3f0c081165f946714db770d41e804802bdc3ad20e&",
+          "fileName": "image.png",
+          "fileSizeBytes": 162307
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 1
+}

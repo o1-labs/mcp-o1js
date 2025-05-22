@@ -1,0 +1,512 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1219029771137056980",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error on Proof.toJSON()",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:00:02.8007277+04:00",
+  "messages": [
+    {
+      "id": "1219029771137056980",
+      "type": "Default",
+      "timestamp": "2024-03-18T01:09:05.917+04:00",
+      "timestampEdited": "2024-03-24T07:11:47.745+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I stumbled on this unexpected error  \n\nZkappWorker.ts\n```ts\n      export type PlayerSignature = {\n    publicKey: string;\n    jsonSignature: string;\n};\n\nasync function start(white: PlayerSignature, black: PlayerSignature, fen?: string) {\n        let jsonProof: JsonProof;\n      initialRollupState = RollupState.from(\n          GameState.fromFEN(fen),\n          PublicKey.fromBase58(white.publicKey),\n          PublicKey.fromBase58(black.publicKey)\n      );\n      if (proofsEnabled) {\n          console.log('worker | generating real start');\n          console.time('start');\n          jsonProof = (\n              await PvPChessProgram.start(\n                  initialRollupState,\n                  Signature.fromJSON(white.jsonSignature),\n                  Signature.fromJSON(black.jsonSignature)\n              )\n          ).toJSON();\n          console.timeEnd('start');\n      } else {\n          console.log('worker | generating dummy start');\n          console.log(dummy,fen,white,black);\n          const proof= new PvPChessProgramProof({\n              proof: dummy,\n              publicInput: initialRollupState,\n              publicOutput: GameState.fromFEN(fen),\n              maxProofsVerified: 2\n          })\n          jsonProof=proof.toJSON();\n      }\n      return jsonProof;\n}\n```\n\nattached the console.log screenshot\n\nyou can see the PVPChessProgram implementation in my contract on github\nhttps://github.com/rudrakpatra/zkchess/blob/zkprogram/contracts/src/PvPChessProgram/PvPChessProgram.test.ts",
+      "author": {
+        "id": "549981810357043212",
+        "name": "dragonlord2712",
+        "discriminator": "0000",
+        "nickname": "dragonlord",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/549981810357043212/31416ea3b2d52c9eb736bba906293b2d.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1219029771422531765",
+          "url": "https://cdn.discordapp.com/attachments/1219029771137056980/1219029771422531765/image.png?ex=680aa871&is=680956f1&hm=895ab935e9b23b2539805f85ec2318eb39910d980f6e29259a3172a95d344f7b&",
+          "fileName": "image.png",
+          "fileSizeBytes": 226758
+        }
+      ],
+      "embeds": [
+        {
+          "title": "zkchess/contracts/src/PvPChessProgram/PvPChessProgram.test.ts at zk...",
+          "url": "https://github.com/rudrakpatra/zkchess/blob/zkprogram/contracts/src/PvPChessProgram/PvPChessProgram.test.ts",
+          "timestamp": null,
+          "description": "Contribute to rudrakpatra/zkchess development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/h1sufnTCvLBmWtN1uH9D6SysmRWxAlci7YPdugQ9d9Y/https/opengraph.githubassets.com/b14ff03c0596b5d2dfc0af1a9f4b116de4d6a8ba6f1f15605180f377d8254ca9/rudrakpatra/zkchess",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1220779685869260850",
+      "type": "Default",
+      "timestamp": "2024-03-22T21:02:38.101+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I did the same thing, It's working for me.\nhttps://github.com/revl-auction-house/main-turbo-repo/tree/privateTokenWallet/apps/web/src/worker",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "main-turbo-repo/apps/web/src/worker at privateTokenWallet · revl-au...",
+          "url": "https://github.com/revl-auction-house/main-turbo-repo/tree/privateTokenWallet/apps/web/src/worker",
+          "timestamp": null,
+          "description": "Contribute to revl-auction-house/main-turbo-repo development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/e78P1m6u80MtmK0rhVdI4OWQm2fi0McBTlViacHc30s/https/opengraph.githubassets.com/c47ce38a4ffafffd4c1235994e8061306b0000278f242762ae4e5ed8c65d4939/revl-auction-house/main-turbo-repo",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1221293341698691082",
+      "type": "Reply",
+      "timestamp": "2024-03-24T07:03:43.194+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Following this I created my dummy.test.ts .\n```ts\n    \n    it(\"test the dummy with Serialization with PvPChessProgram\", async()=>{\n        const [, dummy0] = Pickles.proofOfBase64(await dummyBase64Proof(), 2);\n        const dummy = parse(stringify(dummy0)!); //stringify & parsing same as yours\n        expect(dummy).toStrictEqual(dummy0);\n    });\n```\n\nIt looks like there is  a problem with the serialization.\nthe strictly equality does not hold,  It asks for this.....\nTake a look at the image ->",
+      "author": {
+        "id": "549981810357043212",
+        "name": "dragonlord2712",
+        "discriminator": "0000",
+        "nickname": "dragonlord",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/549981810357043212/31416ea3b2d52c9eb736bba906293b2d.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1221293341514403980",
+          "url": "https://cdn.discordapp.com/attachments/1219029771137056980/1221293341514403980/image.png?ex=680afb8f&is=6809aa0f&hm=8c1b4bcfa1645862b0af6923ca4116bbe269bed8490fca9829be6abf98add5d2&",
+          "fileName": "image.png",
+          "fileSizeBytes": 72364
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "368163996219604992",
+          "name": "thedude_og",
+          "discriminator": "0000",
+          "nickname": "TheDude",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1220779685869260850",
+        "channelId": "1219029771137056980",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1221295396521771088",
+      "type": "Default",
+      "timestamp": "2024-03-24T07:11:53.102+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@maht0rz pls help",
+      "author": {
+        "id": "368163996219604992",
+        "name": "thedude_og",
+        "discriminator": "0000",
+        "nickname": "TheDude",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "374663548174991362",
+          "name": "maht0rz",
+          "discriminator": "0000",
+          "nickname": "maht0rz",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1146001284516827148",
+              "name": "MF Engineering",
+              "color": "#9B59B6",
+              "position": 135
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "1083404176391929916",
+              "name": "Mina Community Creator",
+              "color": "#F68B8B",
+              "position": 74
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1222445902732595231",
+      "type": "Default",
+      "timestamp": "2024-03-27T11:23:35.158+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is there any chance of creating the dummy proof on the frontend web client.\nAny chances that it gets imported by mina on the next update.",
+      "author": {
+        "id": "549981810357043212",
+        "name": "dragonlord2712",
+        "discriminator": "0000",
+        "nickname": "dragonlord",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/549981810357043212/31416ea3b2d52c9eb736bba906293b2d.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1222446260523372556",
+      "type": "Default",
+      "timestamp": "2024-03-27T11:25:00.462+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor help! \uD83D\uDE2D",
+      "author": {
+        "id": "549981810357043212",
+        "name": "dragonlord2712",
+        "discriminator": "0000",
+        "nickname": "dragonlord",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/549981810357043212/31416ea3b2d52c9eb736bba906293b2d.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1222455699788005518",
+      "type": "Default",
+      "timestamp": "2024-03-27T12:02:30.958+04:00",
+      "timestampEdited": "2024-03-27T12:03:05.236+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`PvPChessProgramProof.dummy()`",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE4F",
+            "code": "pray",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f64f.svg"
+          },
+          "count": 3,
+          "users": [
+            {
+              "id": "368163996219604992",
+              "name": "thedude_og",
+              "discriminator": "0000",
+              "nickname": "TheDude",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+            },
+            {
+              "id": "374663548174991362",
+              "name": "maht0rz",
+              "discriminator": "0000",
+              "nickname": "maht0rz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+            },
+            {
+              "id": "549981810357043212",
+              "name": "dragonlord2712",
+              "discriminator": "0000",
+              "nickname": "dragonlord",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/549981810357043212/31416ea3b2d52c9eb736bba906293b2d.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 7
+}

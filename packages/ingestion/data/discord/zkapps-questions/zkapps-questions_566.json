@@ -1,0 +1,353 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1172896938287452310",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Private state/storage options with Mina",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:16:34.9298008+04:00",
+  "messages": [
+    {
+      "id": "1172896938287452310",
+      "type": "Default",
+      "timestamp": "2023-11-11T17:53:41.459+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey Team! In my zkApp I need to verify that an email address provided as input to my circuit is one from a known list of emails. This known list of emails can't be stored publicly as a variable on-chain as it contains sensitive personal data. Using Mina as is, what are my options in making this information private? I don't want to rely on storing this information in a centralised database and just passing it to the user in the ui.",
+      "author": {
+        "id": "703519206603227167",
+        "name": "vdm4",
+        "discriminator": "0000",
+        "nickname": "JonoVDM",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/703519206603227167/b77bb98a19778cad94e134db82696e77.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172901724390957076",
+      "type": "Default",
+      "timestamp": "2023-11-11T18:12:42.555+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It depends very much on the application, so would be good to know more details. One option could be to commit to the emails in the form of a Merkle tree and store the root on chain.\nThen you store the emails on a server and in the smart contract you check that some email is included in the tree before you use it. That way the server does not have to be trusted with sending the actual emails.\n(But I can't tell if I that fits the threat model of your app)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172908055848030219",
+      "type": "Default",
+      "timestamp": "2023-11-11T18:37:52.092+04:00",
+      "timestampEdited": "2023-11-11T18:44:30.943+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for the quick response Gregor! Especially on a Saturday \uD83D\uDE42 \n\nMy first mistake is not being explicit enough, when I said emails I meant email addresses. No actual emails are sent.\n\nFor my app I want someone in an organisation to be able to prove that another email address they have received mail from is part of that same organisation (hence the known list of emails we check against). The list of emails is maintained only by the organisation.\n\nAre you suggesting I should store a merkle tree root onchain and then get my zkcircuit to access that root, 'decode' it and then check the input email vs the list? And by default this root is privacy preserving in that no random can also decode the root?\n\nExcuse the poor use of terminology as I have never worked with Merkle trees before",
+      "author": {
+        "id": "703519206603227167",
+        "name": "vdm4",
+        "discriminator": "0000",
+        "nickname": "JonoVDM",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/703519206603227167/b77bb98a19778cad94e134db82696e77.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172928590833258506",
+      "type": "Default",
+      "timestamp": "2023-11-11T19:59:28.014+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No you can't decode the Merkle root back to email addresses. It's the other way round, if you have the email address you can assert that it hashes to the Merkle root, and thereby prove that it's part of the list",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172928712065421467",
+      "type": "Default",
+      "timestamp": "2023-11-11T19:59:56.918+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can check out our docs about Merkle trees!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172929254741258271",
+      "type": "Default",
+      "timestamp": "2023-11-11T20:02:06.302+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Btw I understood that you meant email addresses \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172929521268301844",
+      "type": "Default",
+      "timestamp": "2023-11-11T20:03:09.847+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The idea is that you store the list of email addresses off chain, so a server sends them to the UI",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172930032600096899",
+      "type": "Default",
+      "timestamp": "2023-11-11T20:05:11.758+04:00",
+      "timestampEdited": "2023-11-11T20:05:19.936+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you want to do it only with Mina then you're limited by the small onchain storage. But you can probably store all the email addresses in actions, in that case you don't need additional infrastructure",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172947926264320110",
+      "type": "Default",
+      "timestamp": "2023-11-11T21:16:17.94+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "THanks Gregor! \uD83D\uDE42  You have been very helpful. I am going to do some reading on the above to fully understand the different components \uD83D\uDE4F",
+      "author": {
+        "id": "703519206603227167",
+        "name": "vdm4",
+        "discriminator": "0000",
+        "nickname": "JonoVDM",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/703519206603227167/b77bb98a19778cad94e134db82696e77.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 9
+}

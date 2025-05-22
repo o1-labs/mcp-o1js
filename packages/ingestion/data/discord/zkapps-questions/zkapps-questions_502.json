@@ -1,0 +1,679 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1187760989303734302",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Custom Tokens Proof Authorization Not Working",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:40:16.9684713+04:00",
+  "messages": [
+    {
+      "id": "1187760989303734302",
+      "type": "Default",
+      "timestamp": "2023-12-22T18:18:07.382+04:00",
+      "timestampEdited": "2023-12-22T18:18:36.152+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "My Test <https://github.com/BerzanOrg/xane/blob/main/contracts/src/Playground.test.ts>\n\nWorking Test <https://github.com/o1-labs/o1js/blob/main/src/lib/token.test.ts#L122>\n\nIt looks like the account update callback makes doesn't work.\nBecause `AccountUpdate.body.balanceChange` is always zero, even though I've used `SmartContract.balance.subInPlace(amount)` for the callback.\n\nError message is below: \n```ts\nField.assertEquals(): 0 != 28948022309329048855892746252171976963363056481941560715954676764349957630337\n\n      85 |         const senderAccountUpdate = this.approve(callback, layout)\n      86 |         const negativeAmount = Int64.fromObject(senderAccountUpdate.body.balanceChange)\n    > 87 |         negativeAmount.assertEquals(Int64.from(amount).neg())\n         |                        ^\n```\n\nI didn't find out what the difference between the official test and mine is.  \nHow can I make the callback work as expected, so  `AccountUpdate.body.balanceChange` equals to `SmartContract.balance.subInPlace(amount)`?",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "639674469132140554",
+              "name": "godot3791",
+              "discriminator": "0000",
+              "nickname": "Martin",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/639674469132140554/dfb6473f38b635487e732dce4c944590.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1187787174628839474",
+      "type": "Default",
+      "timestamp": "2023-12-22T20:02:10.45+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've somehow managed to fix the error by playing with another test. \n<https://github.com/BerzanOrg/xane/blob/main/contracts/src/Callback.test.ts>\n\nHowever my original test still gives me the same error.",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187796919418880021",
+      "type": "Default",
+      "timestamp": "2023-12-22T20:40:53.789+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've found the reason!\nIt looks like callbacks must be created inside transactions.\n\nThis does work.\n```ts\nconst tx = await Mina.transaction(feePayerAddress, () => {\n    const callback = Experimental.Callback.create(zkAppB, 'approveSend', [amount])\n    AccountUpdate.fundNewAccount(feePayerAddress)\n    token.transfer(exchangeAddress, tokenAccount1, amount, callback)\n})\n```\n\nThis doesn't work. (as the callback is created outside)\n```ts\nconst callback = Experimental.Callback.create(zkAppB, 'approveSend', [amount])\nconst tx = await Mina.transaction(feePayerAddress, () => {\n    AccountUpdate.fundNewAccount(feePayerAddress)\n    token.transfer(exchangeAddress, tokenAccount1, amount, callback)\n})\n```",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187797170225680496",
+      "type": "Default",
+      "timestamp": "2023-12-22T20:41:53.586+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That would be great if it throws when created outside of a transaction.",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187797256955510784",
+      "type": "Default",
+      "timestamp": "2023-12-22T20:42:14.264+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Or an Eslint rule that warns would be great.",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "411173825258979328",
+              "name": "lamps6718",
+              "discriminator": "0000",
+              "nickname": "lamps",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/411173825258979328/ad54634c4cdae7f9c1cbb627bb82aeb1.png?size=512"
+            },
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1187797839112314981",
+      "type": "Default",
+      "timestamp": "2023-12-22T20:44:33.061+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've spent over 7 hours trying to fix and find the reason. I hope nobody will ever do the same mistake.",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "411173825258979328",
+              "name": "lamps6718",
+              "discriminator": "0000",
+              "nickname": "lamps",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/411173825258979328/ad54634c4cdae7f9c1cbb627bb82aeb1.png?size=512"
+            },
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1187878133697872002",
+      "type": "Default",
+      "timestamp": "2023-12-23T02:03:36.782+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks a lot for this amazing discover and warning! \uD83D\uDC4F",
+      "author": {
+        "id": "812656813111509003",
+        "name": "minaprotocol",
+        "discriminator": "0000",
+        "nickname": "Talha",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "978633436988338186",
+            "name": "Community Team",
+            "color": "#8B50FF",
+            "position": 140
+          },
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1166422452881076276",
+            "name": "RCM",
+            "color": "#92BE8D",
+            "position": 124
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/812656813111509003/7069472315364a095ebfcdea4e8419c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187883226648293549",
+      "type": "Reply",
+      "timestamp": "2023-12-23T02:23:51.036+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Maybe worth creating a gh issue about this please?",
+      "author": {
+        "id": "411173825258979328",
+        "name": "lamps6718",
+        "discriminator": "0000",
+        "nickname": "lamps",
+        "color": "#FFD170",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "849712902709313547",
+            "name": "node-working-group",
+            "color": "#99AAB5",
+            "position": 94
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/411173825258979328/ad54634c4cdae7f9c1cbb627bb82aeb1.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "991037531615264808",
+              "name": "berzanorg",
+              "discriminator": "0000",
+              "nickname": "berzan",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "991037531615264808",
+          "name": "berzanorg",
+          "discriminator": "0000",
+          "nickname": "berzan",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1187797839112314981",
+        "channelId": "1187760989303734302",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1188066661979398164",
+      "type": "Default",
+      "timestamp": "2023-12-23T14:32:45.427+04:00",
+      "timestampEdited": "2023-12-23T14:33:42+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've created an issue about it. https://github.com/o1-labs/o1js/issues/1347",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Warn if callbacks are used outside of transactions · Issue #1347 · ...",
+          "url": "https://github.com/o1-labs/o1js/issues/1347",
+          "timestamp": null,
+          "description": "Currently, when a callback is created outside of a transaction, it neither throws nor warns the developer by an Eslint rule. There isn't a runtime error while doing so, but as the callback does...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/30Q9GHbcEZLZtAGImn1xp0QrQrD7WL1kyc3K9OqMfsU/https/opengraph.githubassets.com/96cd8dd8a747508bfb7bcdae8d762988822d64ffbe101a101014ab4cfb0d424a/o1-labs/o1js/issues/1347",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "411173825258979328",
+              "name": "lamps6718",
+              "discriminator": "0000",
+              "nickname": "lamps",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/411173825258979328/ad54634c4cdae7f9c1cbb627bb82aeb1.png?size=512"
+            },
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 9
+}

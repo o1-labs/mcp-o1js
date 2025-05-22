@@ -1,0 +1,513 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1200897585024606248",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to verify a merkle tree with dynamic size ?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:01:12.1727139+04:00",
+  "messages": [
+    {
+      "id": "1200897585024606248",
+      "type": "Default",
+      "timestamp": "2024-01-28T00:18:15.868+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, I store action in my game in a merkle tree,  so I build a first merkle tree with a list of action , with the result I build a second merkle tree of 2 leaf the result and the actual root store on chain.\n\n```export class BuildMerkle {\n  merkle: Field;\n\n  constructor(actualMerkle: Field) {\n    this.merkle = actualMerkle;\n  }\n\n  build(gameActions: GameAction[]): {\n    merkle: Field;\n    expected: Field;\n  } {\n    const newTree = new MerkleTree(gameActions.length);\n    newTree.fill(gameActions.map((x) => x.hash()));\n\n    const finalMerkle = new MerkleTree(2);\n    finalMerkle.setLeaf(0n, this.merkle);\n    finalMerkle.setLeaf(1n, newTree.getRoot());\n\n    return { merkle: newTree.getRoot(), expected: finalMerkle.getRoot() };\n  }\n\n  getWitnessForAction(\n    gameActions: GameAction[],\n    gameAction: GameAction\n  ): {\n    witness: Witness;\n    witnessFinal: Witness;\n  } {\n    const newTree = new MerkleTree(gameActions.length);\n    newTree.fill(gameActions.map((x) => x.hash()));\n\n    let index = gameActions.findIndex((x) => x === gameAction);\n\n    let witness = newTree.getWitness(BigInt(index));\n\n    const finalMerkle = new MerkleTree(2);\n    finalMerkle.setLeaf(0n, this.merkle);\n    finalMerkle.setLeaf(1n, newTree.getRoot());\n\n    let witnessFinal = finalMerkle.getWitness(1n);\n\n    return { witness, witnessFinal };\n  }\n}\n```\n\nSo I try to verify if one action was effectively stored on the merkle root \n\nIn the test I got this error\nLength of witness 11-1 doesn't match static tree height undefined.\n\nMaybe I need to completely update my code, how I can manage it\n\nFull Code :\nhttps://github.com/youtpout/zkapp-ui/blob/main/contracts/src/gamemerkle.ts\nhttps://github.com/youtpout/zkapp-ui/blob/main/contracts/src/gamemerkle.test.ts",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "zkapp-ui/contracts/src/gamemerkle.ts at main · youtpout/zkapp-ui",
+          "url": "https://github.com/youtpout/zkapp-ui/blob/main/contracts/src/gamemerkle.ts",
+          "timestamp": null,
+          "description": "Contribute to youtpout/zkapp-ui development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/sKqhynzR5Nmd1FkXkJIswL4AxzB76o24iFoZ6-X5flI/https/opengraph.githubassets.com/df0fc02ffa2df42d7144bf7fa84a94f26c4681f90540f30330e045106585343f/youtpout/zkapp-ui",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "zkapp-ui/contracts/src/gamemerkle.test.ts at main · youtpout/zkapp-ui",
+          "url": "https://github.com/youtpout/zkapp-ui/blob/main/contracts/src/gamemerkle.test.ts",
+          "timestamp": null,
+          "description": "Contribute to youtpout/zkapp-ui development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/sKqhynzR5Nmd1FkXkJIswL4AxzB76o24iFoZ6-X5flI/https/opengraph.githubassets.com/df0fc02ffa2df42d7144bf7fa84a94f26c4681f90540f30330e045106585343f/youtpout/zkapp-ui",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1201460980547330149",
+      "type": "Reply",
+      "timestamp": "2024-01-29T13:36:59.828+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it seems I need to use predefined merklewitness size",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1183507975726448760",
+          "name": "anthony_epp3",
+          "discriminator": "0000",
+          "nickname": "Blink",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1183507975726448760/ca99a60a50779cb952d4040bebb8c06d.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1201329086228865104",
+        "channelId": "1200897585024606248",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1201461239176515604",
+      "type": "Default",
+      "timestamp": "2024-01-29T13:38:01.49+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\nexport class MerkleWitness8 extends MerkleWitness(8) {}\nexport class MerkleWitness2 extends MerkleWitness(2) {}\n\n  // pay to a player, proof it's on actual merkle root\n  @method payout(\n    gameAction: GameAction,\n    witness: MerkleWitness8,\n    witnessFinal: MerkleWitness2\n  ) {\n    gameAction.actionType.assertEquals(payoutAction);\n    const actualIndex = this.indexPayout.getAndRequireEquals();\n\n    const firstRoot = witness.calculateRoot(gameAction.hash());\n    const expectedRoot = witnessFinal.calculateRoot(firstRoot);\n\n    const actualRoot = this.root.getAndRequireEquals();\n    expectedRoot.assertEquals(actualRoot);\n\n    const index = gameAction.idItem;\n    const amount = gameAction.amount;\n    const receiver = gameAction.player1;\n\n    index.assertEquals(actualIndex.add(1));\n    this.send({ to: receiver, amount });\n    // update with new nonce\n    this.indexPayout.set(index);\n\n    // emit a event to retrieve deposit\n    const data = new PayoutData({ receiver, amount, index });\n    this.emitEvent('payout', data);\n  }\n```",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1201461487374434415",
+      "type": "Default",
+      "timestamp": "2024-01-29T13:39:00.665+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this code works but it doesn't solve my problem, witnessfinal will always be 2 but witness can have different size I don't know how I can handle it, maybe I need to create a custom type for this",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1201470464757858314",
+      "type": "Default",
+      "timestamp": "2024-01-29T14:14:41.04+04:00",
+      "timestampEdited": "2024-01-29T14:15:15.321+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Youtpout I'm not sure I get the problem, but in principle, Merkle trees are designed to store a huge amount of data with a small *fixed size* verification cost. So maybe just make it fixed size but large enough to fit your use case?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "295757910691151873",
+          "name": "youtpout",
+          "discriminator": "0000",
+          "nickname": "Youtpout",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1201470703984181308",
+      "type": "Default",
+      "timestamp": "2024-01-29T14:15:38.076+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "method inputs can't be dynamic sized btw",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1201471008759107654",
+      "type": "Default",
+      "timestamp": "2024-01-29T14:16:50.74+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(but there are various patterns to operate on dynamic-sized data structures within a fixed size circuit)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1201508972558028810",
+      "type": "Reply",
+      "timestamp": "2024-01-29T16:47:42.015+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "\"method inputs can't be dynamic sized btw\" thank you I got my answer",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1201470703984181308",
+        "channelId": "1200897585024606248",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1201542113683316826",
+      "type": "Reply",
+      "timestamp": "2024-01-29T18:59:23.475+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I change to a bigger MerkleWitness but it takes heavy time, I will find another solution",
+      "author": {
+        "id": "295757910691151873",
+        "name": "youtpout",
+        "discriminator": "0000",
+        "nickname": "Youtpout",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/295757910691151873/3c7813b443eec196ba05378b57e0e0ff.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1201470464757858314",
+        "channelId": "1200897585024606248",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 9
+}

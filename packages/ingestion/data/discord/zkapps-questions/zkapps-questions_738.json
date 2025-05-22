@@ -1,0 +1,121 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1129839357482774639",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "error TS2339: Property 'proof' does not exist on type '{ new (): Permissions; prototype: Permission",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:58:29.2830403+04:00",
+  "messages": [
+    {
+      "id": "1129839357482774639",
+      "type": "Default",
+      "timestamp": "2023-07-15T22:18:14.224+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "src/Guardian.ts:66:26 - error TS2339: Property 'default' does not exist on type '{ new (): Permissions; prototype: Permissions; }'.\n\n66           ...Permissions.default(),\n                            ~~~~~~~\n\nsrc/Guardian.ts:67:43 - error TS2339: Property 'proof' does not exist on type '{ new (): Permissions; prototype: Permissions; }'.\n\n67           setVerificationKey: Permissions.proof(),\n                                             ~~~~~\n\nWhats wrong with this?\n```\nclass Guardians extends SmartContract {\n    @state(Field) committedGuardians = State<Field>();\n    @state(Field) guardianCounter = State<Field>();\n\n    init() {\n        super.init();\n        this.committedGuardians.set(Field(0));\n        this.guardianCounter.set(Field(0));\n        this.account.permissions.set({\n          ...Permissions.default(),\n          setVerificationKey: Permissions.proof(),\n        });\n    }\n\n    @method\n    public addGuardian(guardianRoot: Field, counter: Field, commitment: Field): Bool {\n      this.committedGuardians.getAndAssertEquals();\n      this.guardianCounter.getAndAssertEquals();\n\n      this.committedGuardians.set(guardianRoot);\n      this.guardianCounter.set(counter);\n\n      this.emitEvent('GuardianAdded', { commitment });\n      return Bool(true);\n    }\n\n    @method replaceVerificationKey(verificationKey: VerificationKey) {\n      this.account.verificationKey.set(verificationKey);\n    }\n}```\n\n\nVersions:\nnode: v20.3.0\nnpm: 9.8.0\n\n```\n  \"peerDependencies\": {\n    \"snarkyjs\": \"0.12.*\"\n  }```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1129858603566772386",
+      "type": "Default",
+      "timestamp": "2023-07-15T23:34:42.848+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "solved, I used Github codespaces, it didn't automaticly add Permissions in import",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 2
+}

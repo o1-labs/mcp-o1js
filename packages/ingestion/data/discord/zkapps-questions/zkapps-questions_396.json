@@ -1,0 +1,213 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1209524250730569768",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Mina smart contracts without deployed smart contract?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:40:36.5561637+04:00",
+  "messages": [
+    {
+      "id": "1209524250730569768",
+      "type": "Default",
+      "timestamp": "2024-02-20T19:37:33.248+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am interested if it is possible to construct a Mina transaction and embed a circuit in it in a way that transaction becomes valid after proof of that circuit is provided.\n\nBased on the `o1js` examples and my own experience I can implement and deploy various smart contracts, they can implement custom logic, manage payments etc.\n\nHowever, sometimes a contract doesn't really need an on-chain component and deploying a contract is an unnecessary waste of resources. Here are few examples.\n\nExample 1: Atomic Swap.\nImagine I have a Circuit that can, given a trusted BTC block hash, list of consecutive blocks verify PoW and ensure a transaction has been made.\nI could create a Mina transaction that sends X amount of Mina in exchange of Y amount BTC, use the above circuit to verify if BTC transaction was made. I provide the transaction to the person who wishes to send BTC, this transaction would automatically become valid if the BTC transfer becomes valid. There is no need to deploy a smart contract and spend 1 Mina on account creation fee.\n\nExample 2: Puzzle Prize\nI construct some puzzle game and implement a Circuit that is capable of verifying the solution. I fund a prize of X Mina for a person who solves the puzzle. I construct a transaction for X Mina and leave the receiver blank. Then I publish the puzzle and the unfinished transaction on my website. Anyone who solves the puzzle can compile the Circuit and compute the proof, put own Mina address and make the transaction become valid, broadcast it to the network and claim the prize. In this example it would also be a waste to deploy a smart contract and spend 1 Mina account creation fee.\n\nMy question is, is it possible to make such conditional transactions? Is there some example for it?",
+      "author": {
+        "id": "281787111718518786",
+        "name": "_renzokuken",
+        "discriminator": "0000",
+        "nickname": "renzokuken",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281787111718518786/faaa1929d3bb42886fd38b7833f07a31.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1209533909285740564",
+      "type": "Default",
+      "timestamp": "2024-02-20T20:15:56.027+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can transform your own account into a smart contract by setting the verification key and setting correct permissions. Then the user can withdraw from your account based on the custom logic you write into the circuit.\n\nWith the first example you would add a method which verifies the BTC proof, checks for the correct nonce and withdraws money. You could do the second example the same way.",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1209535051486863371",
+      "type": "Default",
+      "timestamp": "2024-02-20T20:20:28.349+04:00",
+      "timestampEdited": "2024-02-20T20:20:45.309+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> However, sometimes a contract doesn't really need an on-chain component\nIt kind of does, the node need to be able to verify the proof against the verification key. You could however send to user the signed account update updating your verification key, so the transaction could be applied solely by the user.",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1209592361290702908",
+      "type": "Default",
+      "timestamp": "2024-02-21T00:08:12.071+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> Imagine I have a Circuit that can, given a trusted BTC block hash, list of consecutive blocks verify PoW and ensure a transaction has been made.\n> I could create a Mina transaction that sends X amount of Mina in exchange of Y amount BTC, use the above circuit to verify if BTC transaction was made. I provide the transaction to the person who wishes to send BTC, this transaction would automatically become valid if the BTC transfer becomes valid. There is no need to deploy a smart contract and spend 1 Mina on account creation fee.\n\nsounds like a smart contract to me \uD83D\uDE05 \nas @Faserisko said, a smart contract is just any account which can verify proofs",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "141272134633783297",
+          "name": "faseris",
+          "discriminator": "0000",
+          "nickname": "Faserisko",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 4
+}

@@ -1,0 +1,121 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1127686406815359006",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Require Two Signatures To Commit State On-Chain",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T15:10:12.8125346+04:00",
+  "messages": [
+    {
+      "id": "1127686406815359006",
+      "type": "Default",
+      "timestamp": "2023-07-09T23:43:10.785+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Good afternoon,\n\nIs it possible to require the presence of two signatures in order to commit the data on chain?\n\nLet me give you an example. Let's assume an HTTP client and a server. There is a smart contract that allows the user to set an integer value (Field) on chain. The  smart contract is owned by the server. The server tells the client which number to set on the smart contract, and the client must perform that write.\n\nThe problem is that there is no way to enforce that the number that the client writes on chain is the ones that the server requested. One way to solve the problem would be for the server to write the number that it wants the client to write on-chain (or a hash of that value), and have the write method of the client verify wether the number that the client is writing is equal to that value. However, this requires two transactions and is inefficient.\n\nIs it possible to instead have the client generate the proof, send that proof to the server via HTTP, have the server verify the proof and the public outputs, ensuring that the public output is indeed the number that the server wants the client to write, and in the affirmative case signing the transaction itself (in addition to the existing client signature), and then committing that value on-chain?\n\nThis approach would probably require two methods: one for the client to generate the proof, signing that transaction, then sending it to the server who would sign that transaction as well, and then send the public output on-chain.\n\nSuch an approach would allow the smart contract owner (the server) to verify what is a valid data, while only writing data that has been produced by the client.\n\nFrom that I remember in reading in the documentation, such indeed would be possible. I only have time to dive deep into this later tomorrow or after tomorrow, and it would be very helpful if someone could point to the relevant pattern, code samples or other helpful resources.\n\nThank you!",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1127752632744808478",
+      "type": "Default",
+      "timestamp": "2023-07-10T04:06:20.277+04:00",
+      "timestampEdited": "2023-07-10T05:06:59.623+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You could probably sign a message that is the result of hashing the user address and the number you want the user to set, then share this signature, message, and number with the user, so the user inputs these values for a contract method like this:\n\n```  @method updateState(\n    hashedNumberAndUserAddressSignature: Signature,\n    hashedNumberAndUserAddress: Field,\n    number: Field,\n    userAddress: PublicKey\n  ) {\n    const isSigned = hashedNumberAndUserAddressSignature.verify(\n      this.address,\n      [hashedNumberAndUserAddress]\n    );\n    isSigned.assertTrue();\n\n    hashedNumberAndUserAddress.assertEquals(\n      Poseidon.hash([number].concat(userAddress.toFields()))\n    );\n\n    const accountUpdate = AccountUpdate.create(userAddress);\n    accountUpdate.requireSignature();\n\n    this.number.set(number);\n  }\n}```",
+      "author": {
+        "id": "1050599472071180389",
+        "name": "chrlyz",
+        "discriminator": "0000",
+        "nickname": "chrlyz",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1050599472071180389/4a840b88bc5da50d607bf7cf7749d9ef.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 2
+}

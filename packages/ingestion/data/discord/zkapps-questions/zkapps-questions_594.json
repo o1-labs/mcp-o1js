@@ -1,0 +1,360 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1169898903517265920",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "TypeError: x.toConstant is not a function",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:33:25.3938207+04:00",
+  "messages": [
+    {
+      "id": "1169898903517265920",
+      "type": "Default",
+      "timestamp": "2023-11-03T11:20:34.269+04:00",
+      "timestampEdited": "2023-11-03T11:22:33.528+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Smart Contract:\n`\nimport { \n    Field,\n    SmartContract,\n    state,\n    State,\n    method,\n    PrivateKey,\n    CircuitString,\n    Encryption\n} from 'o1js';\n\nlet privateKey = PrivateKey.random();\nlet publicKey = privateKey.toPublicKey();\n\nexport class Password extends SmartContract {\n  @state(Field) password = State<Field[]>();\n  \n  @method initState(firstPassword: CircuitString) {\n        const passwordField = firstPassword.toFields();\n        const passwordCipher = Encryption.encrypt(passwordField, publicKey);\n\n        const decryptedField = Encryption.decrypt(passwordCipher, privateKey);\n\n        this.password.set(passwordCipher.cipherText);\n  }\n  \n  @method updatePassword(newPassword: CircuitString) {\n    const x = this.password.get();\n    this.password.assertEquals(x);\n\n        const newPasswordField = newPassword.toFields();\n        const newPasswordCipher = Encryption.encrypt(newPasswordField, publicKey);\n\n        const decryptedField = Encryption.decrypt(newPasswordCipher, privateKey)\n\n    this.password.set(newPasswordCipher.cipherText);\n  }\n}\n`\n\nOutput:\n`\n         throw err;\n         ^\n\nTypeError: x.toConstant is not a function\n    at file:///Users/furkan/Playground/Mina/password-app/node_modules/o1js/dist/node/lib/circuit_value.js:429:62\n    at Array.map (<anonymous>)\n    at toConstant (o1js/dist/node/lib/circuit_value.js:429:49)\n    at file:///Users/furkan/Playground/Mina/password-app/node_modules/o1js/dist/node/lib/mina.js:82:90\n`",
+      "author": {
+        "id": "556806273702821888",
+        "name": "furkanakalcom",
+        "discriminator": "0000",
+        "nickname": "Furkan",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/556806273702821888/374b29c1b676e76d2563e67e0f4ecebc.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1169946068201517118",
+      "type": "Default",
+      "timestamp": "2023-11-03T14:27:59.206+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello Furkan! In the example you have, your state `password` is defined as a Field array, but you cannot define an array state like this. In o1js, all arrays must have a static size defined before hand, so you need to use something like `Struct` etc to define array states. (See this tutorial for more examples: https://docs.minaprotocol.com/zkapps/tutorials/common-types-and-functions)",
+      "author": {
+        "id": "523199492716101653",
+        "name": "yunusgurlek",
+        "discriminator": "0000",
+        "nickname": "Yunus Gürlek",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1169985004244320387",
+      "type": "Default",
+      "timestamp": "2023-11-03T17:02:42.282+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @Yunus Gürlek! I initially thought of that, but I couldn’t define a Struct having a dynamic size.",
+      "author": {
+        "id": "556806273702821888",
+        "name": "furkanakalcom",
+        "discriminator": "0000",
+        "nickname": "Furkan",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/556806273702821888/374b29c1b676e76d2563e67e0f4ecebc.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "523199492716101653",
+          "name": "yunusgurlek",
+          "discriminator": "0000",
+          "nickname": "Yunus Gürlek",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ]
+    },
+    {
+      "id": "1169992693972209796",
+      "type": "Default",
+      "timestamp": "2023-11-03T17:33:15.656+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can define a static size array with Provable.array(). But keep in mind that there is the on-chain state limitation, you can store only 8 fields as a state per smart contract.",
+      "author": {
+        "id": "226698101480488960",
+        "name": "magestrio",
+        "discriminator": "0000",
+        "nickname": "magestrio",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/226698101480488960/190005bed69ed1260a1c91fc5680180f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1170019664714268692",
+      "type": "Default",
+      "timestamp": "2023-11-03T19:20:25.982+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks @magestrio!",
+      "author": {
+        "id": "556806273702821888",
+        "name": "furkanakalcom",
+        "discriminator": "0000",
+        "nickname": "Furkan",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/556806273702821888/374b29c1b676e76d2563e67e0f4ecebc.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "226698101480488960",
+          "name": "magestrio",
+          "discriminator": "0000",
+          "nickname": "magestrio",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/226698101480488960/190005bed69ed1260a1c91fc5680180f.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1170129933255843900",
+      "type": "Reply",
+      "timestamp": "2023-11-04T02:38:36.051+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes defining dynamic sized structures is not possible. Instead, you can use recursion to perform some operation for some custom amount of times",
+      "author": {
+        "id": "523199492716101653",
+        "name": "yunusgurlek",
+        "discriminator": "0000",
+        "nickname": "Yunus Gürlek",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "556806273702821888",
+          "name": "furkanakalcom",
+          "discriminator": "0000",
+          "nickname": "Furkan",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/556806273702821888/374b29c1b676e76d2563e67e0f4ecebc.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1169985004244320387",
+        "channelId": "1169898903517265920",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 6
+}

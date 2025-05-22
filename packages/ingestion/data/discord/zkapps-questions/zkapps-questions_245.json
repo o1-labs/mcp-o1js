@@ -1,0 +1,121 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1255068862945169501",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to get block timestamp using the GraphQL endpoint?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:59:04.1448475+04:00",
+  "messages": [
+    {
+      "id": "1255068862945169501",
+      "type": "Default",
+      "timestamp": "2024-06-25T11:55:34.978+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am able to do something like this currently\n```typescript\nimport {\n  fetchLastBlock\n} from \"o1js\";\n\nlet endpointGraphQL = \"https://proxy.devnet.minaexplorer.com/graphql\";\nlet block = await fetchLastBlock(endpointGraphQL);\n```\nand response would be something like\n```json\n{\n    \"snarkedLedgerHash\": \"18155345689904873780326474261688994289273150278617622200527514755318536450159\",\n    \"blockchainLength\": \"320887\",\n    \"minWindowDensity\": \"3\",\n    \"totalCurrency\": \"1428641108000001000\",\n    \"globalSlotSinceGenesis\": \"482231\",\n    \"nextEpochData\": {\n        \"ledger\": {\n            \"hash\": \"19559515451087719196284673123582115706905649724476613997963497991221983710635\",\n            \"totalCurrency\": \"1428304893000001000\"\n        },\n        \"seed\": \"9860827300905481516568420132713328015815209139062545620837624473101410657367\",\n        \"startCheckpoint\": \"28221185404234854505019578838247635814005271881000262461559592500075497501415\",\n        \"lockCheckpoint\": \"23219034713587588735965460800111977504610009658091260356082846573577038687735\",\n        \"epochLength\": \"448\"\n    },\n    \"stakingEpochData\": {\n        \"ledger\": {\n            \"hash\": \"21851597115865189185844097656615845355726767114623887354919485547304049674011\",\n            \"totalCurrency\": \"1424806946000001000\"\n        },\n        \"seed\": \"23014700653747257526007571474168673736814170440179274262189819333357745220386\",\n        \"startCheckpoint\": \"9741946173498566559147461278805321926138871582397490153312352007908737004304\",\n        \"lockCheckpoint\": \"2049493790049162230628173004965507277116918737415280444224428711657173457816\",\n        \"epochLength\": \"4780\"\n    }\n}\n```\nwhat I am interested is the timestamp of that particular block. I know it has `globalSlotSinceGenesis` and I could compute it using `genesisTimestamp + (globalSlotSinceGenesis * 180000)` formula but:\n1. Still not sure how to fetch `genesisTimestamp`...\n2. Wouldn't it be just an estimate when block should be created instead of when it was created?",
+      "author": {
+        "id": "281787111718518786",
+        "name": "_renzokuken",
+        "discriminator": "0000",
+        "nickname": "renzokuken",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281787111718518786/faaa1929d3bb42886fd38b7833f07a31.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1255069800447610920",
+      "type": "Default",
+      "timestamp": "2024-06-25T11:59:18.496+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I will also add that I don't need it in the prover interface. I just want to display some stats in the frontend. Basically what I need is:\n1. User knows current blockchain length as a number.\n2. User is able to perform certain action during a time window expressed in blocks, between certain other blockchain length values.\n3. I want to display an estimate when the user will be able to perform those actions, basically I take number of blocks that will occur starting from current block, multiply by `180000` (block time - 3 minutes). Problem is starting timestamp, which is current block timestamp.",
+      "author": {
+        "id": "281787111718518786",
+        "name": "_renzokuken",
+        "discriminator": "0000",
+        "nickname": "renzokuken",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281787111718518786/faaa1929d3bb42886fd38b7833f07a31.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 2
+}

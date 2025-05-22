@@ -1,0 +1,1949 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1131426170576052385",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to verify an array of Proof from one ZkProgram within another ZkProgram?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:47:46.0255846+04:00",
+  "messages": [
+    {
+      "id": "1131426170576052385",
+      "type": "Default",
+      "timestamp": "2023-07-20T07:23:39.947+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For example as below, zkProgram2 need verify serveral zkProgram1's proof in batch.  But `Proof `is not a type of CircuitValue, so if I define directly an Array for `Proof` as zkProgram2's `privateInputs` as blow,  error occurs.   \nAny solutions for this??  @gregor",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1131426171452670072",
+          "url": "https://cdn.discordapp.com/attachments/1131426170576052385/1131426171452670072/image.png?ex=680b003c&is=6809aebc&hm=eedc8b3c1cae928c2434cfda86c678e3410a3eb1c9da32effe60101a178fda9f&",
+          "fileName": "image.png",
+          "fileSizeBytes": 1215040
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "790135754411343882",
+              "name": "coldstar1993",
+              "discriminator": "0000",
+              "nickname": "coldStar1993",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1131448602066178178",
+      "type": "Default",
+      "timestamp": "2023-07-20T08:52:48.031+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ooh, i'm working on the same problem - i'll just copy and paste what i wrote before here:\n\n```typescript\nclass SProof extends Experimental.ZkProgram.Proof(S) {...}\n  const leaves = Provable.Array(Experimental.ZkProgram.Proof(SProof), 5)\n```\nI'm attempting to use `leaves` as a privateInput, but types are not playing nice. \n\nok...\nthis typechecks, but I lose type information:\n```ts\n  const leaves = provablePure(Array(numOfAccounts).fill(Experimental.ZkProgram.Proof(SProof)))\n```",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131467395781902416",
+      "type": "Default",
+      "timestamp": "2023-07-20T10:07:28.802+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah I think the problem is that we're special casing things instead of having Proof be a normal 'Provable'. In some places that's necessary.. (see proof_system.ts in snarkyjs if you're interested)\n\nI think the proper way would be to make proofs a Provable and find a way to pull out the proofs from privateInputs even if they are nested arbitrarily deep in other Provables",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131486585418948638",
+      "type": "Reply",
+      "timestamp": "2023-07-20T11:23:43.968+04:00",
+      "timestampEdited": "2023-07-20T11:24:13.128+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hi, @arj  I tried as you, but meet errors during circuit compilation",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "611505995998429194",
+          "name": "arj_",
+          "discriminator": "0000",
+          "nickname": "arj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131448602066178178",
+        "channelId": "1131426170576052385",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1131486743942676521",
+      "type": "Reply",
+      "timestamp": "2023-07-20T11:24:21.763+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I was getting a thread issue, maybe same",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "790135754411343882",
+          "name": "coldstar1993",
+          "discriminator": "0000",
+          "nickname": "coldStar1993",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131486585418948638",
+        "channelId": "1131426170576052385",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1131487053385834648",
+      "type": "Default",
+      "timestamp": "2023-07-20T11:25:35.54+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "My intuition was both provers ended up in the same context, but they need to be isolated",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131487060411301899",
+      "type": "Default",
+      "timestamp": "2023-07-20T11:25:37.215+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "just a guess",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131488162351435797",
+      "type": "Reply",
+      "timestamp": "2023-07-20T11:29:59.938+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hi, @gregor  I tried make proofs a Provable and typechecks successfully, however meet errors during circuit compilation.  do you have any solution samples for me , appreciate!",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131467395781902416",
+        "channelId": "1131426170576052385",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1131488370737029150",
+      "type": "Reply",
+      "timestamp": "2023-07-20T11:30:49.621+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "could you pls show your code case to take a look?",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "611505995998429194",
+          "name": "arj_",
+          "discriminator": "0000",
+          "nickname": "arj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131487053385834648",
+        "channelId": "1131426170576052385",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1131489764109975674",
+      "type": "Reply",
+      "timestamp": "2023-07-20T11:36:21.827+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```typescript\ndescribe('VectorTAccount is a zk-snark', () => {\n\n  let vectorVerificationKey: string;\n  let scalarVerificationKey: string;\n\n  // let baseCase: Proof<NamedScalarTAccount, void>;\n  // let additiveCase: Proof<NamedScalarTAccount, void>;\n\n  let leaves: Promise<Proof<NamedScalarTAccount, void>>[]\n  let publicInput: NamedVectorTAccount\n\n  let transaction = mkScalarTAccount(3000, 0);\n  let VectorTAccount = mkVectorTAccount(3);\n\n\n  beforeAll(async () => {\n\n    console.log('compiling Vector verificationKey...')\n    let result = await VectorTAccount.compile();\n    vectorVerificationKey = result.verificationKey;\n\n    console.log('compiling Scalar verificationKey...')\n    result = await ScalarTAccount.compile()\n    scalarVerificationKey = result.verificationKey\n\n    const map = new MerkleMap();\n\n    console.log('Scalar Init')\n    leaves = [0, 1, 2].map(async x => {\n      let account = {\n        name: new Field(x),\n        taccount_hash: hash_taccount_with_salt(new Field(x), ScalarTAccountStruct.identity)\n      };\n      return await ScalarTAccount.init(account);\n    });\n\n    Promise.all(leaves).then((leaves) => {\n      leaves.forEach(scalar => {\n        map.set(scalar.publicInput.name, scalar.publicInput.taccount_hash);\n      });\n      console.log(map);\n    });\n\n    publicInput = {\n      name: new Field(0),\n      taccount_roothash: Poseidon.hash([new Field(0), map.getRoot()])\n    }\n  });\n\n  it('Initialize VectorTAccount', async () => {\n\n    let baseCase = await VectorTAccount.init(\n      publicInput,\n      leaves\n    )\n    const ok = await verify(baseCase.toJSON(), vectorVerificationKey);\n    expect(ok).toEqual(true);\n\n  });\n```\n\n```ts\nimport {\n  Field,\n  Struct,\n  Poseidon,\n  Experimental,\n  SelfProof,\n  Empty,\n  MerkleMap,\n  MerkleMapWitness,\n  provablePure,\n  Proof,\n  Provable,\n} from 'snarkyjs';\nimport { NamedScalarTAccount, ScalarTAccount, ScalarTAccountStruct } from './scalar';\n\nexport class NamedVectorTAccount extends Struct({\n  name: Field,\n  taccount_roothash: Field,\n}) { }\n\n\nexport const mkVectorTAccount = (numOfAccounts: number) => {\n\n  // where are my types? where\n  let leaves = provablePure(Array(numOfAccounts).fill(Experimental.ZkProgram.Proof(ScalarTAccount)))\n  let transaction = Proof<NamedScalarTAccount, void>\n\n  const VectorTAccount = Experimental.ZkProgram({\n    publicInput: NamedVectorTAccount,\n    methods: {\n      init: {\n        privateInputs: [leaves],\n        method(\n          publicInput: NamedVectorTAccount,\n          leaves: Proof<NamedScalarTAccount, void>[]\n        ) { }\n      }\n    }\n```",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "790135754411343882",
+          "name": "coldstar1993",
+          "discriminator": "0000",
+          "nickname": "coldStar1993",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131488370737029150",
+        "channelId": "1131426170576052385",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1131489996092739634",
+      "type": "Default",
+      "timestamp": "2023-07-20T11:37:17.136+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "error msg:\n```\n/Users/arj/arj/pacioli/node_modules/.pnpm/snarkyjs@0.11.0/node_modules/snarkyjs/dist/node/lib/global-context.js:62\n  if (current.id !== id) throw Error(contextConflictMessage);\n                               ^\n\nError: It seems you're running multiple provers concurrently within the same JavaScript thread, which, at the moment, is not supported and would lead to bugs.\n    at leave (/Users/arj/arj/pacioli/node_modules/.pnpm/snarkyjs@0.11.0/node_modules/snarkyjs/src/lib/global-context.ts:94:24)\n    at Function.leave (/Users/arj/arj/pacioli/node_modules/.pnpm/snarkyjs@0.11.0/node_modules/snarkyjs/src/lib/global-context.ts:71:15)\n    at Object.prove_ [as init] (/Users/arj/arj/pacioli/node_modules/.pnpm/snarkyjs@0.11.0/node_modules/snarkyjs/src/lib/proof_system.ts:293:22)\n    at /Users/arj/arj/pacioli/libs/zkLedger/test/VectorTAccount.test.ts:56:14\n    at async Promise.all (index 0)\n\n```",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131490287118729246",
+      "type": "Default",
+      "timestamp": "2023-07-20T11:38:26.522+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```ts\n    console.log('compiling Vector verificationKey...')\n    let result = await VectorTAccount.compile();\n    vectorVerificationKey = result.verificationKey;\n\n    console.log('compiling Scalar verificationKey...')\n    result = await ScalarTAccount.compile()\n    scalarVerificationKey = result.verificationKey\n```\nthis compiles, but fails when proving scalar.init()",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131490733724008501",
+      "type": "Default",
+      "timestamp": "2023-07-20T11:40:13.001+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sry, it's kinda messy",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131491866588758117",
+      "type": "Default",
+      "timestamp": "2023-07-20T11:44:43.097+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "check if you awaited all promises regarding compile/prove/transaction",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131492039163383849",
+      "type": "Default",
+      "timestamp": "2023-07-20T11:45:24.242+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i also saw this error when i imported multiple versions of snarkyjs, so make sure your project uses just one snarkyjs and all libraries you create/use have snarkyjs as a peer dependency",
+      "author": {
+        "id": "374663548174991362",
+        "name": "maht0rz",
+        "discriminator": "0000",
+        "nickname": "maht0rz",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1146001284516827148",
+            "name": "MF Engineering",
+            "color": "#9B59B6",
+            "position": 135
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131494418642382928",
+      "type": "Reply",
+      "timestamp": "2023-07-20T11:54:51.554+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "within  `VectorTAccount.init() `,   could u pls add `proof.verify()` and take a new compile?",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "611505995998429194",
+          "name": "arj_",
+          "discriminator": "0000",
+          "nickname": "arj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131489764109975674",
+        "channelId": "1131426170576052385",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1131497480698220574",
+      "type": "Default",
+      "timestamp": "2023-07-20T12:07:01.605+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yes, originally tried - commented it out to isolate the issue\n```ts\n// methods: {\n    //   init: {\n    //     privateInputs: [leaves],\n    //     method(\n    //       publicInput: NamedVectorTAccount,\n    //       leaves: Proof<NamedScalarTAccount, void>[],\n    //     ) {\n    //\n    //       const name = publicInput.name\n    //       const root = publicInput.taccount_roothash\n    //       const map = new MerkleMap()\n    //\n    //       leaves.map(nScalarTAcc => {\n    //         nScalarTAcc.verify()\n    //         map.set(nScalarTAcc.publicInput.name, nScalarTAcc.publicInput.taccount_hash)\n    //       })\n    //\n    //       Poseidon.hash([name, map.getRoot()]).assertEquals(root)\n    //       //return map\n    //     }\n    //   },\n```",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131498024477143040",
+      "type": "Default",
+      "timestamp": "2023-07-20T12:09:11.252+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\nTypeError: nScalarTAcc.verify is not a function\n\n      40 |\n      41 |           leaves.map(nScalarTAcc => {\n> 42 |             nScalarTAcc.verify()\n         |                         ^\n      43 |             map.set(nScalarTAcc.publicInput.name, nScalarTAcc.publicInput.taccount_hash)\n      44 |           })\n      45 |\n```\nok, this didn't happen before - let me figure it out",
+      "author": {
+        "id": "611505995998429194",
+        "name": "arj_",
+        "discriminator": "0000",
+        "nickname": "arj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131507619702513716",
+      "type": "Reply",
+      "timestamp": "2023-07-20T12:47:18.932+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There is no solution along that lines because if the proofs are wrapped up in a Provable, then our code no longer processes them correctly. Passing each proof as a separate input is really the only way I think we support right now",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "611505995998429194",
+              "name": "arj_",
+              "discriminator": "0000",
+              "nickname": "arj",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "790135754411343882",
+          "name": "coldstar1993",
+          "discriminator": "0000",
+          "nickname": "coldStar1993",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131488162351435797",
+        "channelId": "1131426170576052385",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1131507989958893598",
+      "type": "Default",
+      "timestamp": "2023-07-20T12:48:47.208+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@arj even if you should get your stuff to compile/run, snarkyjs won't verify the proofs in that array",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "611505995998429194",
+          "name": "arj_",
+          "discriminator": "0000",
+          "nickname": "arj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1131512202218721290",
+      "type": "Reply",
+      "timestamp": "2023-07-20T13:05:31.489+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yes, indeed, my existing solution is by Passing each proof as a separate input. But it would be verbose  if there are  many proofs as input",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1131507619702513716",
+        "channelId": "1131426170576052385",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1131512437317840998",
+      "type": "Default",
+      "timestamp": "2023-07-20T13:06:27.541+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll write up an issue to address this. Filed under \"recursion / offchain usability improvements\"",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131512554317959328",
+      "type": "Default",
+      "timestamp": "2023-07-20T13:06:55.436+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "appreciate!",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1131574156169855067",
+      "type": "Default",
+      "timestamp": "2023-07-20T17:11:42.462+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@coldStar1993 @arj also note that Pickles only supports recursively verifying 0, 1 or 2 proofs, not more",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "611505995998429194",
+          "name": "arj_",
+          "discriminator": "0000",
+          "nickname": "arj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+        },
+        {
+          "id": "790135754411343882",
+          "name": "coldstar1993",
+          "discriminator": "0000",
+          "nickname": "coldStar1993",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1131574227473027072",
+      "type": "Default",
+      "timestamp": "2023-07-20T17:11:59.462+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So it may not be that verbose to list them \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "611505995998429194",
+              "name": "arj_",
+              "discriminator": "0000",
+              "nickname": "arj",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/611505995998429194/c037900dbcde6b8d36d69c17df9697c0.png?size=512"
+            },
+            {
+              "id": "790135754411343882",
+              "name": "coldstar1993",
+              "discriminator": "0000",
+              "nickname": "coldStar1993",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1131592251009662998",
+      "type": "Default",
+      "timestamp": "2023-07-20T18:23:36.608+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "btw, will this number increase in the future?",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1132338429586325594",
+      "type": "Default",
+      "timestamp": "2023-07-22T19:48:39.444+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's not planned since it comes at a cost for the verifying Mina node to support more proofs, and since you can merge any number in a binary tree",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 27
+}

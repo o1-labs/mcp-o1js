@@ -1,0 +1,472 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1082500580884369528",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Getting a Rust panic when trying to use snarkyjs in a node REPL",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T17:01:50.9249077+04:00",
+  "messages": [
+    {
+      "id": "1082500580884369528",
+      "type": "Default",
+      "timestamp": "2023-03-07T07:10:50.371+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm not sure if I'm even supposed to be using this in a REPL, just trying to get around these long compile times. But the error itself looks rather suspicious.\n\n@gregor \nSpecifically, the error is: \npanicked at 'Error: Calling Web API crypto.getRandomValues failed', **/home/gregor/**.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.6.4/src/os.rs:63:13\n\nIt seems something may be hardcoded?\n\nHere's the code I'm entering into the REPL:\n```javascript\nconst { Add } = await import('./build/src/Add.js')\nconst { isReady, Field } = await import('snarkyjs')\nawait isReady\nawait Add.compile()\n\nawait Add.init(Field(0)) // << << panics here\n```",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "847560222137385002",
+              "name": "romanh.",
+              "discriminator": "0000",
+              "nickname": "Roman H. | Fatty.io | Runwago",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/847560222137385002/c0cfab16d0b6aed60890171071999ee2.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1082500617781661747",
+      "type": "Default",
+      "timestamp": "2023-03-07T07:10:59.168+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And here's the full stack:\nFull error stack here:\n```\npanicked at 'Error: Calling Web API crypto.getRandomValues failed', /home/gregor/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.6.4/src/os.rs:63:13\n\nStack:\n\nError\n    at module.exports.__wbg_new_abda76e883ba8a5f (/home/jurchen/te-private/node_modules/snarkyjs/dist/node/_node_bindings/plonk_wasm.cjs:7541:17)\n    at console_error_panic_hook::hook::h86bc0f7c7ff5ca1c (wasm://wasm/00eb3862:wasm-function[1787]:0x2cc3fc)\n    at core::ops::function::Fn::call::ha32dd2dc83c0ea14 (wasm://wasm/00eb3862:wasm-function[4048]:0x33db5d)\n    at std::panicking::rust_panic_with_hook::hb01d8793e567b040 (wasm://wasm/00eb3862:wasm-function[2540]:0x30d8e2)\n    at std::panicking::begin_panic_handler::{{closure}}::h60108af06f38ef3d (wasm://wasm/00eb3862:wasm-function[3089]:0x32c7fe)\n    at std::sys_common::backtrace::__rust_end_short_backtrace::h761906d06428c797 (wasm://wasm/00eb3862:wasm-function[3700]:0x33ba1d)\n    at rust_begin_unwind (wasm://wasm/00eb3862:wasm-function[3447]:0x33743c)\n    at core::panicking::panic_fmt::hffbf0f027a7fa92d (wasm://wasm/00eb3862:wasm-function[3639]:0x33add3)\n    at <rand_core::os::OsRng as rand_core::RngCore>::next_u64::hdf9b0b10108bc8d9 (wasm://wasm/00eb3862:wasm-function[3077]:0x32c028)\n    at kimchi::prover::<impl kimchi::proof::ProverProof<G>>::create_recursive::h3b598839533991c6 (wasm://wasm/00eb3862:wasm-function[52]:0x3afb6)\n```",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1082885289996992523",
+      "type": "Default",
+      "timestamp": "2023-03-08T08:39:32.171+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "AH I can kind of see why it’s /home/gregor.\n\nMy hypothesis: this is all pinned when transpiling the OCaml >> Js.\n\nSo that’s why I’m unable to use the REPL, because I need to load in transpiled OCaml >> node library properly.\n\nIs that correct? If so, what’s the best way of doing this in a REPL?",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1083012180158447656",
+      "type": "Default",
+      "timestamp": "2023-03-08T17:03:45.143+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @jierenchen . I took a quick look into this... I think you may be calling init() incorrectly. \n\nI ran what you are trying to do here locally, so you may need to do a lil bit of work to translate this to run in the REPL:\n\n```ts\n\nimport { Add } from './Add.js';\nimport { isReady, Field, PrivateKey } from 'snarkyjs';\n\nawait isReady\nawait Add.compile()\n\nconst zkAppPrivateKey = PrivateKey.random();\nconst zkAppAddress = zkAppPrivateKey.toPublicKey();\n\nconst addapp = new Add(zkAppAddress );\n\naddapp.init() // << << no panics here :)\n```\nThe key thing to note here is that I have created a new instance of the `Add `class called `addapp`, rather than calling the `Add.init()` method directly.\nI have also generated a keypair and used the public key as an argument - the `Add` class extends `SmartContract`(https://github.com/o1-labs/snarkyjs/blob/12dc4802e6a25da80f9e778231b3b21d830aa9e2/src/lib/zkapp.ts#L647) which takes a public key/address as a constructor argument.\nIt also lets you feed a `Field` as an argument, but uses it as a `tokenId`. The `Add` example actually sets the initial state to 1.",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "snarkyjs/zkapp.ts at 12dc4802e6a25da80f9e778231b3b21d830aa9e2 · o1-...",
+          "url": "https://github.com/o1-labs/snarkyjs/blob/12dc4802e6a25da80f9e778231b3b21d830aa9e2/src/lib/zkapp.ts",
+          "timestamp": null,
+          "description": "Typescript/Javascript framework for zk-SNARKs and zkApps - snarkyjs/zkapp.ts at 12dc4802e6a25da80f9e778231b3b21d830aa9e2 · o1-labs/snarkyjs",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/wge0-1t3QndsQGlihj_Kuw9JA8OsRF2HQ2Gk_rA2eTE/https/opengraph.githubassets.com/c872c8b35a258e97d1eb6e758cac2d3005604394d46b55fd0950c723c32a9de7/o1-labs/snarkyjs",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "719523315815022613",
+          "name": "jierenchen",
+          "discriminator": "0000",
+          "nickname": "jierenchen",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1083122331691528243",
+      "type": "Default",
+      "timestamp": "2023-03-09T00:21:27.315+04:00",
+      "timestampEdited": "2023-03-09T00:25:35.545+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@jierenchen FWIW, I use snarkyjs from a REPL pretty often myself and it works. Checkout what Angus wrote.\nBut still -- the error about missing WebCrypto seems weird to me",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "719523315815022613",
+          "name": "jierenchen",
+          "discriminator": "0000",
+          "nickname": "jierenchen",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1083122886467920014",
+      "type": "Default",
+      "timestamp": "2023-03-09T00:23:39.584+04:00",
+      "timestampEdited": "2023-03-09T00:24:41.5+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And yes the debug metadata (file paths for stack traces etc) are probably hard-coded because it was compiled from OCaml/Rust on my machine. But that should never affect the JS/Wasm code that runs in any way",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1083124165843877948",
+      "type": "Reply",
+      "timestamp": "2023-03-09T00:28:44.611+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Just out of curiosity, I'd be interested in the full stack trace (yours was just the top part), which you can get by doing the following in the REPL before triggering the error:\n```js\n> Error.stackTraceLimit = 1000;\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "719523315815022613",
+          "name": "jierenchen",
+          "discriminator": "0000",
+          "nickname": "jierenchen",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1082500617781661747",
+        "channelId": "1082500580884369528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1083583060706074705",
+      "type": "Reply",
+      "timestamp": "2023-03-10T06:52:13.672+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah sorry I should have clarified. My Add.js is an Experimental.ZkProgram, not a SmartContract. I tried out with a SmartContract and it does appear to work, which seems strange. Maybe I'm doing something wrong here",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD14",
+            "code": "thinking",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f914.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "301752126491721730",
+          "name": "blockbeard",
+          "discriminator": "0000",
+          "nickname": "angus_m",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1083012180158447656",
+        "channelId": "1082500580884369528",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1083584832484946001",
+      "type": "Reply",
+      "timestamp": "2023-03-10T06:59:16.097+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "HUH! This is very strange. Can't repro my own error. It's working now. \n\n```\n> await Add.init(Field(0))\n\nProgramProof {\n  shouldVerify: { value: [ 0, [Uint8Array] ] },\n  publicInput: { value: [ 0, [Uint8Array] ] },\n  proof: [ 0, [ 0, [Array], [Array], [Array] ] ],\n  maxProofsVerified: 2\n}\n```\n\nI'll keep my eye on this. If I see this WebCrypto error again, I'll be sure to update this thread.",
+      "author": {
+        "id": "719523315815022613",
+        "name": "jierenchen",
+        "discriminator": "0000",
+        "nickname": "jierenchen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/719523315815022613/04759478e948e0276416dbbafc4b64e8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1083124165843877948",
+        "channelId": "1082500580884369528",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 9
+}

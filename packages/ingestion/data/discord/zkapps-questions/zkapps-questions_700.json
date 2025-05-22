@@ -1,0 +1,424 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1139322369836593182",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to convert signature from Auro Wallet (SignedData) to Signature snarkyjs",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:36:07.5866867+04:00",
+  "messages": [
+    {
+      "id": "1139322369836593182",
+      "type": "Default",
+      "timestamp": "2023-08-11T02:20:20.555+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Getting signature from user:\n```\ninterface SignedData {\n  publicKey: string,\n  data: string,\n  signature: {\n    field: string,\n    scalar: string\n  }\n}\nconst newSignature: SignedData = await mina.signMessage({ message: '777' });\nconsole.log(`From signMessage:${JSON.stringify(newSignature)}`);\n```\n\nConsole log result:\n```\nFrom signMessage:{\"signature\":{\"field\":\"11822131716416700650546285630040677693844122695934519015755884550692234186153\",\"scalar\":\"12218184193181484776188307993991538644319973229228913254048773969367498481507\"},\"publicKey\":\"B62qnb6RNapn5TmGoWvSbVS8eNBtEcA57Fj5LSQghvrn3ZXQ9Kkgzt7\",\"data\":\"777\"}\n```\n\nI would like to use this signature into a transaction like this, but the smart contract is expecting Signature type:\n```\nawait state.zkappWorkerClient!.createRegisterGuardianTransaction(\n    guardianSignature,\n    state.publicKey!,\n    Field(777),\n    witness,\n);\n```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1139516806927745044",
+      "type": "Default",
+      "timestamp": "2023-08-11T15:12:57.97+04:00",
+      "timestampEdited": "2023-08-11T15:19:25.36+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You are signing the string and trying to verify it using field element. `\"777\"` is not the same as `Field(777)`. If you want to sign the field element and verify it in zkapp you can do it like this:\n\n```\nconst { signature, publicKey } = client.signFields([777n], privKey);\n\nSignature.fromBase58(signature)\n  .verify(\n    PublicKey.fromBase58(publicKey),\n    [Field(777)]\n  )\n```",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 3,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            },
+            {
+              "id": "374663548174991362",
+              "name": "maht0rz",
+              "discriminator": "0000",
+              "nickname": "maht0rz",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/374663548174991362/f6511739774fe43bc64418c6c064e1f4.png?size=512"
+            },
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1139545246540247051",
+      "type": "Reply",
+      "timestamp": "2023-08-11T17:05:58.502+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Moderator",
+      "author": {
+        "id": "445391540119011329",
+        "name": "garethtdavies",
+        "discriminator": "0000",
+        "nickname": "garethtdavies",
+        "color": "#1F8B4C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "671808653812170765",
+            "name": "Community Leaders",
+            "color": "#1F8B4C",
+            "position": 125
+          },
+          {
+            "id": "722830883999973376",
+            "name": "Community MVP",
+            "color": "#536452",
+            "position": 120
+          },
+          {
+            "id": "828705107784630303",
+            "name": "CORE Leader",
+            "color": "#992D22",
+            "position": 119
+          },
+          {
+            "id": "918823949528346624",
+            "name": "CORE value champion",
+            "color": "#C27C0E",
+            "position": 118
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "745645274583662592",
+            "name": "technical community ambassador",
+            "color": "#C7972A",
+            "position": 116
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "849712902709313547",
+            "name": "node-working-group",
+            "color": "#99AAB5",
+            "position": 94
+          },
+          {
+            "id": "626071487987580928",
+            "name": "testnet-mvp",
+            "color": "#2ECC71",
+            "position": 93
+          },
+          {
+            "id": "652506253259440138",
+            "name": "Beta Phase 1 Winner",
+            "color": "#2ECC71",
+            "position": 92
+          },
+          {
+            "id": "666350593836711968",
+            "name": "Beta Testers",
+            "color": "#98C79F",
+            "position": 86
+          },
+          {
+            "id": "1246045923654762496",
+            "name": "berkeley-pre-release",
+            "color": "#98C79F",
+            "position": 84
+          },
+          {
+            "id": "817478763088314389",
+            "name": "RC Initiator",
+            "color": null,
+            "position": 83
+          },
+          {
+            "id": "961225664575459328",
+            "name": "dp-test-group",
+            "color": "#98C79F",
+            "position": 82
+          },
+          {
+            "id": "601500112023191580",
+            "name": "testnet-connected",
+            "color": "#BEF8DC",
+            "position": 81
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "807079219691257886",
+            "name": "spp",
+            "color": null,
+            "position": 76
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1240660664985321623",
+            "name": "mainnet-archive-node",
+            "color": "#2ECC71",
+            "position": 42
+          },
+          {
+            "id": "1224800471135289364",
+            "name": "devnet-node-op",
+            "color": "#57A14D",
+            "position": 41
+          },
+          {
+            "id": "1204126954199060570",
+            "name": "UMT-SNARK-Worker",
+            "color": "#2ECC71",
+            "position": 36
+          },
+          {
+            "id": "1204127002530156585",
+            "name": "UMT-operator",
+            "color": "#11806A",
+            "position": 33
+          },
+          {
+            "id": "1093202151607636080",
+            "name": "TW2-Archivist",
+            "color": "#037223",
+            "position": 31
+          },
+          {
+            "id": "1093205210685505587",
+            "name": "TW2-Snarkworker",
+            "color": "#5BE089",
+            "position": 30
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/445391540119011329/724a9e8bdd06202435bda0520f51cdec.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD28",
+            "code": "hammer",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f528.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "741064895721898036",
+              "name": "therealbostonmike",
+              "discriminator": "0000",
+              "nickname": "Sheriff of Mina Town",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/741064895721898036/a9edf6a4fd169c726248e1af0dda9ef8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1075157165058314324",
+          "name": "massey110k5at",
+          "discriminator": "0000",
+          "nickname": "Adobelulu",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1075157165058314324/c573882e9cb3f5f9de5b9d5624f64227.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1139528277883621459",
+        "channelId": "1139322369836593182",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 3
+}

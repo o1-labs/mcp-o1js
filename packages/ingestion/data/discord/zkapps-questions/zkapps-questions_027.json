@@ -1,0 +1,597 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1335906438064635966",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Event Tracking: Chain status",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T15:12:33.4025355+04:00",
+  "messages": [
+    {
+      "id": "1335906438064635966",
+      "type": "Default",
+      "timestamp": "2025-02-03T13:35:14.776+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am starting to track event emissions for state changes within my zkApp. I can see that when a transaction that emits the event has been included it is published with the chain status as `pending`. Then for subsequent blocks it is still fetched as pending, until it finally comes as `canonical`.\n\nI am assuming that this is related to how we [snark transactions](https://docs.minaprotocol.com/mina-protocol/snark-workers). Then when the snark work is finally completed the status is changed to `canonical`. Please correct me if Im wrong.\n\nMy questions:\n\n1) As we can transition state on a pending chainStatus. If the state moves from A > B > C > D, then something dodgy occurs with the transaction that transitioned from A > B. What happens?\n\n2) When I am tracking state changes from events, is it reasonably safe to simply track the state changes from the original `pending` chainStatus in the block the transaction was included or should I only be tracking the state when the status is `canonical`?",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1336012275382878260",
+      "type": "Default",
+      "timestamp": "2025-02-03T20:35:48.359+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It takes 290 blocks to become `canonical`.  It's completely independent from snark work.  Snark work is complete by the time the block is included at all.\n\nI think most developers find that 290 blocks is too long to wait.  Technically the chain can reorganize pending blocks by the longest chain rule, but I think it's highly unlikely after a few blocks have passed.  The most likely case would be if we are at block 3000 and two block producers make separate blocks 3001, those get propogated around and different BPs start building blocks 3002 on top of the diverging 3001s.  Eventually one chain will become dominant by longest chain rule.  I would actually recommend talking to some node operators to learn more about that, since they actually run the Mina protocol.  They could probably tell you more about how often this happens and what the implications are.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1336021805143425187",
+      "type": "Default",
+      "timestamp": "2025-02-03T21:13:40.431+04:00",
+      "timestampEdited": "2025-02-03T21:13:53.305+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "See the table here for probabilities https://docs.minaprotocol.com/mina-protocol/lifecycle-of-a-payment#step-5-to-achieve-a-payment-confidence-level-alice-is-confident-the-transfer-is-complete and the advice \n> The recommended wait time for a transaction to be confirmed is 15 blocks which provides a 99.9% confidence that the transaction will not be reversed.",
+      "author": {
+        "id": "445391540119011329",
+        "name": "garethtdavies",
+        "discriminator": "0000",
+        "nickname": "garethtdavies",
+        "color": "#1F8B4C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "671808653812170765",
+            "name": "Community Leaders",
+            "color": "#1F8B4C",
+            "position": 125
+          },
+          {
+            "id": "722830883999973376",
+            "name": "Community MVP",
+            "color": "#536452",
+            "position": 120
+          },
+          {
+            "id": "828705107784630303",
+            "name": "CORE Leader",
+            "color": "#992D22",
+            "position": 119
+          },
+          {
+            "id": "918823949528346624",
+            "name": "CORE value champion",
+            "color": "#C27C0E",
+            "position": 118
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "745645274583662592",
+            "name": "technical community ambassador",
+            "color": "#C7972A",
+            "position": 116
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "849712902709313547",
+            "name": "node-working-group",
+            "color": "#99AAB5",
+            "position": 94
+          },
+          {
+            "id": "626071487987580928",
+            "name": "testnet-mvp",
+            "color": "#2ECC71",
+            "position": 93
+          },
+          {
+            "id": "652506253259440138",
+            "name": "Beta Phase 1 Winner",
+            "color": "#2ECC71",
+            "position": 92
+          },
+          {
+            "id": "666350593836711968",
+            "name": "Beta Testers",
+            "color": "#98C79F",
+            "position": 86
+          },
+          {
+            "id": "1246045923654762496",
+            "name": "berkeley-pre-release",
+            "color": "#98C79F",
+            "position": 84
+          },
+          {
+            "id": "817478763088314389",
+            "name": "RC Initiator",
+            "color": null,
+            "position": 83
+          },
+          {
+            "id": "961225664575459328",
+            "name": "dp-test-group",
+            "color": "#98C79F",
+            "position": 82
+          },
+          {
+            "id": "601500112023191580",
+            "name": "testnet-connected",
+            "color": "#BEF8DC",
+            "position": 81
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "807079219691257886",
+            "name": "spp",
+            "color": null,
+            "position": 76
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1240660664985321623",
+            "name": "mainnet-archive-node",
+            "color": "#2ECC71",
+            "position": 42
+          },
+          {
+            "id": "1224800471135289364",
+            "name": "devnet-node-op",
+            "color": "#57A14D",
+            "position": 41
+          },
+          {
+            "id": "1204126954199060570",
+            "name": "UMT-SNARK-Worker",
+            "color": "#2ECC71",
+            "position": 36
+          },
+          {
+            "id": "1204127002530156585",
+            "name": "UMT-operator",
+            "color": "#11806A",
+            "position": 33
+          },
+          {
+            "id": "1093202151607636080",
+            "name": "TW2-Archivist",
+            "color": "#037223",
+            "position": 31
+          },
+          {
+            "id": "1093205210685505587",
+            "name": "TW2-Snarkworker",
+            "color": "#5BE089",
+            "position": 30
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/445391540119011329/724a9e8bdd06202435bda0520f51cdec.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "825390300901277697",
+            "name": "Mina_Gareth",
+            "code": "Mina_Gareth",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.discordapp.com/emojis/825390300901277697.png"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "201337099700535297",
+              "name": "45930",
+              "discriminator": "0000",
+              "nickname": "45930",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "201337099700535297",
+              "name": "45930",
+              "discriminator": "0000",
+              "nickname": "45930",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "267659707697594368",
+              "name": "charlie_mack",
+              "discriminator": "0000",
+              "nickname": "Charlie",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1336340524269043783",
+      "type": "Reply",
+      "timestamp": "2025-02-04T18:20:08.992+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok I think my confusion arose because I'm conflating the Snark work for that specific transaction that is included in the block, with just general \"snark work\" that is included in the block.\n\nFrom reading about [scan state](https://docs.minaprotocol.com/mina-protocol/scan-state). It seems to me that when a transaction is included in a block, its added to the scan state ready to be snarked. So it can be many blocks in the future that have been processed before the ledger proof of that original transaction is ready.",
+      "author": {
+        "id": "267659707697594368",
+        "name": "charlie_mack",
+        "discriminator": "0000",
+        "nickname": "Charlie",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/267659707697594368/82825af1b5b1c48dee4b8614357d2d3b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "201337099700535297",
+          "name": "45930",
+          "discriminator": "0000",
+          "nickname": "45930",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1043261559478165567",
+              "name": "ZK-peer-reviewer",
+              "color": "#F87607",
+              "position": 104
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1336012275382878260",
+        "channelId": "1335906438064635966",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 4
+}

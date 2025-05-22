@@ -1,0 +1,145 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1283062089883058236",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "`Secp256k1Curve.generator.scale(privateKeyAlice);` returns deprecated type.",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:13:37.0707662+04:00",
+  "messages": [
+    {
+      "id": "1283062089883058236",
+      "type": "Default",
+      "timestamp": "2024-09-10T17:50:40.369+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey,\n\n I'm trying to use `Secp256k1Curve.generator.scale(privateKeyAlice);` but it returns me `ForeignCurve` type instead of `ForeignCurveV2` since ForeignCurve type is deprecated. \n\nWould be glad if you can help me find a workaround?",
+      "author": {
+        "id": "860489000699559956",
+        "name": "d0x471b",
+        "discriminator": "0000",
+        "nickname": "Deniz",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/860489000699559956/45359e95fc7e171a0336260a4a731e64.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1283083372314497044",
+      "type": "Default",
+      "timestamp": "2024-09-10T19:15:14.496+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i was able to use like thiz:\n```typescript\nclass ECDHSecp256k1 {\n  private static G = Secp256k1Curve.generator;\n\n  generateKey(): { privateKey: CanonicalForeignField, publicKey: ForeignCurveV2 } {\n    const privateKey = Secp256k1Curve.Scalar.random();\n    const publicKey = ECDHSecp256k1.G.scale(privateKey);\n    return { privateKey, publicKey };\n  }\n}```",
+      "author": {
+        "id": "860489000699559956",
+        "name": "d0x471b",
+        "discriminator": "0000",
+        "nickname": "Deniz",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/860489000699559956/45359e95fc7e171a0336260a4a731e64.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 2
+}

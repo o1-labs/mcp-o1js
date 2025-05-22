@@ -1,0 +1,854 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1311027838849126462",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error on a zkProgram and how to debug effectively?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:16:03.6024238+04:00",
+  "messages": [
+    {
+      "id": "1311027838849126462",
+      "type": "Default",
+      "timestamp": "2024-11-26T21:56:34.501+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello there! I'm experimenting a little bit with zkPrograms and I wanted to create one that can chain words as long as the start with the same letter the previous word ends in. Pretty simple logic. Here's the code I have so far:\n\n```\nimport {\n  Field,\n  SelfProof,\n  ZkProgram,\n  verify,\n  CircuitString,\n  Struct,\n  Bool,\n  Poseidon,\n} from 'o1js';\n\nclass WordChain extends Struct({\n  currentWord: CircuitString,\n  chainLength: Field,\n  isValid: Bool,\n}) {\n  static canChainWords(word1: CircuitString, word2: CircuitString): Bool {\n    const word1Fields = CircuitString.toFields(word1);\n    const word2Fields = CircuitString.toFields(word2);\n\n    return word1Fields[word1Fields.length - 1].equals(word2Fields[0]);\n  }\n}\n\nconst WordChainVerifier = ZkProgram({\n  name: 'word-chain-verifier',\n  publicInput: Field,\n\n  methods: {\n    init: {\n      privateInputs: [CircuitString],\n      async method(state: Field, word: CircuitString) {\n        const chain = new WordChain({\n          currentWord: word,\n          chainLength: Field(1),\n          isValid: Bool(true),\n        });\n\n        const stateHash = Poseidon.hash(WordChain.toFields(chain));\n\n        state.assertEquals(stateHash);\n      },\n    },\n\n    addWord: {\n      privateInputs: [SelfProof, CircuitString, WordChain],\n      async method(\n        newState: Field,\n        earlierProof: SelfProof<Field, void>,\n        nextWord: CircuitString,\n        previousChain: WordChain\n      ) {\n        earlierProof.verify();\n\n        Poseidon.hash(WordChain.toFields(previousChain)).assertEquals(\n          earlierProof.publicInput\n        );\n\n        const canChain = WordChain.canChainWords(\n          previousChain.currentWord,\n          nextWord\n        );\n\n        const newChain = new WordChain({\n          currentWord: nextWord,\n          chainLength: previousChain.chainLength.add(1),\n          isValid: Bool.and(previousChain.isValid, canChain),\n        });\n\n        const stateHash = Poseidon.hash(WordChain.toFields(newChain));\n\n        newState.assertEquals(stateHash);\n      },\n    },\n  },\n});\n\nasync function main() {\n  console.log('1. Compiling WordChainVerifier...');\n  const { verificationKey } = await WordChainVerifier.compile();\n\n  const word1 = CircuitString.fromString('cat');\n  const word2 = CircuitString.fromString('tree');\n\n  console.log('\\n2. Creating and verifying word chain...');\n\n  const chain1 = new WordChain({\n    currentWord: word1,\n    chainLength: Field(1),\n    isValid: Bool(true),\n  });\n\n  const state1 = Poseidon.hash(WordChain.toFields(chain1));\n\n  const { proof: proof1 } = await WordChainVerifier.init(state1, word1);\n\n  try {\n    await verify(proof1.toJSON(), verificationKey);\n    console.log('earlierProof verification succeeded');\n  } catch (error) {\n    console.error('earlierProof verification failed:', error);\n  }\n\n  const canChain12 =\n    word1.toString()[word1.toString().length - 1] === word2.toString()[0];\n\n  const chain2 = new WordChain({\n    currentWord: word2,\n    chainLength: chain1.chainLength.add(1),\n    isValid: Bool.and(chain1.isValid, Bool(canChain12)),\n  });\n\n  const state2 = Poseidon.hash(WordChain.toFields(chain2));\n\n  const { proof: proof2 } = await WordChainVerifier.addWord(\n    state2,\n    proof1,\n    word2,\n    chain1\n  );\n\n  try {\n    await verify(proof2.toJSON(), verificationKey);\n    console.log('add word verification succeeded');\n  } catch (error) {\n    console.error('earlierProof verification failed:', error);\n  }\n}\n\nmain().catch(console.error);\n```\n\nBut when I run it, I have this error: \n\n```\nError: Constraint unsatisfied (unreduced):\nrule_main\nConstraint:\n((basic(Equal(Var 34)(Var 25297)))(annotation()))\nData:\nEqual 19392003701531592927903142287996396085335050916130497788034904874347015110570 15290847338572164755584413922465133000320605888899606943999192976461958121377\n```\n\nThe problem is in the method `addWord`, I console.log the inputs and everything looks correct, what's wrong with that method? Is there a better way to debug errors like this?",
+      "author": {
+        "id": "414071876105535488",
+        "name": "bb.face",
+        "discriminator": "0000",
+        "nickname": "bbface",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/414071876105535488/e5a9ba6c645868a1caa627fc0b021612.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1311078416518484059",
+      "type": "Default",
+      "timestamp": "2024-11-27T01:17:33.157+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For debugging, you can use `Provable.log` to see what the prover is seeing.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1311078899865616557",
+      "type": "Default",
+      "timestamp": "2024-11-27T01:19:28.396+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In this case, I see 2 places where an assert equals is happening, so you can use provable log to narrow it down to the assertion `newState.assertEquals(stateHash);`\n\nKnowing that, you can look into how newState and stateHash are constructed.  The issue ends up being in this method:\n\n```ts\n  static canChainWords(word1: CircuitString, word2: CircuitString): Bool {\n    const word1Fields = CircuitString.toFields(word1);\n    const word2Fields = CircuitString.toFields(word2);\n\n    return word1Fields[word1Fields.length - 1].equals(word2Fields[0]);\n  }\n```",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1311079530747793430",
+      "type": "Default",
+      "timestamp": "2024-11-27T01:21:58.81+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The last Field in word1Fields is going to be `0` unless you happen to set a 128-character word.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1311083072069959721",
+      "type": "Default",
+      "timestamp": "2024-11-27T01:36:03.127+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This implementation may not be optimal, but it is functional:",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1311083071717773332",
+          "url": "https://cdn.discordapp.com/attachments/1311027838849126462/1311083071717773332/message.txt?ex=680a0603&is=6808b483&hm=cb8d8e1de232186c29c9bd7ad9adb050ae3d3905539eb212d16bd6538c0d568f&",
+          "fileName": "message.txt",
+          "fileSizeBytes": 4450
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1311083336072040479",
+      "type": "Default",
+      "timestamp": "2024-11-27T01:37:06.07+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Instead of CircuitString, you probably want to define your own Struct type which models your problem exactly.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1311210249922805780",
+      "type": "Default",
+      "timestamp": "2024-11-27T10:01:24.69+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Wow, thanks for the reply! It makes sense, now I'll use Provable.log to fix my merging function (to merge two chains) and I will add a struct that. model my problem a little bit better, I was thinking about something like this:\n\n```\nclass SplitWord extends Struct({\n  word: CircuitString,\n  prefix: CircuitString,\n  lastChar: CircuitString,\n}) {\n  verify(): Bool {\n    const isOneChar = this.lastChar.length().equals(1);\n    \n    const isValidSplit = this.prefix.append(this.lastChar).hash().equals(this.word.hash());\n    \n    return Bool.and(isOneChar, isValidSplit);\n  }\n}\n```",
+      "author": {
+        "id": "414071876105535488",
+        "name": "bb.face",
+        "discriminator": "0000",
+        "nickname": "bbface",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/414071876105535488/e5a9ba6c645868a1caa627fc0b021612.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1311361301632516198",
+      "type": "Default",
+      "timestamp": "2024-11-27T20:01:38.224+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Something like that.  You might do even better to use the `Character` class for the last char, and perhaps a smaller sized `CircuitString`, or `Provable.array(Character)` for the other inputs.  `CircuitString` exposes the append function, which is nice, but the default of 128 characters is too big for this, it seems.",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1311361674107945090",
+      "type": "Default",
+      "timestamp": "2024-11-27T20:03:07.029+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can use [analyzeMethods](https://github.com/o1-labs/o1js/blob/fa205aabd0caebc596076674a3f73424129b26bc/src/lib/proof-system/zkprogram.ts#L284) to evaluate the proof size of different options",
+      "author": {
+        "id": "201337099700535297",
+        "name": "45930",
+        "discriminator": "0000",
+        "nickname": "45930",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/201337099700535297/5eb4e1dfa7edf8ddce5c4fdee8dc5bd3.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "o1js/src/lib/proof-system/zkprogram.ts at fa205aabd0caebc596076674a...",
+          "url": "https://github.com/o1-labs/o1js/blob/fa205aabd0caebc596076674a3f73424129b26bc/src/lib/proof-system/zkprogram.ts",
+          "timestamp": null,
+          "description": "TypeScript framework for zk-SNARKs and zkApps. Contribute to o1-labs/o1js development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDEE1",
+            "code": "\uD83E\uDEE1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1fae1.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "414071876105535488",
+              "name": "bb.face",
+              "discriminator": "0000",
+              "nickname": "bbface",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/414071876105535488/e5a9ba6c645868a1caa627fc0b021612.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1311566719558484001",
+      "type": "Default",
+      "timestamp": "2024-11-28T09:37:53.674+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Good observation, thanks again!",
+      "author": {
+        "id": "414071876105535488",
+        "name": "bb.face",
+        "discriminator": "0000",
+        "nickname": "bbface",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/414071876105535488/e5a9ba6c645868a1caa627fc0b021612.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 10
+}

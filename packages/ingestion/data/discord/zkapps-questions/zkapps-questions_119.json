@@ -1,0 +1,427 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1282303057526263879",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Is it possible to update two token accounts jointly?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:42:37.8263437+04:00",
+  "messages": [
+    {
+      "id": "1282303057526263879",
+      "type": "Default",
+      "timestamp": "2024-09-08T15:34:32.953+04:00",
+      "timestampEdited": "2024-09-08T16:01:36.472+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There is an example of updating two usual accounts jointly:\nhttps://github.com/o1-labs/o1js/blob/main/src/examples/zkapps/joint-update.ts\nhttps://discord.com/channels/484437221055922177/1248339918577733643/1248517378510164071\n\nIs it possible to update two token accounts jointly, given the Mina protocol limitation of 5 AccountUpdates with proof authorization in one transaction and the fact that each token account AccountUpdate should be approved?\n\nThe maximum number of AccountUpdates with proof authorization can be calculated using the formula\n```\n    10.26*np + 10.08*n2 + 9.14*n1 < 69.45\n    where np: number of single proof updates\n    n2: number of pairs of signed/no-auth update\n    n1: number of single signed/no-auth update\n```\n`(69.45 - 9.14 (single feePayer))/10.26 = 5.87`,  i.e. max 5 proof AccountUpdates\n\nThe example above creates the tx with 1 feePayer update and 3 proof updates (for `B.updateWithA()`, `A.updateWithB()`, and `B.assertInsideUpdate()` .\n\nIf we deploy the A and B to token accounts, we need to add `await tokenA.approveAccountUpdate(a.self);`  or  `await tokenB.approveAccountUpdate(b.self);` calls for each of the three calls, doubling the account updates. It gives the 6 AccountUpdates with proof authorization and the error:\n\n```\n Error during transaction sending:\n\n    Error: The transaction is too expensive, try reducing the number of AccountUpdates that are attached to the transaction.\n    Each transaction needs to be processed by the snark workers on the network.\n    Certain layouts of AccountUpdates require more proving time than others, and therefore are too expensive.\n\n    {\"signedPair\":0,\"signedSingle\":1,\"proof\":6}\n```\nTwo of those new account update, that authorize `B.updateWithA()` and `B.assertInsideUpdate()` , are both authorized with the same tokenB, but I found no way to create ONE AccountUpdate that authorizes both  `B.updateWithA()` and `B.assertInsideUpdate()`. \n\nPassing the `B.assertInsideUpdate()` AccountUpdate as the return value to the top and using `await tokenB.approveAccountUpdates([b.self, au]);` leads to creating two AccountUpdates for `B.assertInsideUpdate()` .\n\nIs there a way to fit a joint update of two token accounts into 5 AccountUpdates with proof authorization?",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1282303057668866059",
+          "url": "https://cdn.discordapp.com/attachments/1282303057526263879/1282303057668866059/message.txt?ex=680a21c8&is=6808d048&hm=5c693d2457211901af0850f052284cc17ba1d8a75cb0bf3668919c28dc6f6679&",
+          "fileName": "message.txt",
+          "fileSizeBytes": 7425
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1282303124320682077",
+      "type": "Default",
+      "timestamp": "2024-09-08T15:34:48.878+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The tx:\n```\ntx has 7 AccountUpdates: [\n  {\n    label: 'feePayer',\n    publicKey: '..LP4N',\n    fee: '100000000',\n    nonce: '3',\n    authorization: '..Rew3'\n  },\n  {\n    label: 'FungibleToken.approveBase()',\n    publicKey: '..hQQM',\n    events: '[[\"0\",\"22895977218859805213623650114133779676642806561328343654442710711772693029938\",\"1\",\"0\",\"1\"]]',\n    preconditions: { account: '{\"state\":[null,null,null,\"0\",null,null,null,null]}' },\n    mayUseToken: { parentsOwnToken: false, inheritFromParent: false },\n    authorizationKind: {\n      isSigned: false,\n      isProved: true,\n      verificationKeyHash: '25084457276132306637089336910977939820654927814172888515895248592725736067489'\n    },\n    authorization: { proof: '..KQ==' }\n  },\n  {\n    label: 'B.updateWithA()',\n    publicKey: '..4oh5',\n    tokenId: '..rjU6',\n    update: { appState: '[\"2\",\"1\",null,null,null,null,null,null]' },\n    callDepth: 1,\n    preconditions: { account: '{\"state\":[\"1\",null,null,null,null,null,null,null]}' },\n    mayUseToken: { parentsOwnToken: true, inheritFromParent: false },\n    authorizationKind: {\n      isSigned: false,\n      isProved: true,\n      verificationKeyHash: '18779270748773516984813951086749653315064543358738252402647986868984939279450'\n    },\n    authorization: { proof: '..KSkp' }\n  },\n  {\n    label: 'FungibleToken.approveBase()',\n    publicKey: '..aoFJ',\n    events: '[[\"0\",\"1387716426119385659127116687901264688854074967407135171966698020450414755668\",\"0\",\"0\",\"1\"]]',\n    callDepth: 2,\n    preconditions: { account: '{\"state\":[null,null,null,\"0\",null,null,null,null]}' },\n    mayUseToken: { parentsOwnToken: false, inheritFromParent: false },\n    authorizationKind: {\n      isSigned: false,\n      isProved: true,\n      verificationKeyHash: '25084457276132306637089336910977939820654927814172888515895248592725736067489'\n    },\n    authorization: { proof: '..KQ==' }\n  },\n  {\n    label: 'A.updateWithB()',\n    publicKey: '..wsdu',\n    tokenId: '..Qru1',\n    update: { appState: '[\"1\",null,null,null,null,null,null,null]' },\n    callDepth: 3,\n    preconditions: { account: '{\"state\":[\"0\",null,null,null,null,null,null,null]}' },\n    mayUseToken: { parentsOwnToken: true, inheritFromParent: false },\n    authorizationKind: {\n      isSigned: false,\n      isProved: true,\n      verificationKeyHash: '3321584011495599834944260801164690267502766981080706773518472477672738570615'\n    },\n    authorization: { proof: '..KSkp' }\n  },\n  {\n    label: 'FungibleToken.approveBase()',\n    publicKey: '..hQQM',\n    events: '[[\"0\",\"22895977218859805213623650114133779676642806561328343654442710711772693029938\",\"1\",\"0\",\"1\"]]',\n    callDepth: 4,\n    preconditions: { account: '{\"state\":[null,null,null,\"0\",null,null,null,null]}' },\n    mayUseToken: { parentsOwnToken: false, inheritFromParent: false },\n    authorizationKind: {\n      isSigned: false,\n      isProved: true,\n      verificationKeyHash: '25084457276132306637089336910977939820654927814172888515895248592725736067489'\n    },\n    authorization: { proof: '..KQ==' }\n  },\n  {\n    label: 'B.assertInsideUpdate()',\n    publicKey: '..4oh5',\n    tokenId: '..rjU6',\n    update: { appState: '[null,\"0\",null,null,null,null,null,null]' },\n    callDepth: 5,\n    preconditions: { account: '{\"state\":[null,\"1\",null,null,null,null,null,null]}' },\n    mayUseToken: { parentsOwnToken: true, inheritFromParent: false },\n    authorizationKind: {\n      isSigned: false,\n      isProved: true,\n      verificationKeyHash: '18779270748773516984813951086749653315064543358738252402647986868984939279450'\n    },\n    authorization: { proof: '..KQ==' }\n  }\n]\n\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1282303210605903902",
+      "type": "Default",
+      "timestamp": "2024-09-08T15:35:09.45+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The test code:\n```\n\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1282303210261844081",
+          "url": "https://cdn.discordapp.com/attachments/1282303057526263879/1282303210261844081/message.txt?ex=680a21ed&is=6808d06d&hm=c49ff328ee14d88462951df10a74075fa3e54adf95247b64774641a46b43ea4c&",
+          "fileName": "message.txt",
+          "fileSizeBytes": 7425
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1282392502409629756",
+      "type": "Default",
+      "timestamp": "2024-09-08T21:29:58.275+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@gregor can’t you just up the limit 2x or so",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1282392524979175465",
+      "type": "Default",
+      "timestamp": "2024-09-08T21:30:03.656+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It doesn’t need a hard fork",
+      "author": {
+        "id": "140202196758167552",
+        "name": "las0",
+        "discriminator": "0000",
+        "nickname": "Las",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1282580332771803148",
+      "type": "Default",
+      "timestamp": "2024-09-09T09:56:20.523+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @Las that sounds sensible but I won't be the one making that decision or implementing it",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "140202196758167552",
+          "name": "las0",
+          "discriminator": "0000",
+          "nickname": "Las",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/140202196758167552/09906db085c1359960d2883ed15e8108.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 6
+}

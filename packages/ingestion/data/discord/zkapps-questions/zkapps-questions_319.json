@@ -1,0 +1,535 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1222922531355234347",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Generic proof",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T10:55:16.873646+04:00",
+  "messages": [
+    {
+      "id": "1222922531355234347",
+      "type": "Default",
+      "timestamp": "2024-03-28T18:57:32.277+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi.\nI have some problem with figuring out how to write generic proof. \nWhat I want to do, is a function, that accepts user struct with isValid function and returns PublicInput, PublicOuptut, ZkApp, Proof. I am trying to make this works for 3 days, so I kinda stuck and asking for help.\n\nAll listed code located here: https://github.com/aii23/mina-generic\n\nHere is how it should be invoked:\n\n```\nclass MyStruct extends Struct({\n  isValid: Bool,\n  id: Field,\n  someOtherField: Field,\n}) {\n  myIsValid(): Bool {\n    return this.isValid;\n  }\n}\n\nlet { PublicInput, PublicOutput, ZkApp } = generateProof(MyStruct);\n```\n\nErors that I get(In attachments). They are probably self explanatory, but I am not so good with Generic types.\n\n\nSo the questions is folowing: \n1) How to declare someType, so it have myIsValid inside PublicInput?\n2) PublicInput and PublicOutput is not assignable to T and K. What I can do whith that?\n3) ZkApp is not assignable to type ZKProgram(due to wrong Public Input type i guess)",
+      "author": {
+        "id": "910923978984554586",
+        "name": "aleksandrivlev",
+        "discriminator": "0000",
+        "nickname": "Alekasndr Ivlev",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/910923978984554586/b87c14a8aa5cb1943e7f5d4f17cfcefe.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1222922531506360420",
+          "url": "https://cdn.discordapp.com/attachments/1222922531355234347/1222922531506360420/image.png?ex=680afa1c&is=6809a89c&hm=482a311c08e3defca62a0133d712d19f1b2dc9428b3c5b495942819ba6dd0dda&",
+          "fileName": "image.png",
+          "fileSizeBytes": 81961
+        },
+        {
+          "id": "1222922531778855004",
+          "url": "https://cdn.discordapp.com/attachments/1222922531355234347/1222922531778855004/image.png?ex=680afa1c&is=6809a89c&hm=f5012c570570a941710a0e84e760e83ad764b7a3d1ab3e8d712a33c4ab5a2bed&",
+          "fileName": "image.png",
+          "fileSizeBytes": 85900
+        }
+      ],
+      "embeds": [
+        {
+          "title": "GitHub - aii23/mina-generic",
+          "url": "https://github.com/aii23/mina-generic",
+          "timestamp": null,
+          "description": "Contribute to aii23/mina-generic development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/aMN3RtcM526TzoYfSxZL2dOjxaOqow0Q0ND8avZ-POQ/https/opengraph.githubassets.com/71a6611f6e721d8eaf319fad9bf5b9c0aa04143533a96d7919e7adc8f506f197/aii23/mina-generic",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1222922551773237269",
+      "type": "Default",
+      "timestamp": "2024-03-28T18:57:37.145+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here is broken code, that I am trying to unbreak: \n\n```\ninterface IProofInfo<\n  T extends FlexibleProvablePure<any>,\n  K extends FlexibleProvablePure<any>\n> {\n  PublicInput: T;\n  PublicOutput: K;\n  ZkApp: ZkProgram<{ publicInput: T; publicOutput: K }, any>;\n}\n\ninterface IValid {\n  myIsValid: () => Bool;\n}\n\nexport function generateProof<\n  ST extends IValid,\n  T extends FlexibleProvablePure<any>,\n  K extends FlexibleProvablePure<any>\n>(someType: new (value: any) => ST): IProofInfo<T, K> {\n  class PublicInput extends Struct({\n    value: someType,\n  }) {}\n\n  class PublicOutput extends Struct({}) {}\n\n  const prove = (input: PublicInput): PublicOutput => {\n    input.value.myIsValid().assertTrue(); // No myIsValid property, but value shoud have it\n\n    return new PublicOutput({});\n  };\n\n  const ZkApp = ZkProgram({\n    name: 'zk-app',\n    publicInput: PublicInput,\n    publicOutput: PublicOutput,\n    methods: {\n      prove: {\n        privateInputs: [],\n\n        method: prove,\n      },\n    },\n  });\n\n  return {\n    PublicInput, // PublicInput is not assignable to type T\n    PublicOutput, // PublicOutput is not assignable to type K\n    ZkApp, // ZKApp is not assignable to type ZKProgram\n  };\n}\n```",
+      "author": {
+        "id": "910923978984554586",
+        "name": "aleksandrivlev",
+        "discriminator": "0000",
+        "nickname": "Alekasndr Ivlev",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/910923978984554586/b87c14a8aa5cb1943e7f5d4f17cfcefe.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1224297367881121853",
+      "type": "Default",
+      "timestamp": "2024-04-01T14:00:38.848+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Will the code below work for you?\n```typescript\nimport { Bool, FlexibleProvablePure, Struct, ZkProgram } from 'o1js';\n\n// eslint-disable-next-line @typescript-eslint/no-explicit-any\nexport function generateProof(t: FlexibleProvablePure<any>) {\n  class ValidStruct extends Struct({\n    isValid: Bool,\n    value: t,\n  }) {}\n\n  const ZkApp = ZkProgram({\n    name: 'zk-app',\n    publicInput: ValidStruct,\n    publicOutput: ValidStruct,\n\n    methods: {\n      add: {\n        privateInputs: [],\n        method(value: ValidStruct) {\n          value.isValid.assertTrue();\n          return value;\n        },\n      },\n    },\n  });\n\n  return { struct: ValidStruct, zkApp: ZkApp };\n}\n```\n\n```typescript\nimport { Field, Struct } from 'o1js';\nimport { generateProof } from './ProofGenerator';\n\nclass MyStruct extends Struct({\n  id: Field,\n  someOtherField: Field,\n}) {}\n\nlet { struct, zkApp } = generateProof(MyStruct);\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1224298164929036310",
+      "type": "Default",
+      "timestamp": "2024-04-01T14:03:48.879+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It is also better to set a different name for each generated ZkProgram like in this example https://github.com/dfstio/minanft-lib/blob/master/src/plugins/redactedtree.ts#L107 - it will help with prover keys caching",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1224714562381680760",
+      "type": "Default",
+      "timestamp": "2024-04-02T17:38:25.768+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi. Thank you for response.\nNot quite that what I am looking for. I need more general approach. I simplified what I am trying to do, so the question would be more understandable. \nI am building SDK for card games, so you can create your own custom cards deck with several functions, and from that generate proof. So functions is not to check bool, but to make some computation for encoding card",
+      "author": {
+        "id": "910923978984554586",
+        "name": "aleksandrivlev",
+        "discriminator": "0000",
+        "nickname": "Alekasndr Ivlev",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/910923978984554586/b87c14a8aa5cb1943e7f5d4f17cfcefe.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1224714676500431019",
+      "type": "Default",
+      "timestamp": "2024-04-02T17:38:52.976+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If I could do something like this, it will be good with me\n```\nimport { Bool, Field, FlexibleProvablePure, Struct, ZkProgram } from 'o1js';\n\n// eslint-disable-next-line @typescript-eslint/no-explicit-any\nexport function generateProof(\n  t: FlexibleProvablePure<any> & { isValid: () => Bool }\n) {\n  class ValidStruct extends Struct({\n    myData: t,\n  }) {}\n\n  const ZkApp = ZkProgram({\n    name: 'zk-app',\n    publicInput: ValidStruct,\n    publicOutput: ValidStruct,\n\n    methods: {\n      add: {\n        privateInputs: [],\n        method(value: ValidStruct) {\n          value.myData.isValid().assertTrue();\n          return value;\n        },\n      },\n    },\n  });\n\n  return { struct: ValidStruct, zkApp: ZkApp };\n}\n\nclass MyStruct extends Struct({\n  id: Field,\n  someOtherField: Field,\n}) {\n  isValid(): Bool {\n    return this.id.lessThanOrEqual(Field.from(2));\n  }\n}\n\nlet { struct, zkApp } = generateProof(MyStruct);\n```",
+      "author": {
+        "id": "910923978984554586",
+        "name": "aleksandrivlev",
+        "discriminator": "0000",
+        "nickname": "Alekasndr Ivlev",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/910923978984554586/b87c14a8aa5cb1943e7f5d4f17cfcefe.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1224776370337615952",
+      "type": "Default",
+      "timestamp": "2024-04-02T21:44:01.933+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The code above is working with slight modifications. The test below is passing:\n```typescript\nimport { describe, expect, it } from \"@jest/globals\";\nimport {\n  Bool,\n  Field,\n  FlexibleProvablePure,\n  Struct,\n  ZkProgram,\n  verify,\n} from \"o1js\";\n\n// eslint-disable-next-line @typescript-eslint/no-explicit-any\nexport function generateProof(t: FlexibleProvablePure<any>, name: string) {\n  class ValidStruct extends Struct({\n    myData: t,\n  }) {}\n\n  const ZkApp = ZkProgram({\n    name: \"zk-app-\" + name,\n    publicInput: ValidStruct,\n    publicOutput: ValidStruct,\n\n    methods: {\n      prove: {\n        privateInputs: [],\n        method(value: ValidStruct) {\n          value.myData.isValid().assertTrue();\n          return value;\n        },\n      },\n    },\n  });\n\n  return { ValidStruct, ZkApp };\n}\n\ndescribe(\"generic proof\", () => {\n  it(\"should create a proof\", async () => {\n    class MyStruct extends Struct({\n      id: Field,\n      someOtherField: Field,\n    }) {\n      isValid(): Bool {\n        return this.id.lessThanOrEqual(Field.from(2));\n      }\n    }\n\n    let { ValidStruct, ZkApp } = generateProof(MyStruct, \"mystruct\");\n    const vk = (await ZkApp.compile()).verificationKey;\n    const myStruct = new MyStruct({\n      id: Field.from(1),\n      someOtherField: Field.from(3),\n    });\n    const validStruct = new ValidStruct({ myData: myStruct });\n    const proof = await ZkApp.prove(validStruct);\n    const verified = await verify(proof, vk);\n    expect(verified).toBeTruthy();\n  });\n});\n\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1225074487968661614",
+      "type": "Reply",
+      "timestamp": "2024-04-03T17:28:38.715+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, it's working 100% as I would want it to. Thanks a lot.\nSo because mydata has any type, we can call whatever we want, and we just need to check the type elsewhere. Cool",
+      "author": {
+        "id": "910923978984554586",
+        "name": "aleksandrivlev",
+        "discriminator": "0000",
+        "nickname": "Alekasndr Ivlev",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/910923978984554586/b87c14a8aa5cb1943e7f5d4f17cfcefe.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1224776370337615952",
+        "channelId": "1222922531355234347",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 8
+}

@@ -1,0 +1,210 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1186300465810509854",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to make `init` method support parameters?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:43:07.8638805+04:00",
+  "messages": [
+    {
+      "id": "1186300465810509854",
+      "type": "Default",
+      "timestamp": "2023-12-18T17:34:31.446+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm currently extending `deploy` method as `deploy(args: DeployArgs & CustomDeployArgs)` and it works well for me (a token contract).\nIs it the only approach to initialize state based on parameters? \uD83E\uDD14 \nI wonder if `deploy` method can  be extended with extra parameters, why can't `init` method be extended like this?",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1186300465982492792",
+          "url": "https://cdn.discordapp.com/attachments/1186300465810509854/1186300465982492792/image.png?ex=680ae6a7&is=68099527&hm=5864283f509e08dbe6ed4dd7bf4d430bd72bfb6ee3dffa44c572112df7f71217&",
+          "fileName": "image.png",
+          "fileSizeBytes": 21222
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1186314799890563152",
+      "type": "Default",
+      "timestamp": "2023-12-18T18:31:28.957+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I noticed that TypeScript allows extending parameter types of a method of a class like how I did for `SmartContract.deploy` method.\nBut it doesn't allow adding extra parameters like `SmartContract.init` method.\n```ts\n    deploy(args: DeployArgs & CustomDeployArgs) {\n        ...\n    }\n```",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1187103334545489970",
+      "type": "Default",
+      "timestamp": "2023-12-20T22:44:50.269+04:00",
+      "timestampEdited": "2023-12-20T22:46:06.3+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@berzan are you trying to create smth similar to Solidity constructor with arguments?\n\nIf so, the TLDR is that \n\n* constructors/initializers make sense in environments where you deploy a bytecode on the decentralized network. \n* the bytecode decodes the payload with arguments (if any) and uses them to evaluate initial values and assign them to storage fields. \n\nAt Mina, smart contracts are not deployed in a traditional sense, because there is no bytecode to \"deploy\" \n\nInstead of bytecode, contract.compile() gives you a verificationKey as an artifact.\n\nthe deployment transaction includes\n* fee payment for an account creation\n* associates the verification key with the newly created account.\n\nfor any further account updates (btw verificationKey can also be updated) - a user executes the contract code off-chain.\n\nthis execution is *provable* - not only the account update is evaluated, but also a proof of its validity. this proof is sent to the network and validators check it against a verificationKey (which lives on chain)\n\n\nNow I believe you got the idea: you don't need to have \"constructor code + args\", because you are the one who execute the \"constructor\" .",
+      "author": {
+        "id": "151383322759528448",
+        "name": "qwadratic",
+        "discriminator": "0000",
+        "nickname": "qwadratic",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/151383322759528448/11f6f6854e2c9ed351dd3875482e6b5d.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "991037531615264808",
+              "name": "berzanorg",
+              "discriminator": "0000",
+              "nickname": "berzan",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "991037531615264808",
+          "name": "berzanorg",
+          "discriminator": "0000",
+          "nickname": "berzan",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1187108029649395780",
+      "type": "Default",
+      "timestamp": "2023-12-20T23:03:29.669+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for the information. I could not not agree more. \uD83D\uDC4D",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

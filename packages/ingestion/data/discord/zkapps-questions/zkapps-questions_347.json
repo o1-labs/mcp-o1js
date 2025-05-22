@@ -1,0 +1,324 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1219464942151798954",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Recursive proving speed",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:11:31.5185731+04:00",
+  "messages": [
+    {
+      "id": "1219464942151798954",
+      "type": "Default",
+      "timestamp": "2024-03-19T05:58:18.772+04:00",
+      "timestampEdited": "2024-03-19T05:59:24.97+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello I was testing the speed of a simple increment recursive proof program and was getting speeds like this: \n\n```bash\n> node \"./build/src/pow.js\"\n\ncompiling...\ncompile: 6.290s\nlooping for 3 iterations...\niteration: 1\niteration: 2\niteration: 3\nTotal init time: 16.158 s\nTotal loop time: 99.940 s\nAverage time per iteration: 33.313 s\nproof public input 3\nproof ok true\n```\n\nIs this ballpark expected performance for a simple recursive program (i5 / 16 GB memory)?  Asking to see if I can do something like caching to speed it up or take this speed into account with my app.",
+      "author": {
+        "id": "285762181977473034",
+        "name": "mvkvc",
+        "discriminator": "0000",
+        "nickname": "Marko",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/285762181977473034/fe0f00e9243897caf8e53b996398d67f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "486105950604754965",
+              "name": "satyambnsal",
+              "discriminator": "0000",
+              "nickname": "satyambnsal",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/486105950604754965/cdba7142698795a262e7d5f609e88a1b.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1219465278933696633",
+      "type": "Default",
+      "timestamp": "2024-03-19T05:59:39.067+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here is the code I used:\n\n```typescript\nimport { Field, ZkProgram, SelfProof, verify } from \"o1js\";\n\nexport const POW = ZkProgram({\n  name: \"pow\",\n  publicInput: Field,\n\n  methods: {\n    init: {\n      privateInputs: [],\n\n      method(state: Field) {\n        state.assertEquals(Field(0));\n      },\n    },\n\n    add: {\n      privateInputs: [SelfProof],\n\n      method(\n        newState: Field,\n        earlierProof: SelfProof<Field, void>\n      ) {\n        earlierProof.verify();\n        newState.assertEquals(\n          earlierProof.publicInput.add(Field(1))\n        );\n      },\n    }\n  },\n});\n\n\nasync function main() {\n    const iterations = parseInt(process.argv[2]) || 3;\n\n    console.log('compiling...');\n    console.time('compile');\n  \n    const { verificationKey } = await POW.compile();\n\n    console.timeEnd('compile');\n\n    console.log(`looping for ${iterations} iterations...`);\n\n    const initStartTime = Date.now();\n\n    let proofPrev = await POW.init(Field(0));\n    let proof;\n\n    const initEndTime = Date.now();\n    \n    const loopStartTime = Date.now();\n\n    for (let i = 1; i <= iterations; i++) {\n        console.log(`iteration: ${i}`);\n        proof = await POW.add(Field(i), proofPrev);\n        proofPrev = proof;\n    }\n\n    const loopEndTime = Date.now();\n\n    const totalInitTime = (initEndTime - initStartTime) / 1000;\n    const totalLoopTime = (loopEndTime - loopStartTime) / 1000;\n    const averageTimePerIteration = totalLoopTime / iterations;\n    console.log(`Total init time: ${totalInitTime.toFixed(3)} s`);\n    console.log(`Total loop time: ${totalLoopTime.toFixed(3)} s`);\n    console.log(`Average time per iteration: ${averageTimePerIteration.toFixed(3)} s`);\n  \n    console.log('proof public input', proof.publicInput.toString());\n    const ok = await verify(proof.toJSON(), verificationKey);\n    console.log('proof ok', ok);\n}\n\nmain();\n```",
+      "author": {
+        "id": "285762181977473034",
+        "name": "mvkvc",
+        "discriminator": "0000",
+        "nickname": "Marko",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/285762181977473034/fe0f00e9243897caf8e53b996398d67f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1220032336180019361",
+      "type": "Default",
+      "timestamp": "2024-03-20T19:32:56.05+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This speed is normal. To make it significantly faster, you can calculate the recursive proofs in parallel using many workers (you should use several servers for this, as it does not make sense on one PC; o1js is already handling it optimally).\n\nYou can also experiment with setNumberOfWorkers() - it can help to fine-tune the performance of o1js proving.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 3,
+          "users": [
+            {
+              "id": "285762181977473034",
+              "name": "mvkvc",
+              "discriminator": "0000",
+              "nickname": "Marko",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/285762181977473034/fe0f00e9243897caf8e53b996398d67f.png?size=512"
+            },
+            {
+              "id": "486105950604754965",
+              "name": "satyambnsal",
+              "discriminator": "0000",
+              "nickname": "satyambnsal",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/486105950604754965/cdba7142698795a262e7d5f609e88a1b.png?size=512"
+            },
+            {
+              "id": "875836314950451270",
+              "name": "firat8805",
+              "discriminator": "0000",
+              "nickname": "firat_llc",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/875836314950451270/f63753bc9f64efd757435ca1110b8289.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1220084125931802756",
+      "type": "Reply",
+      "timestamp": "2024-03-20T22:58:43.689+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you!",
+      "author": {
+        "id": "285762181977473034",
+        "name": "mvkvc",
+        "discriminator": "0000",
+        "nickname": "Marko",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/285762181977473034/fe0f00e9243897caf8e53b996398d67f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1220032336180019361",
+        "channelId": "1219464942151798954",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 4
+}

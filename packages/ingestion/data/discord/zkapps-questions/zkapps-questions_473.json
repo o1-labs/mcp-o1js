@@ -1,0 +1,225 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1188792165426544682",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Top-level account update can not use or pass on token permissions",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T12:25:04.0180336+04:00",
+  "messages": [
+    {
+      "id": "1188792165426544682",
+      "type": "Default",
+      "timestamp": "2023-12-25T14:35:38.928+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I got this error. Do you have any idea? \n\nTop-level account update can not use or pass on token permissions. Make sure that\n    accountUpdate.body.mayUseToken = AccountUpdate.MayUseToken.No;\n\nMy code: \nBridge.ts\n\n```\nimport { PublicKey, SmartContract, State, UInt64, method, state, Struct } from 'o1js'\nimport { Token } from './Token'\n\nclass LockEvent extends Struct({\n    tokenAddress: PublicKey,\n    receiver: PublicKey,\n    amount: UInt64\n}){\n    constructor(tokenAddress: PublicKey, receiver: PublicKey, amount: UInt64) {\n        super({ tokenAddress, receiver, amount });\n      }\n}\n\nexport class Bridge extends SmartContract {\n\n    events = {\"Lock\": LockEvent};\n    @method decrementBalance(amount: UInt64) {\n        this.balance.subInPlace(amount)\n    }\n\n    @method lock(tokenAddress: PublicKey, receiver: PublicKey, amount: UInt64) {\n        // const weth = new Token(tokenAddress);\n        // weth.transfer(this.sender, this.address, amount);\n        // this.emitEvent(\"Lock\", new LockEvent(tokenAddress, receiver, amount));\n    }\n}\n\n```\n\nBridge.test.ts\n```\n    it('can lock tokens into vaults', async () => {\n        const tx = await Mina.transaction(userPubkey, () => {\n            vaultZkapp.lock(tokenPubkey, userPubkey, AMOUNT_DEPOSIT);\n        })\n        await tx.prove()\n        tx.sign([userPrivkey])\n        await tx.send()\n        Mina.getBalance(userPubkey, tokenZkapp.token.id).assertEquals(AMOUNT_MINT.sub(AMOUNT_DEPOSIT))\n        Mina.getBalance(vaultPubkey, tokenZkapp.token.id).assertEquals(AMOUNT_DEPOSIT)\n    })\n})\n\n```",
+      "author": {
+        "id": "1133657962561421432",
+        "name": "david_20244",
+        "discriminator": "0000",
+        "nickname": "David",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1189189882145427567",
+      "type": "Default",
+      "timestamp": "2023-12-26T16:56:01.983+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You might need to set `access` permission of the token contract to `Permissions.proofOrSignature()`.",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1189190554303606887",
+      "type": "Default",
+      "timestamp": "2023-12-26T16:58:42.238+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "here is a working implementation: <https://github.com/BerzanOrg/xane/blob/main/contracts/src/Token.ts>\nand the tests: <https://github.com/BerzanOrg/xane/blob/main/contracts/src/Token.test.ts>",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1194198861263155230",
+      "type": "Default",
+      "timestamp": "2024-01-09T12:39:55.667+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@David   Please take a reference on this answer : https://discord.com/channels/484437221055922177/1194060410106687548/1194196511953797171\n\nhope it help u\uD83D\uDE04",
+      "author": {
+        "id": "790135754411343882",
+        "name": "coldstar1993",
+        "discriminator": "0000",
+        "nickname": "coldStar1993",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1043261559478165567",
+            "name": "ZK-peer-reviewer",
+            "color": "#F87607",
+            "position": 104
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1133657962561421432",
+          "name": "david_20244",
+          "discriminator": "0000",
+          "nickname": "David",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/3.png"
+        }
+      ]
+    }
+  ],
+  "messageCount": 4
+}

@@ -1,0 +1,1021 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1215876822504574996",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Signatures of Ecdsa.signHash != web3.js sign",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T10:54:46.8091201+04:00",
+  "messages": [
+    {
+      "id": "1215876822504574996",
+      "type": "Default",
+      "timestamp": "2024-03-09T08:20:24.384+04:00",
+      "timestampEdited": "2024-03-09T08:22:32.86+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, I am playing around with Ecdsa support. The signature outputs are not the same. What am I doing wrong?\n\nBelow is my code.\n\n```ts\nimport { Crypto, createEcdsa, createForeignCurve } from 'o1js';\n\nclass Secp256k1 extends createForeignCurve(Crypto.CurveParams.Secp256k1) {}\nclass Ecdsa extends createEcdsa(Secp256k1) {}\n\nimport Web3 from 'web3';\nconst web3 = new Web3(/* PROVIDER */);\n\nlet privateKey =\n  58226699734337679679681720108764260935568583393200382641693124477075291807457n;\nlet privateKeyHex = '0x' + privateKey.toString(16); // hex of above\n\nlet publicKey = Secp256k1.generator.scale(privateKey);\n\nconsole.log('privateKey:', privateKey, privateKeyHex);\n\nconsole.log(\n  'publicKey:',\n  publicKey.x.toBigInt().toString(16),\n  publicKey.y.toBigInt().toString(16)\n);\nconsole.log('### ####');\n\nconsole.log('=== sign with web3.js');\nconsole.log(web3.eth.accounts.hashMessage('foobar'));\nconst web3SignedMessage = web3.eth.accounts.sign('foobar', privateKeyHex);\n\nconsole.log(web3SignedMessage);\n\nconsole.log('=== sign with Ecdsa.signHash');\nlet sig = Ecdsa.signHash(BigInt(web3SignedMessage.messageHash), privateKey);\nconsole.log(\n  'sig:',\n  sig.r.toBigInt().toString(16),\n  sig.s.toBigInt().toString(16)\n);\n```\n\nI get the `messageHash` output from `web3.js` to ensure that message is prefixed according to standard (i.e ``\\x19Ethereum Signed Message:\\n${messageBytes.byteLength}`)",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "715875608965414953",
+              "name": "0xshashank",
+              "discriminator": "0000",
+              "nickname": "0xKriss1897",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/715875608965414953/5f904b744be39181b263e74dbe177f20.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1215896659255492699",
+      "type": "ChannelNameChange",
+      "timestamp": "2024-03-09T09:39:13.834+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Changed the channel name: Signatures of Ecdsa.signHash != web3.js sign",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216052462671364176",
+      "type": "Default",
+      "timestamp": "2024-03-09T19:58:20.263+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "signature (generated from Metamask) verification proof worked\n\nso i think, the error is in how i structure `privateKey` and/or `messageHash`",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216057217535709224",
+      "type": "Default",
+      "timestamp": "2024-03-09T20:17:13.911+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> signature (generated from Metamask) verification proof worked\nnice \uD83D\uDE04",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216057299055939624",
+      "type": "Default",
+      "timestamp": "2024-03-09T20:17:33.347+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "then I'm sure this is \"close\"",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216059174149034165",
+      "type": "Default",
+      "timestamp": "2024-03-09T20:25:00.404+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> I get the messageHash output from web3.js to ensure that message is prefixed according to standard (i.e `\\x19Ethereum Signed Message:\\n${messageBytes.byteLength}) \n\nHow about trying to generate the signature with `Ecdsa.sign()` and passing a message with the same prefix?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216066206650339359",
+      "type": "Reply",
+      "timestamp": "2024-03-09T20:52:57.083+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yes, i tried as below\n\n```ts\nlet message = Bytes32.fromString('\\x19Ethereum Signed Message:\\n5hello');\nsig = Ecdsa.sign(message.toBytes(), privateKey);\n```\n\nfor sure, fault is in my little understanding of EIP-712 spec",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1216059174149034165",
+        "channelId": "1215876822504574996",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1216106341660102772",
+      "type": "Reply",
+      "timestamp": "2024-03-09T23:32:26.015+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "did this work?",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1066281072905691166",
+          "name": "0xstruct",
+          "discriminator": "0000",
+          "nickname": "0xstruct",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1216066206650339359",
+        "channelId": "1215876822504574996",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1216110490598641684",
+      "type": "Default",
+      "timestamp": "2024-03-09T23:48:55.199+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No, it outputs different signature. My prefix must be wrong.",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE15",
+            "code": "confused",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f615.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1216110853657595955",
+      "type": "Default",
+      "timestamp": "2024-03-09T23:50:21.759+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That’s why i was more confident in using signHash using the same messageHash which was hashed correctly with the prefix.",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1216111551128535051",
+      "type": "Default",
+      "timestamp": "2024-03-09T23:53:08.049+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "makes sense",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1217120002168193074",
+      "type": "Default",
+      "timestamp": "2024-03-12T18:40:21.513+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Try to use Mina privatekey instead of ETH privatekey, here how you can convert it: https://github.com/WalletZkApp/mina-zkApp-snap/blob/1b0e01eac201ccfb9cc6309c066b544a56f9be86/packages/snap/src/Mina/account.ts#L36",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "mina-zkApp-snap/packages/snap/src/Mina/account.ts at 1b0e01eac201cc...",
+          "url": "https://github.com/WalletZkApp/mina-zkApp-snap/blob/1b0e01eac201ccfb9cc6309c066b544a56f9be86/packages/snap/src/Mina/account.ts",
+          "timestamp": null,
+          "description": "Mina protocol zkApp integration with Metamask snap - WalletZkApp/mina-zkApp-snap",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/MxhkD_5rCqGEYjJP_3hpkP7O1D8oFFZZAR7tYgeKR6U/https/opengraph.githubassets.com/baf57a46a02aa648ce5b9e9fb870dc5532aa7e1533cdc6cc91a8f92b000e40ef/WalletZkApp/mina-zkApp-snap",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2764.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "790135754411343882",
+              "name": "coldstar1993",
+              "discriminator": "0000",
+              "nickname": "coldStar1993",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/790135754411343882/4e03c5dfc78443f624379f2476b23380.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1217123397776183466",
+      "type": "Reply",
+      "timestamp": "2024-03-12T18:53:51.089+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you, i will look into it",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "625988499056754688",
+              "name": "iamdev",
+              "discriminator": "0000",
+              "nickname": "IaM [ZK] <DEV>",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "625988499056754688",
+          "name": "iamdev",
+          "discriminator": "0000",
+          "nickname": "IaM [ZK] <DEV>",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1158450061982847106",
+              "name": "Cohort 2 Mentors",
+              "color": "#E74C3C",
+              "position": 101
+            },
+            {
+              "id": "1121063832555634799",
+              "name": "zkIgnite Cohort 1",
+              "color": "#F38705",
+              "position": 97
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1217120002168193074",
+        "channelId": "1215876822504574996",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1224934276144042005",
+      "type": "Default",
+      "timestamp": "2024-04-03T08:11:29.611+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Just to update on progress, i was  able to get signature of hashed message verified with Mina. Here is my project: https://github.com/0xStruct/mina-anons/blob/main/lab/src/ownership.run.ts",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "mina-anons/lab/src/ownership.run.ts at main · 0xStruct/mina-anons",
+          "url": "https://github.com/0xStruct/mina-anons/blob/main/lab/src/ownership.run.ts",
+          "timestamp": null,
+          "description": "building privacy-first social dApps powered by Mina o1js, bringing Mina into other blockchains and platforms - 0xStruct/mina-anons",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/l3smjd7y0cFBZXwhUiRTwXHqW7KHHKucIOJcG-Hja_c/https/opengraph.githubassets.com/ef353159517928e110574d103fa236e5fd08fd57761ad5194deab6987ae5bb8c/0xStruct/mina-anons",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE4C\uD83C\uDFFF",
+            "code": "raised_hands_tone5",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f64c-1f3ff.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "454379078850707466",
+              "name": "ymekuria",
+              "discriminator": "0000",
+              "nickname": "ymekuria",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/1.png"
+            },
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1225742373208723537",
+      "type": "Reply",
+      "timestamp": "2024-04-05T13:42:34.965+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Great job, so whats the solution to your problem?",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1066281072905691166",
+          "name": "0xstruct",
+          "discriminator": "0000",
+          "nickname": "0xstruct",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1224934276144042005",
+        "channelId": "1215876822504574996",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1225753993263976511",
+      "type": "Default",
+      "timestamp": "2024-04-05T14:28:45.402+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Signature verification works as it is. Just that generated signatures are different. It might be due to little differences in hashing with prefix. That i havent figured out the exact issue.",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDD25",
+            "code": "fire",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f525.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "625988499056754688",
+              "name": "iamdev",
+              "discriminator": "0000",
+              "nickname": "IaM [ZK] <DEV>",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1225771510497546271",
+      "type": "Reply",
+      "timestamp": "2024-04-05T15:38:21.836+04:00",
+      "timestampEdited": "2024-04-05T15:45:06.964+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Isn't that expected? Ecdsa signing algorithm involves generating random nonce `k`, so it shouldn't be the same.",
+      "author": {
+        "id": "141272134633783297",
+        "name": "faseris",
+        "discriminator": "0000",
+        "nickname": "Faserisko",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1066281072905691166",
+          "name": "0xstruct",
+          "discriminator": "0000",
+          "nickname": "0xstruct",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1225753993263976511",
+        "channelId": "1215876822504574996",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1225809972756090921",
+      "type": "Reply",
+      "timestamp": "2024-04-05T18:11:11.953+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks, now i know \uD83D\uDE42",
+      "author": {
+        "id": "1066281072905691166",
+        "name": "0xstruct",
+        "discriminator": "0000",
+        "nickname": "0xstruct",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1066281072905691166/a61fdd26f6ec6f8f186e5dd61e0d1022.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "141272134633783297",
+          "name": "faseris",
+          "discriminator": "0000",
+          "nickname": "Faserisko",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/141272134633783297/906de2260ca3617d3a9792834a64e3c8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1225771510497546271",
+        "channelId": "1215876822504574996",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 18
+}

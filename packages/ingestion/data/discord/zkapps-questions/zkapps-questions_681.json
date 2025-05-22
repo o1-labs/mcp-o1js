@@ -1,0 +1,705 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1125354355760042075",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "History Of State In a zkApplicaiton",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:24:49.1539054+04:00",
+  "messages": [
+    {
+      "id": "1125354355760042075",
+      "type": "Default",
+      "timestamp": "2023-07-03T13:16:26.486+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have questions regarding obtaining the historical state values in a Smart Contract. Let's say I have a Smart Contract that has a single state field, which is an integer. The smart contract exposes a single method that adds the values supplied by the caller to that field:\n\n```\nclass IncrementMe extends SmartContract {\n  @state(Field) x = State<Field>();\n\n  @method increment(delta: Field) {\n    const x = this.x.get();\n    this.x.assertEquals(x);\n\n    this.x.set(x.add(delta));\n  }\n}\n```\n\nGiven the address of a zkApp, is there a way to obtain the historical list of its state? The goal is to obtain a list o all of the states that this smart contract was in, and inspecting how the value of the `x` field evolved over time.\n\nThank you.",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1145946762851389503",
+      "type": "Default",
+      "timestamp": "2023-08-29T09:03:18.925+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@illya have you found the answer?",
+      "author": {
+        "id": "456226577798135808",
+        "name": "Deleted User",
+        "discriminator": "0000",
+        "nickname": "Deleted User",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1146034009831391284",
+      "type": "Default",
+      "timestamp": "2023-08-29T14:50:00.226+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hi @illya - the blockchain history can be stored using the archive node - https://docs.minaprotocol.com/node-operators/archive-node , then run queries on the postgres database. If you connect to the blockchain using Rosetta, this also runs an archive node so you can query history via graphQL - https://docs.minaprotocol.com/node-operators/rosetta. But if you don't want to run this sort of infrastructure you'd need to find a service (mina explorer for example - https://docs.minaexplorer.com/minaexplorer/bigquery-public-dataset ) that collects history and allows you to query it. Worth mentioning that there is current work going on improving the archive nodes to add filtering etc.",
+      "author": {
+        "id": "1062606894193184848",
+        "name": "philiphalsall",
+        "discriminator": "0000",
+        "nickname": "philip halsall",
+        "color": "#FFF7F7",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1062606894193184848/6c5996770c985bcd6e5b68131ff2ba04.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Mina Documentation",
+          "url": "https://docs.minaprotocol.com/node-operators/archive-node",
+          "timestamp": null,
+          "description": "Website for documentation about Mina Protocol",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/_PJlmeDNad-_70g7jbEdYnu0Z3mezgosb1bPK642OJE/https/docs.minaprotocol.com/img/common/mina-logo.png",
+            "width": 1120,
+            "height": 630
+          },
+          "images": [],
+          "fields": []
+        },
+        {
+          "title": "BigQuery Public Dataset - Mina Explorer",
+          "url": "https://docs.minaexplorer.com/minaexplorer/bigquery-public-dataset",
+          "timestamp": null,
+          "description": "Mina is a succinct blockchain, which means while we can verify the chain's current state using a zero-knowledge proof, the prior history is not retained.",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1122802332166520932",
+          "name": "illya.papi",
+          "discriminator": "0000",
+          "nickname": "illya",
+          "color": "#C02020",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1146358774609747991",
+      "type": "Default",
+      "timestamp": "2023-08-30T12:20:30.183+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this link shows more details about a newer way to collect history -  https://github.com/Granola-Team/mina-indexer",
+      "author": {
+        "id": "1062606894193184848",
+        "name": "philiphalsall",
+        "discriminator": "0000",
+        "nickname": "philip halsall",
+        "color": "#FFF7F7",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1062606894193184848/6c5996770c985bcd6e5b68131ff2ba04.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - Granola-Team/mina-indexer: The Mina indexer is a simplifie...",
+          "url": "https://github.com/Granola-Team/mina-indexer",
+          "timestamp": null,
+          "description": "The Mina indexer is a simplified, and improved version of the software collectively called the &quot;archive node&quot; in the Mina codebase. - GitHub - Granola-Team/mina-indexer: The Mina ...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/Rzb-LOc5vTUR8bk8mfsabUB2k814O3QLCNqTEINByEI/https/opengraph.githubassets.com/38557ab5dfaed1ef6cd377df6be95f7cc56d4c411a97849b4c88a5c11909069b/Granola-Team/mina-indexer",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1146374243605565550",
+      "type": "Default",
+      "timestamp": "2023-08-30T13:21:58.279+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Just in case you need a working example of using the Mina archive bigquery-public-dataset mentioned by @philip halsall, I've got one here:  https://github.com/RaidasGrisk/mina-node-dashboard-backend/blob/master/queries.js",
+      "author": {
+        "id": "749314817449394186",
+        "name": "iowxss6",
+        "discriminator": "0000",
+        "nickname": "ioWxss6",
+        "color": "#A84300",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/749314817449394186/d2c2690718e42bce0a0090fff3746b86.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "mina-node-dashboard-backend/queries.js at master · RaidasGrisk/mina...",
+          "url": "https://github.com/RaidasGrisk/mina-node-dashboard-backend/blob/master/queries.js",
+          "timestamp": null,
+          "description": "Contribute to RaidasGrisk/mina-node-dashboard-backend development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/ZCdBq_474txtcD-tliu3qFkG8LduQqNBXv_CvyCElQc/https/opengraph.githubassets.com/6673e8ad6b6a2515fad3eb546bef4f724a4679049db5165ee8430acb4e83de97/RaidasGrisk/mina-node-dashboard-backend",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1062606894193184848",
+          "name": "philiphalsall",
+          "discriminator": "0000",
+          "nickname": "philip halsall",
+          "color": "#FFF7F7",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1062606894193184848/6c5996770c985bcd6e5b68131ff2ba04.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1147340442636144650",
+      "type": "Default",
+      "timestamp": "2023-09-02T05:21:18.079+04:00",
+      "timestampEdited": "2023-09-02T05:21:28.657+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The Big Query dataset only runs on mainnet though so no zkApps there (same is true of the Granola indexer) Berkeley Archive node or https://berkeley.graphql.minaexplorer.com/ would work (albeit the latter is being deprecated)",
+      "author": {
+        "id": "445391540119011329",
+        "name": "garethtdavies",
+        "discriminator": "0000",
+        "nickname": "garethtdavies",
+        "color": "#1F8B4C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "671808653812170765",
+            "name": "Community Leaders",
+            "color": "#1F8B4C",
+            "position": 125
+          },
+          {
+            "id": "722830883999973376",
+            "name": "Community MVP",
+            "color": "#536452",
+            "position": 120
+          },
+          {
+            "id": "828705107784630303",
+            "name": "CORE Leader",
+            "color": "#992D22",
+            "position": 119
+          },
+          {
+            "id": "918823949528346624",
+            "name": "CORE value champion",
+            "color": "#C27C0E",
+            "position": 118
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "745645274583662592",
+            "name": "technical community ambassador",
+            "color": "#C7972A",
+            "position": 116
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "849712902709313547",
+            "name": "node-working-group",
+            "color": "#99AAB5",
+            "position": 94
+          },
+          {
+            "id": "626071487987580928",
+            "name": "testnet-mvp",
+            "color": "#2ECC71",
+            "position": 93
+          },
+          {
+            "id": "652506253259440138",
+            "name": "Beta Phase 1 Winner",
+            "color": "#2ECC71",
+            "position": 92
+          },
+          {
+            "id": "666350593836711968",
+            "name": "Beta Testers",
+            "color": "#98C79F",
+            "position": 86
+          },
+          {
+            "id": "1246045923654762496",
+            "name": "berkeley-pre-release",
+            "color": "#98C79F",
+            "position": 84
+          },
+          {
+            "id": "817478763088314389",
+            "name": "RC Initiator",
+            "color": null,
+            "position": 83
+          },
+          {
+            "id": "961225664575459328",
+            "name": "dp-test-group",
+            "color": "#98C79F",
+            "position": 82
+          },
+          {
+            "id": "601500112023191580",
+            "name": "testnet-connected",
+            "color": "#BEF8DC",
+            "position": 81
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "807079219691257886",
+            "name": "spp",
+            "color": null,
+            "position": 76
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1240660664985321623",
+            "name": "mainnet-archive-node",
+            "color": "#2ECC71",
+            "position": 42
+          },
+          {
+            "id": "1224800471135289364",
+            "name": "devnet-node-op",
+            "color": "#57A14D",
+            "position": 41
+          },
+          {
+            "id": "1204126954199060570",
+            "name": "UMT-SNARK-Worker",
+            "color": "#2ECC71",
+            "position": 36
+          },
+          {
+            "id": "1204127002530156585",
+            "name": "UMT-operator",
+            "color": "#11806A",
+            "position": 33
+          },
+          {
+            "id": "1093202151607636080",
+            "name": "TW2-Archivist",
+            "color": "#037223",
+            "position": 31
+          },
+          {
+            "id": "1093205210685505587",
+            "name": "TW2-Snarkworker",
+            "color": "#5BE089",
+            "position": 30
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/445391540119011329/724a9e8bdd06202435bda0520f51cdec.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1151575938920890448",
+      "type": "Default",
+      "timestamp": "2023-09-13T21:51:39.085+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks a lot for the answers, I will check all of the resources out",
+      "author": {
+        "id": "1122802332166520932",
+        "name": "illya.papi",
+        "discriminator": "0000",
+        "nickname": "illya",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1122802332166520932/7d472e13c746407efa6a79bb6539ca59.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 7
+}

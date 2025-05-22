@@ -1,0 +1,210 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1103745765005869097",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Why Deploy with deployerKey vs zkApp Key?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T16:03:33.3197545+04:00",
+  "messages": [
+    {
+      "id": "1103745765005869097",
+      "type": "Default",
+      "timestamp": "2023-05-04T22:11:36.982+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's possible to deploy with a zkApp directly and have a single keypair, or define a a `deployer` to create the deployment. \n\nIs there any reason to prefer one method over the other, and does this introduce any changes in how you deploy or interact with the smart contract later on? \n\nfor full context, here is an example paying the fee with a separate deployer account:\n\n```\nconst { privateKey: deployerKey, publicKey: deployerAccount } =\n  Local.testAccounts[0];\n\nlet zkAppPrivateKey = PrivateKey.random();\nlet appKey = zkAppPrivateKey.toPublicKey();\nconst zkApp = new Add(appKey);\n\nawait Add.compile();\n\nconst txn = await Mina.transaction(deployerKey, () => {\n  AccountUpdate.fundNewAccount(deployerAccount);\n  zkApp.deploy();\n});\nawait txn.sign([deployerKey, zkAppPrivateKey]).send();\n\n```\n\nand an example using the zkapp account directly:\n```\nlet zkAppPrivateKey = PrivateKey.random();\nlet appKey = zkAppPrivateKey.toPublicKey();\n\nLocal.addAccount(appKey, '9999999999'); // manually fund account\n\nconst zkApp = new Add(appKey);\n\nawait Add.compile();\n\nconst txn = await Mina.transaction(appKey, () => {\n  zkApp.deploy();\n});\n\nawait txn.sign([zkAppPrivateKey]).send();\n```\n\nI look forward to hearing any best practices.",
+      "author": {
+        "id": "401572278183133186",
+        "name": "calebcurry",
+        "discriminator": "0000",
+        "nickname": "CalebCurry",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401572278183133186/1aa46f860975473fc0a465a1cac05989.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1103745881842389002",
+      "type": "ChannelNameChange",
+      "timestamp": "2023-05-04T22:12:04.838+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Changed the channel name: Why Deploy with deployerKey vs zkApp Key?",
+      "author": {
+        "id": "401572278183133186",
+        "name": "calebcurry",
+        "discriminator": "0000",
+        "nickname": "CalebCurry",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401572278183133186/1aa46f860975473fc0a465a1cac05989.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1104050565866061894",
+      "type": "Default",
+      "timestamp": "2023-05-05T18:22:47.17+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @CalebCurry, check out this post (the Motivation section) for why it's not always possible and typically not convenient to use the zkApp key https://github.com/o1-labs/zkapp-cli/issues/129#issuecomment-1476489272",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD14",
+            "code": "thinking",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f914.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "401572278183133186",
+          "name": "calebcurry",
+          "discriminator": "0000",
+          "nickname": "CalebCurry",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401572278183133186/1aa46f860975473fc0a465a1cac05989.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1104050825279582318",
+      "type": "Default",
+      "timestamp": "2023-05-05T18:23:49.019+04:00",
+      "timestampEdited": "2023-05-05T21:16:04.871+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In local testing, you can deploy with the zkApp key of course if you manually fund it (but you can't send txs from it after deploying)",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 4
+}

@@ -1,0 +1,135 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1214620097667276841",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Error: Cannot parse invalid permission. [object Object] does not exist.",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:22:33.0969395+04:00",
+  "messages": [
+    {
+      "id": "1214620097667276841",
+      "type": "Default",
+      "timestamp": "2024-03-05T21:06:37.834+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "When I deployed an example smart contract to berkeley network, I got the message \"Error: Cannot parse invalid permission. [object Object] does not exist.\" \nMy code:\n```\nlet Berkeley = Mina.Network({\n    mina: 'https://berkeley.minascan.io/graphql',\n    archive: 'https://archive-node-api.p42.xyz',\n});\nMina.setActiveInstance(Berkeley);\nlet accountFee = Mina.accountCreationFee();\n\nconst senderKey=PrivateKey.fromBase58('...keep.secret.....................................')\nconst sender=PublicKey.fromBase58('B62qmudAJpX5z88eHjApN2prtyXbZKRYk9Pczcr3o2peKXbp8xXUHKV')\nconst senderSpec={sender,fee:accountFee}\n\nconst zkAppKey=PrivateKey.random()\nconst zkAppAddress=zkAppKey.toPublicKey()\nconsole.log(`zkApp's key and address:${zkAppKey.toBase58()}, ${zkAppAddress.toBase58()}`)\n\nawait Square.compile()\nconst zkAppInstance = new Square(zkAppAddress);\n\n\nconst deployTxn = await Mina.transaction(senderSpec, () => {\n    AccountUpdate.fundNewAccount(sender);\n    zkAppInstance.deploy();\n});\nlet pendingTx= await deployTxn.sign([senderKey, zkAppKey]).send();\n```\nI noticed that this may be related to public key.  But the public key is ok and it's in berkeley ledger :  https://berkeley.minaexplorer.com/wallet/B62qmudAJpX5z88eHjApN2prtyXbZKRYk9Pczcr3o2peKXbp8xXUHKV\n\nCan someone help me fix this problem?",
+      "author": {
+        "id": "1186890131421012069",
+        "name": "tenacious_mango_64264",
+        "discriminator": "0000",
+        "nickname": "ss",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1186890131421012069/fb7a8bda39452f3f559e2e731db569b9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1214694589949284384",
+      "type": "Default",
+      "timestamp": "2024-03-06T02:02:38.178+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is related to a recent change of one of the permissions fields. So either your o1js version or the graphql endpoint is outdated",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1214759863800963093",
+      "type": "Default",
+      "timestamp": "2024-03-06T06:22:00.677+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you Gregor. Setting o1js version to 0.16.2 and graphql endpoint to https://proxy.berkeley.minaexplorer.com/graphql works well.",
+      "author": {
+        "id": "1186890131421012069",
+        "name": "tenacious_mango_64264",
+        "discriminator": "0000",
+        "nickname": "ss",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1186890131421012069/fb7a8bda39452f3f559e2e731db569b9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE4C",
+            "code": "raised_hands",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f64c.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 3
+}

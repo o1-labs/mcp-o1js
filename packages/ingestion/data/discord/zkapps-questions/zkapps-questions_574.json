@@ -1,0 +1,329 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1171890783989805176",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Request the method with parameter UInt64 from the worker in the UI",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:21:16.9889027+04:00",
+  "messages": [
+    {
+      "id": "1171890783989805176",
+      "type": "Default",
+      "timestamp": "2023-11-08T23:15:35.581+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have a smart contract method defined as follows:\n\n```\n@method mint(receiverAddress: PublicKey, amount: UInt64)\n```\nI am attempting to invoke this method from the UI using zkappWorker.ts. Below is my code:\n\n```\ncreateMintTransaction: async (args: { publicKey: PublicKey, amount: UInt64 }) => {\n  const { publicKey, amount } = args;\n  const transaction = await Mina.transaction(() => {\n    state.zkapp!.mint(publicKey, amount);\n  });\n\n  state.transaction = transaction;\n}\n```\n\nRegardless of whether I use the amount parameter or UInt64.from(1) as an argument, I receive the same exception every time. I have attached a screenshot for reference.",
+      "author": {
+        "id": "1064623042971582494",
+        "name": "inspector44",
+        "discriminator": "0000",
+        "nickname": "inspector",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1204122222504054875",
+            "name": "UMT-Block-Producer",
+            "color": "#1F8B4C",
+            "position": 35
+          },
+          {
+            "id": "1204127002530156585",
+            "name": "UMT-operator",
+            "color": "#11806A",
+            "position": 33
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1064623042971582494/92b42b236b16319f97dd022a22a31c16.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1171890784203702395",
+          "url": "https://cdn.discordapp.com/attachments/1171890783989805176/1171890784203702395/Screenshot_2023-11-08_at_22.12.59.png?ex=680b3697&is=6809e517&hm=cbd7d589455b4fac77915bbcb49e7112689c8d6bd80e3096723018f89898772e&",
+          "fileName": "Screenshot_2023-11-08_at_22.12.59.png",
+          "fileSizeBytes": 279219
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1172143560053755934",
+      "type": "Default",
+      "timestamp": "2023-11-09T16:00:02.091+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @inspector, It seems that you are calling the createMintTransaction with o1js types. Clearly there is a problem with creating of these variables (you may be creating them before o1js is fully loaded or something, but I am see the whole code to be sure). Anyway, in all cases the problem should be fixed if you call the function with regular JS types (e.g string, number), and parse them inside this method. Then it should work fine. Please let me know how it goes!",
+      "author": {
+        "id": "523199492716101653",
+        "name": "yunusgurlek",
+        "discriminator": "0000",
+        "nickname": "Yunus Gürlek",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1044272767060672624",
+            "name": "Cohort 0 Mentor",
+            "color": "#A84300",
+            "position": 102
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1064623042971582494",
+          "name": "inspector44",
+          "discriminator": "0000",
+          "nickname": "inspector",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1344664872356679743",
+              "name": "MWN-tester",
+              "color": "#FFA6C9",
+              "position": 39
+            },
+            {
+              "id": "1204122222504054875",
+              "name": "UMT-Block-Producer",
+              "color": "#1F8B4C",
+              "position": 35
+            },
+            {
+              "id": "1204127002530156585",
+              "name": "UMT-operator",
+              "color": "#11806A",
+              "position": 33
+            },
+            {
+              "id": "1093206126817968280",
+              "name": "TW2-Operator",
+              "color": "#72BE86",
+              "position": 28
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1064623042971582494/92b42b236b16319f97dd022a22a31c16.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1172144075684720660",
+      "type": "Reply",
+      "timestamp": "2023-11-09T16:02:05.027+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey @Yunus Gürlek , yes the problem has been fixed after moving the uses of o1js type into base ts file. This worked for me! Appreciate it!",
+      "author": {
+        "id": "1064623042971582494",
+        "name": "inspector44",
+        "discriminator": "0000",
+        "nickname": "inspector",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1204122222504054875",
+            "name": "UMT-Block-Producer",
+            "color": "#1F8B4C",
+            "position": 35
+          },
+          {
+            "id": "1204127002530156585",
+            "name": "UMT-operator",
+            "color": "#11806A",
+            "position": 33
+          },
+          {
+            "id": "1093206126817968280",
+            "name": "TW2-Operator",
+            "color": "#72BE86",
+            "position": 28
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1064623042971582494/92b42b236b16319f97dd022a22a31c16.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE42",
+            "code": "slight_smile",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f642.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "523199492716101653",
+              "name": "yunusgurlek",
+              "discriminator": "0000",
+              "nickname": "Yunus Gürlek",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "523199492716101653",
+          "name": "yunusgurlek",
+          "discriminator": "0000",
+          "nickname": "Yunus Gürlek",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "1090136219045867601",
+              "name": "Gov Focus Group",
+              "color": "#C02020",
+              "position": 107
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1044272767060672624",
+              "name": "Cohort 0 Mentor",
+              "color": "#A84300",
+              "position": 102
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/embed/avatars/0.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1172143560053755934",
+        "channelId": "1171890783989805176",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 3
+}

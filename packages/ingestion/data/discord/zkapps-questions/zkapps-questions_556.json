@@ -1,0 +1,246 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1174371473109041253",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Deploying contracts on-chain",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T13:11:15.339748+04:00",
+  "messages": [
+    {
+      "id": "1174371473109041253",
+      "type": "Default",
+      "timestamp": "2023-11-15T19:32:57.956+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I found that it is possible to call another contract on-chain if you know its address, but what if I need to deploy contracts to users dynamically?\n\nAlso, lets say in my application I need to store some data for every user on-chain. I will deploy some central contract and contract for every user with his data. After that I need some king of authorization for all these contracts, but I cant just have mapping with allowed address, sooo what is the best way to handle such situations? \nWhat is the pattern for multi-user app",
+      "author": {
+        "id": "436236237893009420",
+        "name": "30mb1",
+        "discriminator": "0000",
+        "nickname": "30mb1",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/436236237893009420/dbe56cafa9d9f5f0721f1174ef6055e6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "436236237893009420",
+              "name": "30mb1",
+              "discriminator": "0000",
+              "nickname": "30mb1",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/436236237893009420/dbe56cafa9d9f5f0721f1174ef6055e6.png?size=512"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "⁉️",
+            "code": "interrobang",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2049.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "120215867886796813",
+              "name": "mr.robot2056",
+              "discriminator": "0000",
+              "nickname": "Mr.Robot",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/120215867886796813/66e29a1ee5651f905671197ffbc076e7.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1174399166944911380",
+      "type": "Default",
+      "timestamp": "2023-11-15T21:23:00.681+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can do so by setting verification key of the other contract inside your method:\n```typescript\nconst update = AccountUpdate.createSigned(data.nft.address, this.token.id);\n    update.body.update.verificationKey = {\n      isSome: Bool(true),\n      value: data.verificationKey,\n    };\n    update.body.update.permissions = {\n      isSome: Bool(true),\n      value: {\n        ...Permissions.default(),\n        editState: Permissions.proof(),\n      },\n    };\n    data.nft.initialState[0].assertEquals(data.nft.name);\n    update.body.update.appState = [\n      { isSome: Bool(true), value: data.nft.initialState[0] },\n      { isSome: Bool(true), value: data.nft.initialState[1] },\n      { isSome: Bool(true), value: data.nft.initialState[2] },\n      { isSome: Bool(true), value: data.nft.initialState[3] },\n      { isSome: Bool(true), value: data.nft.initialState[4] },\n      { isSome: Bool(true), value: data.nft.initialState[5] },\n      { isSome: Bool(true), value: data.nft.initialState[6] },\n      { isSome: Bool(true), value: data.nft.initialState[7] },\n    ];\n```",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1174399530461040750",
+      "type": "Default",
+      "timestamp": "2023-11-15T21:24:27.35+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can have the mapping with the user address, see https://discord.com/channels/484437221055922177/1171202435663007804/1173613269131468820",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 3
+}

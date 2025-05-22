@@ -1,0 +1,316 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1280956137989996584",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "rollup-friendly accumulator of Field values without repetitions",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:53:03.5729252+04:00",
+  "messages": [
+    {
+      "id": "1280956137989996584",
+      "type": "Default",
+      "timestamp": "2024-09-04T22:22:22.311+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey all! I would like to consult something about accumulators in o1js.\n\n`N` values of type `Field` are given. A data structure is required to store them with resulting commitment `c`. The data structure needs to ensure any element can occur at most once. Accumulator should admit membership and non-membership witnesses (a way to prove an element is included or not included in the data structure).\n\nI was thinking `MerkleTree` or `MerkleList` types would be good candidates as they admit a hash commitment of the entire data structure but they do allow repetitions of elements.\n\nOne could create a circuit that checks membership before updating them, but that would require iterating over all elements, which would not be efficient.\n\nThe data structure should be efficient, it should be possible to prove changes in the accumulator without needing to iterate over all members of the set. If accumulator would be based on MerkleTrees then for instance it should be sufficient to prove change is valid by providing path in the tree before inclusion and after inclusion etc.\n\nI think it should be possible, I just don’t know how! For instance account tree in MINA must ensure address is not created not more than once and I don’t think iterating over all addresses is necessary…\n\nUse cases:\n1. Voting that ensures everyone voted not more than once (because members of the set can occur once).\n2. Ticket validation (it should not be possible to validate ticket more than once).",
+      "author": {
+        "id": "281787111718518786",
+        "name": "_renzokuken",
+        "discriminator": "0000",
+        "nickname": "renzokuken",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281787111718518786/faaa1929d3bb42886fd38b7833f07a31.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1280957792177623165",
+      "type": "Default",
+      "timestamp": "2024-09-04T22:28:56.7+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There's a clean solution actually! IndexedMerkleTree with hashes of your elements as keys.",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1280957872418590720",
+      "type": "Default",
+      "timestamp": "2024-09-04T22:29:15.831+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "We also have MerkleMap but that's much less efficient",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1281185193281065033",
+      "type": "Default",
+      "timestamp": "2024-09-05T13:32:33.348+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you! I even found an implementation `o1js-merkle` https://plus3-labs.github.io/o1js-merkle/index.html\na `StandardIndexedTree` example https://plus3-labs.github.io/o1js-merkle/index.html#md:create-and-load-a-standardindexedtree",
+      "author": {
+        "id": "281787111718518786",
+        "name": "_renzokuken",
+        "discriminator": "0000",
+        "nickname": "renzokuken",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/281787111718518786/faaa1929d3bb42886fd38b7833f07a31.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "o1js-merkle",
+          "url": "https://plus3-labs.github.io/o1js-merkle/index.html",
+          "timestamp": null,
+          "description": "Documentation for o1js-merkle",
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1281241603834380350",
+      "type": "Default",
+      "timestamp": "2024-09-05T17:16:42.672+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@renzokuken it's also in o1js, as Experimental.IndexedMerkleTree.\nWould love your feedback on that, I wrote it a couple of months ago! I think it's by far the most usable merkle tree impl we have in o1js so far",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/964566918482784306/d8fb8d3c806d8530658b94a99e9110f9.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "281787111718518786",
+          "name": "_renzokuken",
+          "discriminator": "0000",
+          "nickname": "renzokuken",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "931675496079585350",
+              "name": "zkApp Builders Program - Cohort 1",
+              "color": "#F37210",
+              "position": 98
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "754653466344947782",
+              "name": "QA Task Force",
+              "color": "#B2F3B8",
+              "position": 80
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/281787111718518786/faaa1929d3bb42886fd38b7833f07a31.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 5
+}

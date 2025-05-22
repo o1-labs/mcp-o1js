@@ -1,0 +1,71 @@
+---
+title: "Sandbox Node"
+hide_title: true
+---
+
+# Sandbox Node
+
+The Mina Sandbox Node enables you to test and get familiar with core features of the protocol and build tooling in a stable environment -- it's a single-node private network that uses the same configuration as the live testnet. This sandbox supports multiple accounts, sending transactions between them, and also supports performing SNARK work, delegating, and staking. In fact since it's a single node network, you earn all the block rewards!
+
+:::info
+
+The sandbox does **NOT** connect you to a live network.
+
+:::
+
+## Installation
+
+[Docker](https://www.docker.com) is a tool for portably running applications. The Mina Sandbox is packaged with Docker, and now built-in to our daemon containers. It’s easy to install--we suggest the [Docker Desktop](https://www.docker.com/products/docker-desktop).
+
+After you have Docker installed run the following command to spin up the Mina Sandbox.
+
+```
+docker run \
+  --publish 3085:3085 \
+  -d \
+  --name mina \
+  -e RUN_DEMO=true \
+  -e MINA_PRIVKEY_PASS='' \
+  minaprotocol/mina-daemon:3.0.3-d800da8-bullseye-mainnet
+
+```
+
+This command starts a daemon inside the docker container and exposes the GraphQL port (3085) to your computer. This port is used for communication with the client. This daemon automatical runs in the background with a block producer and SNARK worker.
+
+You can view logs by executing.
+
+```
+docker logs --follow mina
+```
+
+And stop mina by running.
+
+```
+docker stop mina
+```
+
+You can use the Mina CLI to interact with the sandbox node. The following command opens a shell inside the docker container from where you can issue any of the available [cli commands](/node-operators/cli-reference).
+
+```
+docker exec -it mina bash
+```
+
+### Account details
+
+The container has one account with this public key:
+
+```
+B62qiZfzW27eavtPrnF6DeDSAKEjXuGFdkouC3T5STRa6rrYLiDUP2p
+```
+
+The password for this account is the empty string (there's no password -- you can leave the password field blank).
+
+## How to use the sandbox
+
+There are a few things you can do with your sandbox now that you have it running:
+
+- [Install Mina](/node-operators/block-producer-node/getting-started#installation) as usual and use many of the client commands. Since the daemon is already running in the container, you don't need to run `mina daemon`!
+
+- Install the GUI Wallet app to use a graphical interface to your node. Enter '127.0.0.1' as the host of your node during setup.
+
+- Head over to [http://localhost:3085/graphql](http://localhost:3085/graphql) to play with the GraphQL API directly.

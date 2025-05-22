@@ -1,0 +1,633 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1276044121873842187",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Minaprotocol Docs Tutorial 11 Not working",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:17:40.2613176+04:00",
+  "messages": [
+    {
+      "id": "1276044121873842187",
+      "type": "Default",
+      "timestamp": "2024-08-22T09:03:46.408+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, I'm a developer new to Mina. I’ve been following the tutorials on the Mina Protocol docs page, but I'm posting here because the code in Tutorial 11 is not running properly.\n\nInitially, when I installed the o1js dependency listed in the existing package.json, version 1.0.1 was downloaded. However, when proceeding with this version, the process halted at the compile stage and would not move forward. To resolve this, I updated o1js to the latest version, 1.6, and then reinstalled all the node_modules. After doing so, I was able to proceed with the compile stage.\n\nHowever, at the deployment stage of the zkApp, the transaction failed. Despite several attempts, I was ultimately unable to succeed. I did confirm that if I commented out the deployment of the TokenHolder, the process proceeded without issues.\n\nI have the following questions regarding this:\n\n1. Unlike other apps, the TokenHolder was initialized using tokenUserAddr instead of generating its own unique address. Is there a specific reason for this?\n\n2. When I replaced the TokenHolder address with a newly generated unique address instead of using tokenUserAddr, the deployment succeeded without any issues. Is there a way to solve the problem without changing to a unique address?\n\n3. I also checked the code at https://github.com/MinaFoundation/mina-fungible-token. Unlike in Tutorial 11, where three zkApps are used, this example handles custom tokens using two zkApps. Which structure is officially recommended by Mina for handling custom tokens: the structure using three zkApps in Tutorial 11, or the structure using two zkApps in the mina-fungible-token repository?",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1276044176626155521",
+      "type": "Default",
+      "timestamp": "2024-08-22T09:03:59.462+04:00",
+      "timestampEdited": "2024-08-22T09:09:05.332+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Below is the relevant portion of the code.\n\n```typescript\n// zkapp construction\n  const myTokenInstance = new MyToken(myTokenAddr);\n  const tokenUserInstance = new TokenUser(tokenUserAddr);\n  const tokenHolderInstance = new TokenHolder(\n    tokenUserAddr,\n    myTokenInstance.tokenId\n  );\n\n// failed at this transaction\nconst deployTxn = await Mina.transaction(deployerAddr, async () => {\n    let feePayerUpdate = AccountUpdate.fundNewAccount(deployerAddr, 3);\n    feePayerUpdate.send({ to: myTokenAddr, amount: accountFee });\n\n    await myTokenInstance.deploy();\n    await tokenUserInstance.deploy();\n    await tokenHolderInstance.deploy();\n\n    await myTokenInstance.approveDeploy(tokenHolderInstance.self);\n  });\n\n```",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1276045616161488906",
+      "type": "Default",
+      "timestamp": "2024-08-22T09:09:42.674+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is the error log\n\n```bash\nError: Transaction failed with errors:\n- [[],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Account_is_new_precondition_unsatisfied\"]],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Update_not_permitted_permissions\"],[\"Update_not_permitted_nonce\"],[\"Update_not_permitted_verification_key\"],[\"Update_not_permitted_app_state\"]]]\n    at file:///Users/hamgyeongsig/Projects/external/docs2/examples/zkapps/11-advanced-account-updates/node_modules/o1js/dist/node/lib/mina/transaction.js:162:27\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async main (file:///Users/hamgyeongsig/Projects/external/docs2/examples/zkapps/11-advanced-account-updates/build/src/main.js:83:5)\n    at async file:///Users/hamgyeongsig/Projects/external/docs2/examples/zkapps/11-advanced-account-updates/build/src/main.js:6:1\n```",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1276130352527708254",
+      "type": "Default",
+      "timestamp": "2024-08-22T14:46:25.398+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "TokenHolder holds tokens on behalf of the TokenUser therefore it's deterministically generated from token user address and token id.  Are you running the main.ts as it is or have you changed it to deploy it to devnet?",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1276167862339371068",
+      "type": "Default",
+      "timestamp": "2024-08-22T17:15:28.434+04:00",
+      "timestampEdited": "2024-08-22T17:17:12.453+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@boray I am using the main.ts file on local.",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "401088306210799616",
+          "name": "borays",
+          "discriminator": "0000",
+          "nickname": "boray",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1276175713019363359",
+      "type": "Default",
+      "timestamp": "2024-08-22T17:46:40.182+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "When I changed the second parameter of TokenHolder as follows, the error message was reduced. It seems that the isNew condition was not satisfied during the deployment of MyToken, but I don't understand why the isNew condition wasn't met since this is the first transaction deploying MyToken.\n\n```typescript\n// change second parameter\n  const tokenHolderInstance = new TokenHolder(\n    tokenUserAddr,\n    myTokenInstance.deriveTokenId()\n  );\n```",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1276175898747342932",
+      "type": "Default",
+      "timestamp": "2024-08-22T17:47:24.463+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```bash\n/Users/hamgyeongsig/Projects/external/docs2/examples/zkapps/11-advanced-account-updates/node_modules/o1js/dist/node/bindings/compiled/_node_bindings/o1js_node.bc.cjs:6761\n         throw err;\n         ^\n\nError: Transaction failed with errors:\n- [[],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Account_is_new_precondition_unsatisfied\"]],[[\"Cancelled\"]],[[\"Cancelled\"]],[[\"Cancelled\"]]]\n    at file:///Users/hamgyeongsig/Projects/external/docs2/examples/zkapps/11-advanced-account-updates/node_modules/o1js/dist/node/lib/mina/transaction.js:162:27\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async main (file:///Users/hamgyeongsig/Projects/external/docs2/examples/zkapps/11-advanced-account-updates/build/src/main.js:84:5)\n    at async file:///Users/hamgyeongsig/Projects/external/docs2/examples/zkapps/11-advanced-account-updates/build/src/main.js:6:1\n```",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1276176184492691496",
+      "type": "Default",
+      "timestamp": "2024-08-22T17:48:32.59+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```bash\n# fifth account update from deployTxn.toPretty()\n  {\n    label: 'MyToken.deploy()',\n    publicKey: '..sLZD',\n    update: {\n      appState: '[\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"]',\n      verificationKey: '{\"data\":\"..dBs=\",\"hash\":\"..7494\"}',\n      permissions: '{\"editState\":\"Proof\",\"access\":\"Proof\",\"send\":\"Proof\",\"receive\":\"None\",\"setDelegate\":\"Proof\",\"setPermissions\":\"Proof\",\"setVerificationKey\":{\"auth\":\"Proof\",\"txnVersion\":\"3\"},\"setZkappUri\":\"Proof\",\"editActionState\":\"Proof\",\"setTokenSymbol\":\"Proof\",\"incrementNonce\":\"Proof\",\"setVotingFor\":\"Proof\",\"setTiming\":\"Proof\"}',\n      tokenSymbol: 'MYTKN'\n    },\n    incrementNonce: true,\n    preconditions: {\n      account: '{\"nonce\":{\"lower\":\"0\",\"upper\":\"0\"},\"provedState\":false,\"isNew\":true}'\n    },\n    mayUseToken: { parentsOwnToken: false, inheritFromParent: false },\n    authorizationKind: { isSigned: true, isProved: false },\n    authorization: { signature: '..S9b3' }\n  },\n\n```",
+      "author": {
+        "id": "433489869927481346",
+        "name": "zeniroy.",
+        "discriminator": "0000",
+        "nickname": "roy",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1276197930919002113",
+      "type": "Default",
+      "timestamp": "2024-08-22T19:14:57.342+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@asut let's talk to Roy to help them onboard to ecosystem!",
+      "author": {
+        "id": "597699276709036038",
+        "name": "grande9536",
+        "discriminator": "0000",
+        "nickname": "Yasin",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "978633436988338186",
+            "name": "Community Team",
+            "color": "#8B50FF",
+            "position": 140
+          },
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/597699276709036038/197842e32482bdf30f64e834228de1b4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "471767168405733387",
+          "name": "asut7",
+          "discriminator": "0000",
+          "nickname": "asut",
+          "color": "#8B50FF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "978633436988338186",
+              "name": "Community Team",
+              "color": "#8B50FF",
+              "position": 140
+            },
+            {
+              "id": "846838836649525259",
+              "name": "Mina Foundation",
+              "color": "#8B50FF",
+              "position": 138
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/471767168405733387/939352d39fe8ea2c199bf7a119fbc651.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1276209573669244999",
+      "type": "Default",
+      "timestamp": "2024-08-22T20:01:13.19+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sure!",
+      "author": {
+        "id": "471767168405733387",
+        "name": "asut7",
+        "discriminator": "0000",
+        "nickname": "asut",
+        "color": "#8B50FF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "978633436988338186",
+            "name": "Community Team",
+            "color": "#8B50FF",
+            "position": 140
+          },
+          {
+            "id": "846838836649525259",
+            "name": "Mina Foundation",
+            "color": "#8B50FF",
+            "position": 138
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/471767168405733387/939352d39fe8ea2c199bf7a119fbc651.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1277793617766776927",
+      "type": "Reply",
+      "timestamp": "2024-08-27T04:55:38.733+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I’ve managed to reproduce the errors. It turns out there’s already an [issue](https://github.com/o1-labs/docs2/issues/701) in the doc2 repository related to this tutorial. I’ll take a look this week and let you know when it’s fixed.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Tutorial 11 compile and prove time · Issue #701 · o1-labs/docs2",
+          "url": "https://github.com/o1-labs/docs2/issues/701",
+          "timestamp": null,
+          "description": "Compiling and Proving time for Tutorial 11 transactions is long enough compared to other tutorials. I’ve been unable to run those scripts (Or should I wait more than 3-5 minutes??). The wrappedMina...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/V1FwxUCvBS8VW6d_dgtt-auAifL9xAG2FALfC0cmmGg/https/opengraph.githubassets.com/206d4244a8e528c33131137354c3c23809807dae3cb20da766d6920ba3bc763c/o1-labs/docs2/issues/701",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "433489869927481346",
+              "name": "zeniroy.",
+              "discriminator": "0000",
+              "nickname": "roy",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "433489869927481346",
+          "name": "zeniroy.",
+          "discriminator": "0000",
+          "nickname": "roy",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/433489869927481346/59408bfe1d186d37e5acca010cc18f73.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1276175713019363359",
+        "channelId": "1276044121873842187",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 11
+}

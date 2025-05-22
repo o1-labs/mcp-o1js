@@ -1,0 +1,797 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1290061874557091882",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Issue with MerkleMap.getWitness()",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:59:23.9039667+04:00",
+  "messages": [
+    {
+      "id": "1290061874557091882",
+      "type": "Default",
+      "timestamp": "2024-09-30T01:25:19.085+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey everyone,\n\nI'm encountering an error while trying to use MerkleMap.getWitness(). Here’s a simplified version of the relevant code:\n\n```js\nconst participantDataMerkleMap = new MerkleMap();\nconst nullifierWitness = nullifierMerkleMap.getWitness(nullifierKey);\nconsole.log('participantDataMerkleMap:', participantDataMerkleMap);\n\nconst participantData = args.participantData;\nconsole.log('participantData:', participantData);\n\nconst participantDataWitness = participantDataMerkleMap.getWitness(participantData);\n```\n\nI'm logging the participant data and Merkle map (which you can assume is empty for now). The console shows that both are created successfully. However, I get an error on the following line:\n\n```js\nconst participantDataWitness = participantDataMerkleMap.getWitness(participantData);\n```\n\nWhen I pass Field(0) as the argument for getWitness, it works perfectly fine without any issues.\n\nThe error I am getting is\n```\nindex.js:2483 Uncaught (in promise) TypeError: _.toBigInt is not a function\n    at RB._keyToIndex (index.js:2483:4367)\n    at RB.getWitness (index.js:2483:4761)\n    at Object.createAddParticipantTransaction (zkappWorker.ts:67:61)\n    at eval (zkappWorker.ts:99:56)\n```\n\nAny idea what might be causing the error when using the actual participantData? I'd appreciate any insights!",
+      "author": {
+        "id": "221240291682811905",
+        "name": "melihakpinar",
+        "discriminator": "0000",
+        "nickname": "melihakpinar",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/221240291682811905/d8a67df320e2e7b2fd1c6a5d8a8de3c5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1290079084235456523",
+      "type": "Default",
+      "timestamp": "2024-09-30T02:33:42.192+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "What is the type of `args.participantData`? Also, is there a case where it could be undefined or null?",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1290186886358372363",
+      "type": "Default",
+      "timestamp": "2024-09-30T09:42:04.221+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I expect it to always be Field. The console log shows the following:\n```\nparticipantDataMerkleMap: RB\u00A0{tree: t}\nparticipantData: {value: Array(2)}\n  value: Array(2)\n    0: 0\n    1: (2)\u00A0[0, 28368326864023806453400272436547090089752296404382953403344391997748172808258n]\n    length: 2\n```",
+      "author": {
+        "id": "221240291682811905",
+        "name": "melihakpinar",
+        "discriminator": "0000",
+        "nickname": "melihakpinar",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/221240291682811905/d8a67df320e2e7b2fd1c6a5d8a8de3c5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1290222632028868650",
+      "type": "Default",
+      "timestamp": "2024-09-30T12:04:06.653+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I was able to produce a similar stack trace by passing a `Field[]` as an argument to `.getWitness(key)`. The error stems from some sort of type issue with the key. Could you share the whole function?",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1290337548865896618",
+      "type": "Default",
+      "timestamp": "2024-09-30T19:40:44.962+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sure, here is the function. I assumed that since I’m specifying participantData as a Field, args.participantData would always be of type Field. However, I'm not very familiar with Next.js. Thank you for your help\n```js\ncreateAddParticipantTransaction: async (args: {nullifierJson: any, participantData: Field}) => {\n    const nullifier = Nullifier.fromJSON(args.nullifierJson);\n    const nullifierKey = nullifier.key();\n    const nullifierMerkleMap = new MerkleMap();\n    const participantDataMerkleMap = new MerkleMap();\n    const nullifierWitness = nullifierMerkleMap.getWitness(nullifierKey);\n    console.log('participantDataMerkleMap:', participantDataMerkleMap);\n    console.log('participantData:', args.participantData);\n    console.log('Field(0):', Field(0));\n    const participantDataWitness = participantDataMerkleMap.getWitness(args.participantData);\n    const transaction = await Mina.transaction(async () => {\n      await state.zkapp!.addParticipantIfEligible(nullifier, nullifierWitness, args.participantData, participantDataWitness);\n    });\n    state.transaction = transaction;\n  }\n```",
+      "author": {
+        "id": "221240291682811905",
+        "name": "melihakpinar",
+        "discriminator": "0000",
+        "nickname": "melihakpinar",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/221240291682811905/d8a67df320e2e7b2fd1c6a5d8a8de3c5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1290391247927902332",
+      "type": "Reply",
+      "timestamp": "2024-09-30T23:14:07.816+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Looks correct! I was able to run the snippet with a test nullifier. I can think of two possible points where it might fail. First, the `nullifier` may not be initialised correctly from `nullifierJson`. Second, the zkApp might generate this error if it has `.getWitness`, but the second is unlikely since we would have seen that in the stack trace. I can take a look at the whole project if you’ve uploaded it somewhere.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "221240291682811905",
+          "name": "melihakpinar",
+          "discriminator": "0000",
+          "nickname": "melihakpinar",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/221240291682811905/d8a67df320e2e7b2fd1c6a5d8a8de3c5.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1290337548865896618",
+        "channelId": "1290061874557091882",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1290624897739001907",
+      "type": "Reply",
+      "timestamp": "2024-10-01T14:42:34.272+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Interesting, I pushed the latest changes to: https://github.com/melihakpinar/experiminal\n\nSee https://github.com/melihakpinar/experiminal/blob/acd1558a74b33d4964dfe7c7bc1e205ae51f5516/ui/src/pages/index.tsx#L148",
+      "author": {
+        "id": "221240291682811905",
+        "name": "melihakpinar",
+        "discriminator": "0000",
+        "nickname": "melihakpinar",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/221240291682811905/d8a67df320e2e7b2fd1c6a5d8a8de3c5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "401088306210799616",
+          "name": "borays",
+          "discriminator": "0000",
+          "nickname": "boray",
+          "color": "#206694",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "595716565014675466",
+              "name": "o1 Labs",
+              "color": "#206694",
+              "position": 131
+            },
+            {
+              "id": "1266133384632078347",
+              "name": "o1-exploration-team",
+              "color": "#63CCF9",
+              "position": 129
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1290391247927902332",
+        "channelId": "1290061874557091882",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1291011442668998719",
+      "type": "Default",
+      "timestamp": "2024-10-02T16:18:33.765+04:00",
+      "timestampEdited": "2024-10-02T16:18:55.55+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I gave up and passed it as a `bigint` in the Worker function. But still curious about why it doesn't work. You can still check the link above.",
+      "author": {
+        "id": "221240291682811905",
+        "name": "melihakpinar",
+        "discriminator": "0000",
+        "nickname": "melihakpinar",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/221240291682811905/d8a67df320e2e7b2fd1c6a5d8a8de3c5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "401088306210799616",
+              "name": "borays",
+              "discriminator": "0000",
+              "nickname": "boray",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1291403875634647103",
+      "type": "Reply",
+      "timestamp": "2024-10-03T18:17:57.075+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've managed to reproduce the issue locally. Even explicitly running `args.participantData.toBigInt()` fails, just as it does when `.getWitness` is called. I'll investigate what's happening internally.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "221240291682811905",
+          "name": "melihakpinar",
+          "discriminator": "0000",
+          "nickname": "melihakpinar",
+          "color": "#FFFFFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/221240291682811905/d8a67df320e2e7b2fd1c6a5d8a8de3c5.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1291011442668998719",
+        "channelId": "1290061874557091882",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1291556719394291733",
+      "type": "Default",
+      "timestamp": "2024-10-04T04:25:17.867+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks",
+      "author": {
+        "id": "221240291682811905",
+        "name": "melihakpinar",
+        "discriminator": "0000",
+        "nickname": "melihakpinar",
+        "color": "#FFFFFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/221240291682811905/d8a67df320e2e7b2fd1c6a5d8a8de3c5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1293109200376823839",
+      "type": "Default",
+      "timestamp": "2024-10-08T11:14:18.177+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Okay, this is happening because `Field` is serialized somehow but not properly. It’s best to stick to `bigint` and `string`.",
+      "author": {
+        "id": "401088306210799616",
+        "name": "borays",
+        "discriminator": "0000",
+        "nickname": "boray",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1266133384632078347",
+            "name": "o1-exploration-team",
+            "color": "#63CCF9",
+            "position": 129
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/401088306210799616/f1650e1562cfe75a756c5d44e2f60cc6.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1294048105582297109",
+      "type": "Default",
+      "timestamp": "2024-10-11T01:25:10.622+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Even better to use IndexedMerkleMap!",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 12
+}

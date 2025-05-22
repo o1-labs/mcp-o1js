@@ -1,0 +1,354 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1269687426129989915",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "When Field is passed to the circuit can Field be deconstructed to TS type?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:31:46.6513477+04:00",
+  "messages": [
+    {
+      "id": "1269687426129989915",
+      "type": "Default",
+      "timestamp": "2024-08-04T20:04:32.041+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> checkTrue: {\n>       privateInputs: [SelfProof, Field],\n>       async method(\n>         newState: Field,\n>         earlierProof: SelfProof<Field, void>,\n>         check: Field\n>       ) {\n> \n>       },\n>     },\n\nOk i want to pass Field(1234) to checkTrue Circuit and check if the second digit is 2 which I cannot do since the Field can only perform simple tasks. \n\nIs there a way to deconstruct Field inside circuit so that I can check if second digit is 2 or do i just have to pass second digit number to the Circuit in the first place \n\nI am curious to know how zkapp developers handle this sorry for the lack of understanding about zkp",
+      "author": {
+        "id": "813424332503777280",
+        "name": "mingyeom._",
+        "discriminator": "0000",
+        "nickname": "kimant",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/813424332503777280/c2491a77fca5e244a37a316a0ae424d4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1269895352836685845",
+      "type": "Default",
+      "timestamp": "2024-08-05T09:50:45.631+04:00",
+      "timestampEdited": "2024-08-05T09:52:07.167+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The zkprogram : \n```\nimport { ZkProgram, SelfProof, Bool, CircuitString } from 'o1js';\n\nexport const TestSecondElement = ZkProgram({\n  name: 'test-program',\n  publicInput: CircuitString,\n  publicOutput: Bool,\n\n  methods: {\n    base: {\n      privateInputs: [],\n\n      async method(publicInput: CircuitString) {\n        return Bool(true);\n      },\n    },\n    checkTrue: {\n      privateInputs: [SelfProof],\n      async method(\n        newState: CircuitString,\n        earlierProof: SelfProof<CircuitString, Bool>\n      ) {\n        earlierProof.verify();\n\n        return Bool(\n          newState.substring(1, 2).equals(CircuitString.fromString('2'))\n        );\n      },\n    },\n  },\n});\n```\n\nThe interact script : \n```\nimport { TestSecondElement } from './TestSecondElement.js';\nimport { Mina, CircuitString, Field } from 'o1js';\n\nconst Local = await Mina.LocalBlockchain({ proofsEnabled: false });\nMina.setActiveInstance(Local);\n\nawait TestSecondElement.compile();\n\n// BASE CASE\nconst baseField = Field.from('1234234');\nconst baseCs = CircuitString.fromString(baseField.toString());\nconst baseProof = await TestSecondElement.base(baseCs);\nconsole.log(baseProof.toJSON());\nconsole.log(baseProof.publicOutput.toBoolean(), '\\n');\n\n// STEP CASES\nlet stepField = Field.from('1654');\nlet stepCs = CircuitString.fromString(stepField.toString());\nlet stepProof = await TestSecondElement.checkTrue(stepCs, baseProof);\nconsole.log(stepProof.toJSON());\nconsole.log(stepProof.publicOutput.toBoolean(), '\\n');\n\nstepField = Field.from('123654');\nstepCs = CircuitString.fromString(stepField.toString());\nstepProof = await TestSecondElement.checkTrue(stepCs, stepProof);\nconsole.log(stepProof.toJSON());\nconsole.log(stepProof.publicOutput.toBoolean(), '\\n');\n```\n\nThe index.ts \n```\nimport { TestSecondElement } from './TestSecondElement';\n\nexport { TestSecondElement };\n```",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1269895929541038090",
+      "type": "Default",
+      "timestamp": "2024-08-05T09:53:03.128+04:00",
+      "timestampEdited": "2024-08-05T09:53:26.672+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The above can check if the second digit is 2",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1269896295154454650",
+      "type": "Default",
+      "timestamp": "2024-08-05T09:54:30.297+04:00",
+      "timestampEdited": "2024-08-05T09:58:11.663+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Works okay for cases : \n1654 - which returns false \n12365 - which returns true",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1269945103699415052",
+      "type": "Default",
+      "timestamp": "2024-08-05T13:08:27.161+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and I found a way through Uint64 too",
+      "author": {
+        "id": "813424332503777280",
+        "name": "mingyeom._",
+        "discriminator": "0000",
+        "nickname": "kimant",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/813424332503777280/c2491a77fca5e244a37a316a0ae424d4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1269945115330478164",
+      "type": "Default",
+      "timestamp": "2024-08-05T13:08:29.934+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "by dividng",
+      "author": {
+        "id": "813424332503777280",
+        "name": "mingyeom._",
+        "discriminator": "0000",
+        "nickname": "kimant",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/813424332503777280/c2491a77fca5e244a37a316a0ae424d4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1269945132791369861",
+      "type": "Default",
+      "timestamp": "2024-08-05T13:08:34.097+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "thank you",
+      "author": {
+        "id": "813424332503777280",
+        "name": "mingyeom._",
+        "discriminator": "0000",
+        "nickname": "kimant",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/813424332503777280/c2491a77fca5e244a37a316a0ae424d4.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 7
+}

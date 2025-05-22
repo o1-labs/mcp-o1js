@@ -1,0 +1,680 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1298137235090178088",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Define 2d array as public input",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:33:31.4976041+04:00",
+  "messages": [
+    {
+      "id": "1298137235090178088",
+      "type": "Default",
+      "timestamp": "2024-10-22T08:13:55.069+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "How do you define a 2D array as a public input in a zkProgram? Is this the correct way to do it?\n```\n\nconst Example = ZkProgram({\n  name: 'example',\n  publicInput: Provable.Array(Provable.Array(Int64, 10), 20),\n\n  methods: {\n    predict: {\n      privateInputs: [Provable.Array(Int64, 3)],\n\n      async method(w1: Int64[][], input: Int64[]){\n      \n      },\n    },\n  },\n});\n```",
+      "author": {
+        "id": "789419683891642378",
+        "name": "saharap",
+        "discriminator": "0000",
+        "nickname": "SaharAP",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1237380387853041748",
+              "name": "yash_bit_25859",
+              "discriminator": "0000",
+              "nickname": "yash_bit",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1237380387853041748/3dda3c122e4e6eaa4f7a706a081501a1.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1298504819967000618",
+      "type": "Default",
+      "timestamp": "2024-10-23T08:34:34.133+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The code works, but it gives zkprogram compile error in higher dimensions. It doesn't give any specific error, it just print some files like the following:\nnode_modules/o1js/dist/node/bindings/compiled/_node_bindings/o1js_node.bc.cjs:78645:18)\nnode_modules/o1js/dist/node/bindings/compiled/_node_bindings/o1js_node.bc.cjs:128179:60)",
+      "author": {
+        "id": "789419683891642378",
+        "name": "saharap",
+        "discriminator": "0000",
+        "nickname": "SaharAP",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298635022752022635",
+      "type": "Default",
+      "timestamp": "2024-10-23T17:11:56.896+04:00",
+      "timestampEdited": "2024-10-23T17:13:31.22+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\nclass _2DInput extends Struct({\n  array: Provable.Array(Provable.Array(Int64, 10), 20),\n}) {}\n\nconst Example = ZkProgram({\n  name: 'example',\n  publicInput: _2DInput,\n\n  methods: {\n    predict: {\n      privateInputs: [Provable.Array(Int64, 3)],\n\n      async method(publicInp: _2DInput, privateInp: Int64[]) {\n        assert(publicInp.array[0][0] == Int64.from(1));\n        assert(privateInp[0] == Int64.from(1));\n      },\n    },\n  },\n});\n```\nCan try this?",
+      "author": {
+        "id": "810793675033673730",
+        "name": "br0wn_d3v",
+        "discriminator": "0000",
+        "nickname": "br0wnD3v",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298673245607956540",
+      "type": "Default",
+      "timestamp": "2024-10-23T19:43:49.935+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@SaharAP yes your original code is how you do it\n\n> The code works, but it gives zkprogram compile error in higher dimensions.\n\nWhat do you mean with \"in higher dimensions\"? Increasing the array dimensions? To what number?\n\n> It doesn't give any specific error, it just print some files like the following:\n\nWould probably still be good for us to see the stack trace. You can also improve the stack trace by running with\n```\nnode --enable-source-maps\n```",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "789419683891642378",
+          "name": "saharap",
+          "discriminator": "0000",
+          "nickname": "SaharAP",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1298719084988465202",
+      "type": "Reply",
+      "timestamp": "2024-10-23T22:45:58.895+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for the answer, tried this. It also throws the same error with higher dimensions for example a 2d matrix with 40 rows and 50 columns.",
+      "author": {
+        "id": "789419683891642378",
+        "name": "saharap",
+        "discriminator": "0000",
+        "nickname": "SaharAP",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "810793675033673730",
+          "name": "br0wn_d3v",
+          "discriminator": "0000",
+          "nickname": "br0wnD3v",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1297496671890047037",
+              "name": "Protokit",
+              "color": "#FFFFFF",
+              "position": 16
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/810793675033673730/avatars/2db4ae0dbab7167c86c35b78d9c2faa8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1298635022752022635",
+        "channelId": "1298137235090178088",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1298719830190592010",
+      "type": "Default",
+      "timestamp": "2024-10-23T22:48:56.565+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "40 x 50, ok so 2000 public input fields. I'm surprised this doesn't work",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1298724394633265244",
+      "type": "Default",
+      "timestamp": "2024-10-23T23:07:04.813+04:00",
+      "timestampEdited": "2024-10-23T23:07:42.376+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is the exact code I used. It works with 20 x 20 but it doesn't work for 40 x 40:\n```\n  const Example = ZkProgram({\n    name: 'example',\n    publicInput: Provable.Array(Provable.Array(Int64, 40), 40),\n  \n    methods: {\n      myFunc: {\n        privateInputs: [Provable.Array(Int64, 650)],\n  \n        async method(w1: Int64[][], input: Int64[]){\n          \n          Int64.from(w1.length).assertEquals(Int64.from(40)); // number of rows in w1\n          Int64.from(w1[0].length).assertEquals(Int64.from(40)); // number of columns in w1\n          Int64.from(input.length).assertEquals(Int64.from(650));\n        },\n      },\n    },\n  });\n  \n  async function main() {\n    console.log('compiling...');\n    const { verificationKey } = await Example.compile();\n    console.log('making proof 0');\n\n    //create an example 40 * 40 matrix of Int64 numbers\n    const publicInput = Array(40).fill(Array(40).fill(Int64.from(1)));\n    //create and array of Int64 with size 650\n    const privateInput = Array(650).fill(Int64.from(1));\n\n    const proof1 = await Example.myFunc(publicInput, privateInput);\n  \n    const ok = await verify(proof1.toJSON(), verificationKey);\n    console.log('ok', ok);\n  \n  }\n```",
+      "author": {
+        "id": "789419683891642378",
+        "name": "saharap",
+        "discriminator": "0000",
+        "nickname": "SaharAP",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1299221365437501452",
+      "type": "Reply",
+      "timestamp": "2024-10-25T08:01:51.886+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So you don't have this problem?",
+      "author": {
+        "id": "789419683891642378",
+        "name": "saharap",
+        "discriminator": "0000",
+        "nickname": "SaharAP",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1298719830190592010",
+        "channelId": "1298137235090178088",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1299250751087837330",
+      "type": "Default",
+      "timestamp": "2024-10-25T09:58:37.971+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you run analyzeMethods to check the number of constraints for 40x40?",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1299364625288269906",
+      "type": "Reply",
+      "timestamp": "2024-10-25T17:31:07.696+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ah no sorry I didn't run it",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "789419683891642378",
+          "name": "saharap",
+          "discriminator": "0000",
+          "nickname": "SaharAP",
+          "color": "#FFFFFE",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1299221365437501452",
+        "channelId": "1298137235090178088",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1299743049001205780",
+      "type": "Default",
+      "timestamp": "2024-10-26T18:34:50.94+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It is weird, when using `Provable.Array(Provable.Array(Int64, 40), 40)` in private inputs it runs successfully.",
+      "author": {
+        "id": "789419683891642378",
+        "name": "saharap",
+        "discriminator": "0000",
+        "nickname": "SaharAP",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1300273375780016198",
+      "type": "Default",
+      "timestamp": "2024-10-28T05:42:10.697+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Solved the problem by moving the variables from publicInput to privateinputs of the method.",
+      "author": {
+        "id": "789419683891642378",
+        "name": "saharap",
+        "discriminator": "0000",
+        "nickname": "SaharAP",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/789419683891642378/d8c47935e02c526df7c2809220f06493.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDCAF",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4af.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "568421780331692042",
+              "name": "mitschabaude",
+              "discriminator": "0000",
+              "nickname": "gregor",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 12
+}

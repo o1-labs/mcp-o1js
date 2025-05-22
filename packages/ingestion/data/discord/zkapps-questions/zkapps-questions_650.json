@@ -1,0 +1,348 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1161675789486522409",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "`Account_action_state_precondition_unsatisfied `  error when using `reducer.getActions`",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T14:06:59.5499401+04:00",
+  "messages": [
+    {
+      "id": "1161675789486522409",
+      "type": "Default",
+      "timestamp": "2023-10-11T18:44:51.106+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I encountered an error while running on the local testnet. \n\nThe error message is: `Error: [[],[[\"Account_action_state_precondition_unsatisfied\"]]]`. \n\nI suspect that the issue lies with a `reducer.getActions` where the `endActionState` parameter is not actually the last state.\n\nHere is the relevant code snippet:\n```typescript\nthis.reducer.getActions({\n  fromActionState,\n  endActionState,\n});\n```\n\nThis code is part of a smart contract that have 2 main function:\n```ts\n@method incrementCounter(amount: Field) {\n    this.reducer.dispatch(amount);\n}\n\n@method rollupIncrements(startAction: Field, endAction: Field) {\n    let pendingActions = this.reducer.getActions({\n      fromActionState: startAction,\n      endActionState: endAction,\n    });\n    \n    let { state: newCounter, actionState: newActionState } =\n      this.reducer.reduce(\n        pendingActions,\n        Field,\n        (state: Field, _action: Field) => {\n          return state.add(_action);\n        },\n        { state: Field(0), actionState: startAction }\n      );\n    \n    this.num.set(newCounter);\n}\n```",
+      "author": {
+        "id": "653233526556327946",
+        "name": ".huyminh",
+        "discriminator": "0000",
+        "nickname": "huyminh",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/653233526556327946/042e54a15df541567d5ac2333aa0688a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1161675824626409652",
+      "type": "Default",
+      "timestamp": "2023-10-11T18:44:59.484+04:00",
+      "timestampEdited": "2023-10-11T18:45:40.299+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "After calling `rollupIncrements` multiple times, I fetch the action state hashes and save them in an array.\n```ts\nfor (let i = 0; i < 3; i++) {\n    tx = await Mina.transaction(feePayer, () => {\n      addContract.incrementCounter();\n    });\n    await tx.prove();\n    await tx.sign([feePayerKey]).send();\n}\n\nlet myActionArray: Field[] = [];\nlet actions = await Mina.fetchActions(addContractAddress);\nif (Array.isArray(actions)) {\n    for (let action of actions) {\n      myActionArray.push(Field(action.hash));\n    }\n}\n```\n\nThe error occurs when I send a transaction with `endActionState` not being the last action state.\nHere is the code snippet where the error occurs:\n\n```ts\ntx = await Mina.transaction(feePayer, () => {\n  addContract.rollupIncrements(\n    myActionArray[0],\n    myActionArray[myActionArray.length - 2]\n  );\n});\n```\n\nHowever, the transaction runs fine when `endState` is set to the last action state.\n```ts\ntx = await Mina.transaction(feePayer, () => {\n  addContract.rollupIncrements(\n    myActionArray[0],\n    myActionArray[myActionArray.length - 1]\n  );\n});\n```\n\nMy question is: Is this behavior intended? If not, what is the purpose of the\u00A0`endActionState`\u00A0parameter.",
+      "author": {
+        "id": "653233526556327946",
+        "name": ".huyminh",
+        "discriminator": "0000",
+        "nickname": "huyminh",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/653233526556327946/042e54a15df541567d5ac2333aa0688a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162284967875838013",
+      "type": "Default",
+      "timestamp": "2023-10-13T11:05:30.552+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes this is intended",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162285198260576307",
+      "type": "Default",
+      "timestamp": "2023-10-13T11:06:25.48+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The reduce() call attempts to prove that the actions you got match what has been committed to on the chain, up to the latest action",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1162285426338439219",
+      "type": "Default",
+      "timestamp": "2023-10-13T11:07:19.858+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "However, you can customize reducer() to not do this, with the skipActionStatePrecondition parameter",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "653233526556327946",
+              "name": ".huyminh",
+              "discriminator": "0000",
+              "nickname": "huyminh",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/653233526556327946/042e54a15df541567d5ac2333aa0688a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1162288641696092241",
+      "type": "Default",
+      "timestamp": "2023-10-13T11:20:06.459+04:00",
+      "timestampEdited": "2023-10-13T11:20:34.541+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Which allows you to do something more custom including making use of the endActionsHash",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "653233526556327946",
+              "name": ".huyminh",
+              "discriminator": "0000",
+              "nickname": "huyminh",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/653233526556327946/042e54a15df541567d5ac2333aa0688a.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1162325277100220507",
+      "type": "Default",
+      "timestamp": "2023-10-13T13:45:41.02+04:00",
+      "timestampEdited": "2023-10-13T13:48:43.536+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you for your response. I now have a clear understanding \uD83D\uDCAA",
+      "author": {
+        "id": "653233526556327946",
+        "name": ".huyminh",
+        "discriminator": "0000",
+        "nickname": "huyminh",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/653233526556327946/042e54a15df541567d5ac2333aa0688a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 7
+}

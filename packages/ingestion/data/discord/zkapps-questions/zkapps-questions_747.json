@@ -1,0 +1,268 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1128353240350728202",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "converting String to Public key gives error when sending Mina to the Public Key",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T15:03:47.2314509+04:00",
+  "messages": [
+    {
+      "id": "1128353240350728202",
+      "type": "Default",
+      "timestamp": "2023-07-11T19:52:56.289+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "[Nest] 74485  - 07/11/2023, 3:49:29 PM   ERROR [ExceptionsHandler] Cannot create property 'sender' on string 'B62qoZ5fEStf3z3rtLsrtsS9xb3KT5nCim7DboHxpMB6qGcqYyDAMgo'\nTypeError: Cannot create property 'sender' on string 'B62qoZ5fEStf3z3rtLsrtsS9xb3KT5nCim7DboHxpMB6qGcqYyDAMgo'\n   \nOnchain Service: My Backend service sending Mina with my backend:\n```\nimport { Injectable } from '@nestjs/common';\nimport { ConfigService } from '@nestjs/config';\nimport { AllConfigType } from 'src/config/config.type';\nimport { AccountUpdate, Mina, PublicKey, PrivateKey } from 'snarkyjs';\n\n@Injectable()\nexport class OnchainService {\n  private privateKey: PrivateKey;\n  private publicKey: PublicKey;\n\n  constructor(private configService: ConfigService<AllConfigType>) {\n    this.privateKey = configService.get('topup.minaPrivateKey', {\n      infer: true,\n    }) as PrivateKey;\n    this.publicKey = configService.get('topup.minaPublicKey', {\n      infer: true,\n    }) as PublicKey;\n  }\n\n  async sendMina(receiver: string, amount: number): Promise<boolean> {\n    const receiverPublicKey: PublicKey = PublicKey.fromBase58(receiver);\n    const tx = await Mina.transaction(this.publicKey, () => {\n      const accountUpdate = AccountUpdate.fundNewAccount(this.publicKey);\n      accountUpdate.send({ to: receiverPublicKey, amount: amount });\n    });\n    await tx.sign([this.privateKey]).send();\n\n    return true;\n  }\n}\n\n```\n\nThe backend controller received the receiver address as a String :  'B62qoZ5fEStf3z3rtLsrtsS9xb3KT5nCim7DboHxpMB6qGcqYyDAMgo' and redirect it to our backend Service sendMina function!\n\nError:\n```\nERROR [ExceptionsHandler] Cannot create property 'sender' on string 'B62qoZ5fEStf3z3rtLsrtsS9xb3KT5nCim7DboHxpMB6qGcqYyDAMgo'\nTypeError: Cannot create property 'sender' on string 'B62qoZ5fEStf3z3rtLsrtsS9xb3KT5nCim7DboHxpMB6qGcqYyDAMgo'\n```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1128356711003078676",
+      "type": "Default",
+      "timestamp": "2023-07-11T20:06:43.757+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah I guess my sender publicKey + Private key needs to be convert from string to Base58",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1128356815558672446",
+      "type": "Default",
+      "timestamp": "2023-07-11T20:07:08.685+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "PrivateKey.fromBase58(configService.get('topup.minaPrivateKey', {\n      infer: true,\n    }))",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1128401613564936212",
+      "type": "Default",
+      "timestamp": "2023-07-11T23:05:09.362+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "solved \uD83D\uDE09",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1128401696066916362",
+      "type": "Default",
+      "timestamp": "2023-07-11T23:05:29.032+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "solution: ```const privateKeyFromConf: string = configService.get(\n      'topup.minaPrivateKey',\n      {\n        infer: true,\n      },\n    ) as string;\n    this.privateKey = PrivateKey.fromBase58(privateKeyFromConf);\n    this.publicKey = this.privateKey.toPublicKey();\n```",
+      "author": {
+        "id": "625988499056754688",
+        "name": "iamdev",
+        "discriminator": "0000",
+        "nickname": "IaM [ZK] <DEV>",
+        "color": "#C02020",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1090136219045867601",
+            "name": "Gov Focus Group",
+            "color": "#C02020",
+            "position": 107
+          },
+          {
+            "id": "1158450061982847106",
+            "name": "Cohort 2 Mentors",
+            "color": "#E74C3C",
+            "position": 101
+          },
+          {
+            "id": "1121063832555634799",
+            "name": "zkIgnite Cohort 1",
+            "color": "#F38705",
+            "position": 97
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/625988499056754688/ca3bcee231636cd4efa91c804ed7442f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 5
+}

@@ -1,0 +1,164 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1334547271743705169",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Best way to send native token in mina",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T15:12:48.6013995+04:00",
+  "messages": [
+    {
+      "id": "1334547271743705169",
+      "type": "Default",
+      "timestamp": "2025-01-30T19:34:24.273+04:00",
+      "timestampEdited": "2025-01-30T19:36:13.134+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "currently I am trying to use o1js to send transaction (send mina token from 1 address to multi addresses at once) but it is not working for me \nnote: I successfuly send transction from 1 address to 1 address\nmy `goal`  is to able to send mina token from 1 address to multi addresses at once\n```\nimport { AccountUpdate, fetchAccount, Mina, PrivateKey, PublicKey, UInt64 } from 'o1js';\n\nasync sendToken() {\n    const Network = Mina.Network(process.env.GRAPHQL_ENDPOINT);\n    \n    Mina.setActiveInstance(Network);\n    const senderPrivateKey = PrivateKey.fromBase58(process.env.BE_PRIVATE_KEY);\n    const sender = senderPrivateKey.toPublicKey();\n\n\n    const listData = [\n      {revcAddress: \"B62qoksGibqbDZt5LLLjrDAoGrZ1Jp7yXJPfp7CtchCUNNLXSKorJhW\", amount: 1.5*1e9},\n      {revcAddress: \"B62qnDisSm5ugcj765iA72zfwA4mSSb8mWHCwjBkdwPuMQkYRK5ZioC\", amount: 1*1e9},\n      {revcAddress: \"B62qrLE66dWosDGuHFwd2dVFQoRmoHBp2CHdp2PkweXFz9wfYqueZQE\", amount: 3.5*1e9},\n    ]\n    console.log(sender.toBase58());\n    \n    await fetchAccount(\n      {\"publicKey\": sender.toBase58()},  process.env.GRAPHQL_ENDPOINT\n    );\n    let currentNonce = Number(Mina.getAccount(sender).nonce.toBigint());\n    console.log(currentNonce);\n    const fee = 0.6 * 1e9\n    for (const item of listData) {\n      const tx = await Mina.transaction({sender,fee:fee, memo: 'send reward', nonce: currentNonce++}, async () => {\n        const senderUpdate = AccountUpdate.createSigned(sender);\n        senderUpdate.send({ to:  PublicKey.fromBase58(item.revcAddress), amount: new UInt64(item.amount) });\n      })\n      await tx.prove();\n      tx.sign([senderPrivateKey]);\n      const result = await tx.safeSend();\n      console.log(result.hash);\n    }\n    console.log(currentNonce);\n}\n\n```",
+      "author": {
+        "id": "448413556795375648",
+        "name": "ezio_hanoi",
+        "discriminator": "0000",
+        "nickname": "Ezio",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/448413556795375648/a73d7883c4f99224fe5d5fd819e18243.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1334863002570194995",
+      "type": "Default",
+      "timestamp": "2025-01-31T16:29:00.368+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Just call `senderUpdate.send` several times inside Mina.transaction and, if you're sending to new addresses, add the code to pay 1 MINA fee for all new addresses.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1335816030693621760",
+      "type": "Default",
+      "timestamp": "2025-02-03T07:35:59.979+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks but I switch to sign and send transaction bt mina-signer and sen by graphql",
+      "author": {
+        "id": "448413556795375648",
+        "name": "ezio_hanoi",
+        "discriminator": "0000",
+        "nickname": "Ezio",
+        "color": "#FFFFFE",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/448413556795375648/a73d7883c4f99224fe5d5fd819e18243.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 3
+}

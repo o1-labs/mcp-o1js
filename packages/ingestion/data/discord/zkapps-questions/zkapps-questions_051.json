@@ -1,0 +1,1406 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1325263488129699985",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "How to work with Auro Wallet + Lightnet",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T16:01:20.9554686+04:00",
+  "messages": [
+    {
+      "id": "1325263488129699985",
+      "type": "Default",
+      "timestamp": "2025-01-05T04:43:57.775+04:00",
+      "timestampEdited": "2025-01-05T05:48:11.817+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've added a new chain with Lighnet graphql url to the Auro Wallet.\n\nThen I use this script to send some funds to my Auro Wallet\n\n```typescript\nimport { AccountUpdate, Lightnet, Mina, PublicKey, UInt64 } from 'o1js';\n\n// Network configuration\nconst network = Mina.Network({\n  mina: 'http://127.0.0.1:8080/graphql',\n  archive: 'http://127.0.0.1:8282',\n  lightnetAccountManager: 'http://127.0.0.1:8181',\n});\nMina.setActiveInstance(network);\n\n// Fee payer setup\nconst senderPrivateKey = (await Lightnet.acquireKeyPair()).privateKey;\nconst senderPublicKey = senderPrivateKey.toPublicKey();\n\n// Release previously acquired key pair\nconst keyPairReleaseMessage = await Lightnet.releaseKeyPair({\n  publicKey: senderPublicKey.toBase58(),\n});\n\nif (keyPairReleaseMessage) console.log(keyPairReleaseMessage);\n\nconst senderUpdate = AccountUpdate.createSigned(senderPublicKey);\n\nconst tx = await Mina.transaction(\n  {\n    sender: senderPublicKey,\n    fee: 100000000,\n  },\n  async () => {\n    senderUpdate.send({\n      to: PublicKey.fromBase58(\n        MY_PUBLIC_ADDRESS\n      ),\n      amount: 1000000000000000000,\n    });\n  }\n);\n\nawait tx.prove();\nawait tx.sign([senderPrivateKey]);\n\nlet pendingTx = await tx.send();\nconsole.log(`Got pending transaction with hash ${pendingTx.hash}`);\n\n// wait until transaction is included in a block\nawait pendingTx.wait();\n\nconsole.log(\n  `Transaction included in block!`\n);\n```\n\nHowever, the balance in my Auro Wallet still zero for the Lightnet. Is something wrong?",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f440.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "557487516739960845",
+              "name": "bulingtang",
+              "discriminator": "0000",
+              "nickname": "bulingTang | Auro Wallet",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/557487516739960845/972b1d4afd9a16f98852a3f91a297407.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1325638208121339965",
+      "type": "Default",
+      "timestamp": "2025-01-06T05:32:57.983+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Have you added Lighnet's IP to the custom GQL node of Auro Wallet?",
+      "author": {
+        "id": "557487516739960845",
+        "name": "bulingtang",
+        "discriminator": "0000",
+        "nickname": "bulingTang | Auro Wallet",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/557487516739960845/972b1d4afd9a16f98852a3f91a297407.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1325639294945067102",
+      "type": "Default",
+      "timestamp": "2025-01-06T05:37:17.102+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Because Auro will use current network to request balance to do a balance check",
+      "author": {
+        "id": "557487516739960845",
+        "name": "bulingtang",
+        "discriminator": "0000",
+        "nickname": "bulingTang | Auro Wallet",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/557487516739960845/972b1d4afd9a16f98852a3f91a297407.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1325859670916861963",
+      "type": "Reply",
+      "timestamp": "2025-01-06T20:12:58.828+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@bulingTang | Auro Wallet how I do that?",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "557487516739960845",
+          "name": "bulingtang",
+          "discriminator": "0000",
+          "nickname": "bulingTang | Auro Wallet",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/557487516739960845/972b1d4afd9a16f98852a3f91a297407.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1325638208121339965",
+        "channelId": "1325263488129699985",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1325859907399847966",
+      "type": "Default",
+      "timestamp": "2025-01-06T20:13:55.21+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I just added in this screen",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1325859907202711653",
+          "url": "https://cdn.discordapp.com/attachments/1325263488129699985/1325859907202711653/image.png?ex=6809ba83&is=68086903&hm=7cc6c2f81c97797d450f09fdbc5c7a5d60a9c296d9b3d4cf1d49b2d52ebab9e5&",
+          "fileName": "image.png",
+          "fileSizeBytes": 21881
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1325860146618044528",
+      "type": "Default",
+      "timestamp": "2025-01-06T20:14:52.244+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1325860146429165598",
+          "url": "https://cdn.discordapp.com/attachments/1325263488129699985/1325860146429165598/image.png?ex=6809babc&is=6808693c&hm=e11ade5f6d336a3e49cee0419a74f037a9291c4164c969679aa24eef620eb178&",
+          "fileName": "image.png",
+          "fileSizeBytes": 21301
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1325920511225626737",
+      "type": "Reply",
+      "timestamp": "2025-01-07T00:14:44.288+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "could you try `localhost` ?",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "372048889135628300",
+          "name": "anarkrypto",
+          "discriminator": "0000",
+          "nickname": "Kaique Anarkrypto",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1325860146618044528",
+        "channelId": "1325263488129699985",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1325924596142182472",
+      "type": "Reply",
+      "timestamp": "2025-01-07T00:30:58.208+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "same",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738036747455299764",
+          "name": "zkkirol",
+          "discriminator": "0000",
+          "nickname": "zkKirol",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "857943736289984583",
+              "name": "prism-contributing-member",
+              "color": "#FFEABD",
+              "position": 112
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "1344664872356679743",
+              "name": "MWN-tester",
+              "color": "#FFA6C9",
+              "position": 39
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1325920511225626737",
+        "channelId": "1325263488129699985",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1325926610259546162",
+      "type": "Default",
+      "timestamp": "2025-01-07T00:38:58.411+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "odd, works for me",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1325926610033049731",
+          "url": "https://cdn.discordapp.com/attachments/1325263488129699985/1325926610033049731/image.png?ex=6809f8a2&is=6808a722&hm=2819e18e9b9e597c7bcdc6f930a679d52990e65b26afd5c572e064103d2197a1&",
+          "fileName": "image.png",
+          "fileSizeBytes": 90398
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "557487516739960845",
+              "name": "bulingtang",
+              "discriminator": "0000",
+              "nickname": "bulingTang | Auro Wallet",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/557487516739960845/972b1d4afd9a16f98852a3f91a297407.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1325934495140024415",
+      "type": "Default",
+      "timestamp": "2025-01-07T01:10:18.313+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@zkKirol, how did you transfer the funds?",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738036747455299764",
+          "name": "zkkirol",
+          "discriminator": "0000",
+          "nickname": "zkKirol",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "857943736289984583",
+              "name": "prism-contributing-member",
+              "color": "#FFEABD",
+              "position": 112
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "1344664872356679743",
+              "name": "MWN-tester",
+              "color": "#FFA6C9",
+              "position": 39
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1325989689148313683",
+      "type": "Reply",
+      "timestamp": "2025-01-07T04:49:37.59+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is enough",
+      "author": {
+        "id": "557487516739960845",
+        "name": "bulingtang",
+        "discriminator": "0000",
+        "nickname": "bulingTang | Auro Wallet",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/557487516739960845/972b1d4afd9a16f98852a3f91a297407.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "372048889135628300",
+          "name": "anarkrypto",
+          "discriminator": "0000",
+          "nickname": "Kaique Anarkrypto",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1325859670916861963",
+        "channelId": "1325263488129699985",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1325997712793141281",
+      "type": "Reply",
+      "timestamp": "2025-01-07T05:21:30.576+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Your script should work I think but I've just imported the priv keys  for testing by hitting account manager endpoint",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "372048889135628300",
+          "name": "anarkrypto",
+          "discriminator": "0000",
+          "nickname": "Kaique Anarkrypto",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1325934495140024415",
+        "channelId": "1325263488129699985",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1326008302177353809",
+      "type": "Reply",
+      "timestamp": "2025-01-07T06:03:35.282+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And how did you imported private keys in auro wallet? I just see the mnemonic option",
+      "author": {
+        "id": "372048889135628300",
+        "name": "anarkrypto",
+        "discriminator": "0000",
+        "nickname": "Kaique Anarkrypto",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "740299734341910689",
+            "name": "Server Booster",
+            "color": null,
+            "position": 15
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738036747455299764",
+          "name": "zkkirol",
+          "discriminator": "0000",
+          "nickname": "zkKirol",
+          "color": "#E74C3C",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "692003893445656606",
+              "name": "Genesis Founding Member",
+              "color": "#FFD170",
+              "position": 114
+            },
+            {
+              "id": "857943736289984583",
+              "name": "prism-contributing-member",
+              "color": "#FFEABD",
+              "position": 112
+            },
+            {
+              "id": "1204059991435251723",
+              "name": "Technical Reviewer - Navigators",
+              "color": "#E74C3C",
+              "position": 105
+            },
+            {
+              "id": "1249795469157335081",
+              "name": "NExT",
+              "color": "#B47936",
+              "position": 103
+            },
+            {
+              "id": "1010215418604040232",
+              "name": "zkapp-beta-tester",
+              "color": "#E06304",
+              "position": 99
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            },
+            {
+              "id": "1344664872356679743",
+              "name": "MWN-tester",
+              "color": "#FFA6C9",
+              "position": 39
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "893400661759246366",
+              "name": "Applicant",
+              "color": null,
+              "position": 24
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1227899957491535973",
+              "name": "Delegation-Program",
+              "color": "#FFFFFF",
+              "position": 21
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1325997712793141281",
+        "channelId": "1325263488129699985",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1326219138397507614",
+      "type": "Reply",
+      "timestamp": "2025-01-07T20:01:22.554+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "top right corner wallet icon -> Add Account -> Private Key",
+      "author": {
+        "id": "738036747455299764",
+        "name": "zkkirol",
+        "discriminator": "0000",
+        "nickname": "zkKirol",
+        "color": "#E74C3C",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "692003893445656606",
+            "name": "Genesis Founding Member",
+            "color": "#FFD170",
+            "position": 114
+          },
+          {
+            "id": "857943736289984583",
+            "name": "prism-contributing-member",
+            "color": "#FFEABD",
+            "position": 112
+          },
+          {
+            "id": "1204059991435251723",
+            "name": "Technical Reviewer - Navigators",
+            "color": "#E74C3C",
+            "position": 105
+          },
+          {
+            "id": "1249795469157335081",
+            "name": "NExT",
+            "color": "#B47936",
+            "position": 103
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "1344664872356679743",
+            "name": "MWN-tester",
+            "color": "#FFA6C9",
+            "position": 39
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/738036747455299764/24454fe5d228acb754eb99223bf7161a.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D\uD83C\uDFFB",
+            "code": "thumbsup_tone1",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d-1f3fb.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "372048889135628300",
+              "name": "anarkrypto",
+              "discriminator": "0000",
+              "nickname": "Kaique Anarkrypto",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+            },
+            {
+              "id": "557487516739960845",
+              "name": "bulingtang",
+              "discriminator": "0000",
+              "nickname": "bulingTang | Auro Wallet",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/557487516739960845/972b1d4afd9a16f98852a3f91a297407.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "372048889135628300",
+          "name": "anarkrypto",
+          "discriminator": "0000",
+          "nickname": "Kaique Anarkrypto",
+          "color": "#E5DFBB",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1280898028529778789",
+              "name": "Community Builder",
+              "color": "#E5DFBB",
+              "position": 26
+            },
+            {
+              "id": "740299734341910689",
+              "name": "Server Booster",
+              "color": null,
+              "position": 15
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/372048889135628300/35bb2c740298d83d4a6fe1e0a5ea073f.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1326008302177353809",
+        "channelId": "1325263488129699985",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 14
+}

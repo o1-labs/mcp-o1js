@@ -1,0 +1,390 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1285013847060779130",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "zero token balance after mint",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:10:29.718087+04:00",
+  "messages": [
+    {
+      "id": "1285013847060779130",
+      "type": "Default",
+      "timestamp": "2024-09-16T03:06:15.542+04:00",
+      "timestampEdited": "2024-09-16T03:06:38.654+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Deployed my custom token contract to devnet and made mint transaction. On Minascan I can see that associated token sent to my account but when I try to get my token balance with either\n```\nawait GameToken.compile();\n\nconst GameTokenInstance = new GameToken(GameTokenAddr);\n\nconst price = await GameTokenInstance.gamePrice.fetch();\nconsole.log('Game price:', price?.toBigInt());\n\nlet userBalance = await GameTokenInstance.getBalanceOf(userAddress);\n```\nor\n```\nconst gameTokenId = TokenId.derive(GameTokenAddr);\n\nconst accountUpdate = AccountUpdate.create(userAddress, gameTokenId);\n\nconst tokenBalance = accountUpdate.account.balance.get();\n```\nit gives me zero.  When I tried same thing in local Mina instance i was working as expected.\n\nHere is tx: https://minascan.io/devnet/tx/5JtnMK1mhkp4ePkf5ABVC5wnz7tPMCASmAUajdNMLiXLEKQ94UVP?type=zk-tx",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1285013863674155060",
+      "type": "Default",
+      "timestamp": "2024-09-16T03:06:19.503+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also my mint and getBalanceOf methods:\n```\n  @method.returns(AccountUpdate)\n  async mintGameToken(recipient: PublicKey): Promise<AccountUpdate> {\n    this.paused.getAndRequireEquals().assertFalse(GameTokenErrors.tokenPaused);\n    const price = this.gamePrice.getAndRequireEquals();\n    const discount = this.discount.getAndRequireEquals();\n    const publisherAddress = this.publisher.getAndRequireEquals();\n    const totalPrice = price.sub(discount);\n    const mintAmount = UInt64.from(1);\n    recipient\n      .equals(this.address)\n      .assertFalse(GameTokenErrors.noTransferFromCirculation);\n\n    const mintFeeUpdate = AccountUpdate.createSigned(recipient);\n    mintFeeUpdate.send({ to: publisherAddress, amount: totalPrice });\n\n    const accountUpdate = this.internal.mint({\n      address: recipient,\n      amount: mintAmount,\n    });\n    this.approve(accountUpdate);\n\n    this.emitEvent('Mint', new MintEvent({ recipient, amount: mintAmount }));\n    const circulationUpdate = AccountUpdate.create(\n      this.address,\n      this.deriveTokenId()\n    );\n    circulationUpdate.balanceChange = Int64.fromUnsigned(mintAmount);\n\n    return accountUpdate;\n  }\n```\n\n```\n  @method.returns(UInt64)\n  async getBalanceOf(address: PublicKey): Promise<UInt64> {\n    const account = AccountUpdate.create(address, this.deriveTokenId()).account;\n    const balance = account.balance.get();\n    account.balance.requireEquals(balance);\n    return balance;\n  }\n```",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1285146297736761398",
+      "type": "Default",
+      "timestamp": "2024-09-16T11:52:34.244+04:00",
+      "timestampEdited": "2024-09-16T11:52:50.096+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do you use `await fetchAccount()` for `{userAddress, gameTokenId}` before checking the balance on devnet?",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1285166991514013738",
+      "type": "Reply",
+      "timestamp": "2024-09-16T13:14:48.025+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "964566918482784306",
+          "name": "dfst.io",
+          "discriminator": "0000",
+          "nickname": "DFST",
+          "color": "#FA7504",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1182371055923376168",
+              "name": "Mina Navigator",
+              "color": "#FA7504",
+              "position": 100
+            },
+            {
+              "id": "1150768164850913322",
+              "name": "zkIgnite Cohort 2",
+              "color": "#E97404",
+              "position": 96
+            },
+            {
+              "id": "1285544625037115557",
+              "name": "MinaCon",
+              "color": "#FAFFD6",
+              "position": 25
+            },
+            {
+              "id": "1205541869375979601",
+              "name": "UMT",
+              "color": "#FFFFFF",
+              "position": 22
+            },
+            {
+              "id": "1220065449098743838",
+              "name": "Node-Operations",
+              "color": "#FFFFFF",
+              "position": 20
+            },
+            {
+              "id": "1220064445863038996",
+              "name": "zkApps",
+              "color": "#FFFFFF",
+              "position": 19
+            },
+            {
+              "id": "1220065628602503188",
+              "name": "Testing",
+              "color": "#FFFFFF",
+              "position": 18
+            },
+            {
+              "id": "1291345674213920768",
+              "name": "Rust-Node",
+              "color": "#FFF7F7",
+              "position": 17
+            },
+            {
+              "id": "1259816280605851648",
+              "name": "Links and Images",
+              "color": "#FFFFFE",
+              "position": 12
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1285146297736761398",
+        "channelId": "1285013847060779130",
+        "guildId": "484437221055922177"
+      }
+    },
+    {
+      "id": "1285167061638840342",
+      "type": "Default",
+      "timestamp": "2024-09-16T13:15:04.744+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "thats works thanks DFST !",
+      "author": {
+        "id": "406082843878359041",
+        "name": "duldulosman",
+        "discriminator": "0000",
+        "nickname": "Düldül Osman",
+        "color": "#E5DFBB",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1280898028529778789",
+            "name": "Community Builder",
+            "color": "#E5DFBB",
+            "position": 26
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1297496671890047037",
+            "name": "Protokit",
+            "color": "#FFFFFF",
+            "position": 16
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/406082843878359041/78d878e165071a4dc9a9dce4105cfa05.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "964566918482784306",
+              "name": "dfst.io",
+              "discriminator": "0000",
+              "nickname": "DFST",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    }
+  ],
+  "messageCount": 5
+}

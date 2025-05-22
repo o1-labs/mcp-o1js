@@ -1,0 +1,426 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1109022024472469515",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "SnarkyJs and c-reference Poseidon results are different",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T11:07:22.4574191+04:00",
+  "messages": [
+    {
+      "id": "1109022024472469515",
+      "type": "Default",
+      "timestamp": "2023-05-19T11:37:35.267+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Poseidon hash results differ between snarkyJS and posidon c implementation from c-reference repo. Why? (Input is number 3) What am I doing wrong?",
+      "author": {
+        "id": "1106496683010969610",
+        "name": "st160948",
+        "discriminator": "0000",
+        "nickname": "st16",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1106496683010969610/783e66900536009a89beb548638aee14.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1109144299033088071",
+      "type": "Default",
+      "timestamp": "2023-05-19T19:43:27.794+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "SnarkyJS uses the hash with some initial state, I think. There was a thread discussing SnarkyJS and mina-signer hashing outputs recently here: https://discord.com/channels/484437221055922177/1092492982109872281",
+      "author": {
+        "id": "301752126491721730",
+        "name": "blockbeard",
+        "discriminator": "0000",
+        "nickname": "angus_m",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1110849988587704361",
+      "type": "Default",
+      "timestamp": "2023-05-24T12:41:15.874+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@st16 Poseidon is not a single standardized algorithm. It has loads of parameters that probably differ between the c reference impl and Mina's implementation. So I would think of it as a family of hash functions.\n\nEven within Mina, we use two different sets of parameters \uD83D\uDE06 (one is for hashing & signing current mainnet transactions which we keep backwards-compatible, even though that version of Poseidon was superseded by a more efficient version that's used in most places now).\n\nWe have three different implementations of Poseidon (OCaml, Rust, TypeScript) that are consistent with each other, if you're interested in reference code",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "301752126491721730",
+              "name": "blockbeard",
+              "discriminator": "0000",
+              "nickname": "angus_m",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/301752126491721730/0a8d7f37a46cb3c2ca757f772e60e497.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1106496683010969610",
+          "name": "st160948",
+          "discriminator": "0000",
+          "nickname": "st16",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1106496683010969610/783e66900536009a89beb548638aee14.png?size=512"
+        }
+      ]
+    },
+    {
+      "id": "1110850488041209927",
+      "type": "Default",
+      "timestamp": "2023-05-24T12:43:14.953+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "TS implementation is the one I wrote: https://github.com/o1-labs/snarkyjs-bindings/blob/9948427f992545da1f6919fa5d4445437da751d9/crypto/poseidon.ts",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE0D",
+            "code": "heart_eyes",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f60d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1106496683010969610",
+              "name": "st160948",
+              "discriminator": "0000",
+              "nickname": "st16",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1106496683010969610/783e66900536009a89beb548638aee14.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1220287193176871012",
+      "type": "Default",
+      "timestamp": "2024-03-21T12:25:38.693+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you very much. I really admire your work. Could you please give a link to the rust implementation which is compatible with the poseidon used in o1js?",
+      "author": {
+        "id": "1106496683010969610",
+        "name": "st160948",
+        "discriminator": "0000",
+        "nickname": "st16",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1106496683010969610/783e66900536009a89beb548638aee14.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1220618664542339143",
+      "type": "Default",
+      "timestamp": "2024-03-22T10:22:47.625+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/o1-labs/proof-systems/tree/master/hasher",
+      "author": {
+        "id": "568421780331692042",
+        "name": "mitschabaude",
+        "discriminator": "0000",
+        "nickname": "gregor",
+        "color": "#6991D8",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "751144417951219713",
+            "name": "Core Engineers",
+            "color": "#6991D8",
+            "position": 122
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "proof-systems/hasher at master · o1-labs/proof-systems",
+          "url": "https://github.com/o1-labs/proof-systems/tree/master/hasher",
+          "timestamp": null,
+          "description": "The proof systems used by Mina. Contribute to o1-labs/proof-systems development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/JtK95Zc1_wTMLVBThmDo4yPGPz-kzQvg2dECqvyzLEk/https/opengraph.githubassets.com/a42154c2f94705cbdecd5e23965ad3314ca5fd8f70d5ca91e0f5c6176d27423d/o1-labs/proof-systems",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE0D",
+            "code": "heart_eyes",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f60d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1106496683010969610",
+              "name": "st160948",
+              "discriminator": "0000",
+              "nickname": "st16",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1106496683010969610/783e66900536009a89beb548638aee14.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": []
+    },
+    {
+      "id": "1220769805619957880",
+      "type": "Default",
+      "timestamp": "2024-03-22T20:23:22.466+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanx a lot!!!",
+      "author": {
+        "id": "1106496683010969610",
+        "name": "st160948",
+        "discriminator": "0000",
+        "nickname": "st16",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1106496683010969610/783e66900536009a89beb548638aee14.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1221136660386021566",
+      "type": "Reply",
+      "timestamp": "2024-03-23T20:41:07.458+04:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you need a usage example you can check this: https://github.com/berzanorg/nacho/blob/main/poseidon-hash/src/poseidon_hash.rs",
+      "author": {
+        "id": "991037531615264808",
+        "name": "berzanorg",
+        "discriminator": "0000",
+        "nickname": "berzan",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/991037531615264808/3ef91bfa9b67c5315e5c06f752a83ed9.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "nacho/poseidon-hash/src/poseidon_hash.rs at main · berzanorg/nacho",
+          "url": "https://github.com/berzanorg/nacho/blob/main/poseidon-hash/src/poseidon_hash.rs",
+          "timestamp": null,
+          "description": "A decentralized and scalable layer-2 solution that allows decentralized trading on top of Mina Protocol. - berzanorg/nacho",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/wgCvZhKi219Ln-R_7nz03qdCkLWGssLSbBKWY8BFc9Q/https/opengraph.githubassets.com/a9c492e46cca085f6a208058a7caf14327051a08c400f89d42a1f0f7dcea95de/berzanorg/nacho",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE0D",
+            "code": "heart_eyes",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f60d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1106496683010969610",
+              "name": "st160948",
+              "discriminator": "0000",
+              "nickname": "st16",
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1106496683010969610/783e66900536009a89beb548638aee14.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1106496683010969610",
+          "name": "st160948",
+          "discriminator": "0000",
+          "nickname": "st16",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1106496683010969610/783e66900536009a89beb548638aee14.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1220287193176871012",
+        "channelId": "1109022024472469515",
+        "guildId": "484437221055922177"
+      }
+    }
+  ],
+  "messageCount": 8
+}

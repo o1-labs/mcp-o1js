@@ -1,0 +1,132 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1280767157969358942",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Can AccountUpdate be changed or removed after being approved by a SmartContract method?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-23T17:05:27.5914933+04:00",
+  "messages": [
+    {
+      "id": "1280767157969358942",
+      "type": "Default",
+      "timestamp": "2024-09-04T09:51:25.963+04:00",
+      "timestampEdited": "2024-09-04T10:00:50.212+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If I have a SmartContract method that relies on the AccountUpdate prepared by another calling contract or externally in Mina.transaction being unchanged and being part of the transaction after the call, is it enough to approve it? Tests show that it is possible to write a code that changes it after the `settle` method call, but this code does not affect the AccountUpdate printed using toPretty() and throws the error in case constraints do not match:\n\n```typescript\n@method async settle(receiver: AccountUpdate) {\n    ...\n    // check AccountUpdate\n    receiver.tokenId.assertEquals(tokenId);\n    receiver.publicKey.assertEquals(receiverAddress);\n    receiver.balanceChange.assertEquals(amount);\n    receiver.body.useFullCommitment.assertEquals(Bool(true));\n    // approve AccountUpdate to ensure that it will be unchanged and included in the transaction\n    this.approve(receiver);\n    this.self.body.mayUseToken =   AccountUpdate.MayUseToken.InheritFromParent;\n    // send MINA after checking the AccountUpdate\n    const sender = this.send({ to: senderAddress, amount: price });\n    sender.body.useFullCommitment = Bool(true);\n  }\n```\n\nThe goal is to ensure that after being approved by the `settle` method, the AccountUpdate cannot be changed or removed from the transaction by another contract that calls the `settle` method.\n\nThere is another way of having the same effect  (see joint update example https://github.com/o1-labs/o1js/blob/main/src/examples/zkapps/joint-update.ts by @gregor ), but it requires the contract's publicKey to be hardcoded.",
+      "author": {
+        "id": "964566918482784306",
+        "name": "dfst.io",
+        "discriminator": "0000",
+        "nickname": "DFST",
+        "color": "#FA7504",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1182371055923376168",
+            "name": "Mina Navigator",
+            "color": "#FA7504",
+            "position": 100
+          },
+          {
+            "id": "1150768164850913322",
+            "name": "zkIgnite Cohort 2",
+            "color": "#E97404",
+            "position": 96
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          },
+          {
+            "id": "1259816280605851648",
+            "name": "Links and Images",
+            "color": "#FFFFFE",
+            "position": 12
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/964566918482784306/avatars/6d2f9b5ac3d3e9135840e45e13230dd8.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "568421780331692042",
+          "name": "mitschabaude",
+          "discriminator": "0000",
+          "nickname": "gregor",
+          "color": "#6991D8",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "751144417951219713",
+              "name": "Core Engineers",
+              "color": "#6991D8",
+              "position": 122
+            },
+            {
+              "id": "1075313326499823676",
+              "name": "zkApp E2E Tester",
+              "color": "#E74C3C",
+              "position": 117
+            },
+            {
+              "id": "916351299988107364",
+              "name": "zkApps-bootcamp-2021",
+              "color": "#F19924",
+              "position": 95
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/568421780331692042/e1669a88013d05eb102f3e9b75279562.png?size=512"
+        }
+      ]
+    }
+  ],
+  "messageCount": 1
+}

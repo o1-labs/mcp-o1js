@@ -1,0 +1,337 @@
+{
+  "guild": {
+    "id": "484437221055922177",
+    "name": "Mina Protocol",
+    "iconUrl": "https://cdn.discordapp.com/icons/484437221055922177/60f5907d2f7e3804b704a7153cae7768.png?size=512"
+  },
+  "channel": {
+    "id": "1077029054374490152",
+    "type": "GuildPublicThread",
+    "categoryId": "1047214314349658172",
+    "category": "zkapps-questions",
+    "name": "Mastermind Tutorial Struct Error",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-04-24T17:13:55.7782856+04:00",
+  "messages": [
+    {
+      "id": "1077029054374490152",
+      "type": "Default",
+      "timestamp": "2023-02-20T04:48:56.795+04:00",
+      "timestampEdited": "2023-02-20T04:53:36.467+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It seems like CircuitValue has been depreciated since this video came out https://www.youtube.com/watch?v=HveLAT21t4M.\n\nIn line with the intellisense corrections, I tried configuring the game using Struct instead of Circuit Value, but I'm getting this error. The definition of Struct is throwing the error\n\n`Type '<A, T extends InferCircuitValue<A> = InferCircuitValue<A>, J extends InferJson<A> = InferJson<A>, Pure extends boolean = IsPure<A>>(type: A, options?: { ...; } | undefined) => (new (value: T) => T) & ... 2 more ... & { ...; }' is not a constructor function type.ts(2507)` \n\nAll I've done is copy the beginning of the Mastermind code and substituted out CircuitValue for Struct. Is there any chance that someone has an updated version of this game or some advice on how to refactor for the most up to date version of SnarkyJS? \n\n```\nimport {\n\n    Field,\n    SmartContract,\n    method,\n    state,\n    State,\n    Struct, //used to be CircuitValue\n    arrayProp,\n    Poseidon,\n    Circuit,\n    isReady,\n    UInt32\n\n} from 'snarkyjs';\n\nexport { Pegs };\n\nawait isReady;\n\nclass Pegs extends Struct{\n    @arrayProp(Field, 4) value: Field[];\n\n    constructor(value: number[]){\n        super();\n        this.value = value.map((value) => Field(value))\n    }\n\n    hash(){\n        return Poseidon.hash(this.value);\n    }\n}\n```\n\nSuper curious for any feedback, just starting to get my feet wet with SnarkyJS, so it's very likely I'm missing something basic. Thanks in advance for any/all insights!",
+      "author": {
+        "id": "439913321072820234",
+        "name": "stovenlabs",
+        "discriminator": "0000",
+        "nickname": "StovenLabs ⦿ Founder @ Kintsu",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/439913321072820234/3668f35cbd6fbbc3fb549b686cbdc34b.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Snarky JS Week 2022 - Advanced SnarkyJS Workshop",
+          "url": "https://www.youtube.com/watch?v=HveLAT21t4M",
+          "timestamp": null,
+          "description": "",
+          "color": "#FF0000",
+          "author": {
+            "name": "O(1) Labs",
+            "url": "https://www.youtube.com/channel/UCrT2KUIIrDPJk8leVu7GYdQ"
+          },
+          "thumbnail": {
+            "url": "https://images-ext-1.discordapp.net/external/ZTYMaa5VoZETt3HAR0L_gPoUkHZL5N2f6X-yhFGcrU0/https/i.ytimg.com/vi/HveLAT21t4M/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          },
+          "video": {
+            "url": "https://www.youtube.com/embed/HveLAT21t4M",
+            "width": 1280,
+            "height": 720
+          },
+          "images": [],
+          "fields": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1077400152874172468",
+      "type": "Default",
+      "timestamp": "2023-02-21T05:23:33.572+04:00",
+      "timestampEdited": "2023-02-21T10:07:46.949+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Struct works quite differently from the old CircuitValue! Struct is now a function that returns a class you can extend, hence you have to specify your structs properties as argument to the struct function - plus it doesn't require decorators anymore",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    },
+    {
+      "id": "1077400175015895191",
+      "type": "Default",
+      "timestamp": "2023-02-21T05:23:38.851+04:00",
+      "timestampEdited": "2023-02-21T05:23:59.257+04:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```ts\nclass Pegs extends Struct({\n  value: Circuit.array(Field, 4),\n}) {\n  hash() {\n    return Poseidon.hash(this.value);\n  }\n}\n\nlet pegs = new Pegs({\n  value: [Field(0), Field(1), Field(2), Field(3)],\n});\n\n```",
+      "author": {
+        "id": "227173927712063508",
+        "name": "trivo",
+        "discriminator": "0000",
+        "nickname": "Florian",
+        "color": "#206694",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "595716565014675466",
+            "name": "o1 Labs",
+            "color": "#206694",
+            "position": 131
+          },
+          {
+            "id": "1300439738003619890",
+            "name": "o1 Engineering",
+            "color": "#00368B",
+            "position": 130
+          },
+          {
+            "id": "1075313326499823676",
+            "name": "zkApp E2E Tester",
+            "color": "#E74C3C",
+            "position": 117
+          },
+          {
+            "id": "952432654849028116",
+            "name": "GCP",
+            "color": "#E1C97A",
+            "position": 113
+          },
+          {
+            "id": "918156487434596374",
+            "name": "MinaResearch Founding Member",
+            "color": "#A5BEF3",
+            "position": 108
+          },
+          {
+            "id": "1010215418604040232",
+            "name": "zkapp-beta-tester",
+            "color": "#E06304",
+            "position": 99
+          },
+          {
+            "id": "931675496079585350",
+            "name": "zkApp Builders Program - Cohort 1",
+            "color": "#F37210",
+            "position": 98
+          },
+          {
+            "id": "916351299988107364",
+            "name": "zkApps-bootcamp-2021",
+            "color": "#F19924",
+            "position": 95
+          },
+          {
+            "id": "754653466344947782",
+            "name": "QA Task Force",
+            "color": "#B2F3B8",
+            "position": 80
+          },
+          {
+            "id": "1083404176391929916",
+            "name": "Mina Community Creator",
+            "color": "#F68B8B",
+            "position": 74
+          },
+          {
+            "id": "1285544625037115557",
+            "name": "MinaCon",
+            "color": "#FAFFD6",
+            "position": 25
+          },
+          {
+            "id": "893400661759246366",
+            "name": "Applicant",
+            "color": null,
+            "position": 24
+          },
+          {
+            "id": "1205541869375979601",
+            "name": "UMT",
+            "color": "#FFFFFF",
+            "position": 22
+          },
+          {
+            "id": "1227899957491535973",
+            "name": "Delegation-Program",
+            "color": "#FFFFFF",
+            "position": 21
+          },
+          {
+            "id": "1220065449098743838",
+            "name": "Node-Operations",
+            "color": "#FFFFFF",
+            "position": 20
+          },
+          {
+            "id": "1220064445863038996",
+            "name": "zkApps",
+            "color": "#FFFFFF",
+            "position": 19
+          },
+          {
+            "id": "1220065628602503188",
+            "name": "Testing",
+            "color": "#FFFFFF",
+            "position": 18
+          },
+          {
+            "id": "1291345674213920768",
+            "name": "Rust-Node",
+            "color": "#FFF7F7",
+            "position": 17
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/guilds/484437221055922177/users/227173927712063508/avatars/af988f24ad028b7c1086768733982f08.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": []
+    }
+  ],
+  "messageCount": 3
+}
