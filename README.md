@@ -1,4 +1,4 @@
-# MCP O1JS Project
+# MCP o1js Project
 
 This project provides TypeScript packages for o1js Model Context Protocol (MCP) server.
 
