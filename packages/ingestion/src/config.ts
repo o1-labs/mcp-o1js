@@ -39,10 +39,6 @@ export const config = {
     process.env.O1JS_FOLDER_PATH ||
     path.join(process.cwd(), "data", "typescript"),
 
-  localEmbeddingsPath:
-    process.env.LOCAL_EMBEDDINGS_PATH ||
-    path.join(process.cwd(), "data", "embeddings"),
-
   chunkSize: parseInt(process.env.CHUNK_SIZE || "1000", 10),
   chunkOverlap: parseInt(process.env.CHUNK_OVERLAP || "200", 10),
 
