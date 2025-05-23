@@ -12,8 +12,7 @@ This project provides a data ingestion pipeline for processing Markdown files, D
 
 ## Prerequisites
 
-- Node.js 16+
-- TypeScript
+- Node.js
 - OpenAI API key
 - Qdrant DB server (running locally or remotely)
 

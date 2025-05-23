@@ -12,7 +12,7 @@ This is a monorepo containing multiple packages:
 
 ## Requirements
 
-- Node.js >= 18
+- Node.js
 - Npm
 
 ## Setup

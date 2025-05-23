@@ -11,8 +11,7 @@ This project provides middleware functionality connecting vector databases (like
 
 ## Prerequisites
 
-- Node.js 16+
-- TypeScript
+- Node.js
 - OpenAI API key
 - Qdrant DB server (running locally or remotely)
 
