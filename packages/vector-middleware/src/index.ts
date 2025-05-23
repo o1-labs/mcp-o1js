@@ -9,6 +9,11 @@ const PORT = parseInt(process.env.PORT ?? '3000', 10);
 
 app.use(globalLimiter);
 
+type SearchResult = {
+  score: number;
+  content: string;
+}
+
 /**
  * Generic handler factory for the three endpoints.
  */
@@ -24,7 +29,7 @@ function createHandler(collection: string) {
       }
 
       const vector = await embeddings.embedQuery(query);
-      const results = await vectorSearch(collection, vector, nResults);
+      const results: SearchResult[] = await vectorSearch(collection, vector, nResults);
 
       res.json({ results });
     } catch (err) {
