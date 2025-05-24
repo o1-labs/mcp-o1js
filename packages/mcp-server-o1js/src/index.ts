@@ -130,7 +130,7 @@ async function queryVectorDB(
     query: queryTexts[0],
     nResults: nResults.toString(),
   });
-  const response = await fetch(`http://localhost:3000/${source}?${queryParams}`);
+  const response = await fetch(`https://mcp-o1js.onrender.com/${source}?${queryParams}`);
 
   if (!response.ok) throw new Error(`Error: ${response.status}`);
 
