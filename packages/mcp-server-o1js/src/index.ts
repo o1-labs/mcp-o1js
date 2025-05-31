@@ -1,6 +1,10 @@
+#!/usr/bin/env node
+
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
+
+const gatewayURL = 'https://mcp-o1js.onrender.com';
 
 type SearchResult = {
   score: number;
@@ -15,7 +19,7 @@ const server = new McpServer({
 
 server.tool(
   'search_discord',
-  'Search for messages in o1js Discord chats related to the query',
+  'Search for messages in o1js Discord chats related to the query. This tool is not a reliable source of information, but it can be useful for finding answers to questions that are not covered in the documentation or codebase.',
   {
     query: z.string().describe('The search query for Discord messages.'),
     n_results: z.number().optional().default(10).describe('Number of results to return.'),
@@ -23,11 +27,12 @@ server.tool(
   async ({ query, n_results }) => {
     try {
       const results = await queryVectorDB([query], 'discord', n_results);
+      const processedResults = processSearchResults(results);
       return {
         content: [
           {
             type: 'text',
-            text: JSON.stringify(results, null, 2),
+            text: processedResults,
           },
         ],
       };
@@ -51,7 +56,7 @@ server.tool(
 
 server.tool(
   'search_documentation',
-  'Search for documentation in the o1js docs collection related to the query',
+  'Search for documentation in the o1js docs collection related to the query. Use this tool to find answers to questions about o1js that are covered in the documentation.',
   {
     query: z.string().describe('The search query for documentation.'),
     n_results: z.number().optional().default(10).describe('Number of results to return.'),
@@ -59,11 +64,12 @@ server.tool(
   async ({ query, n_results }) => {
     try {
       const results = await queryVectorDB([query], 'docs', n_results);
+      const processedResults = processSearchResults(results);
       return {
         content: [
           {
             type: 'text',
-            text: JSON.stringify(results, null, 2),
+            text: processedResults,
           },
         ],
       };
@@ -87,7 +93,7 @@ server.tool(
 
 server.tool(
   'search_o1js_codebase',
-  'Search for code snippets in the o1js codebase related to the query',
+  'Search for code snippets in the o1js codebase related to the query. Use this tool to find code examples, functions, or classes that are relevant to your query.',
   {
     query: z.string().describe('The search query for o1js codebase.'),
     n_results: z.number().optional().default(10).describe('Number of results to return.'),
@@ -95,11 +101,12 @@ server.tool(
   async ({ query, n_results }) => {
     try {
       const results = await queryVectorDB([query], 'o1js', n_results);
+      const processedResults = processSearchResults(results);
       return {
         content: [
           {
             type: 'text',
-            text: JSON.stringify(results, null, 2),
+            text: processedResults,
           },
         ],
       };
@@ -124,67 +131,24 @@ server.tool(
 async function queryVectorDB(
   queryTexts: string[],
   source: string,
-  nResults: number = 50
+  nResults: number = 10
 ): Promise<SearchResult[]> {
   const queryParams = new URLSearchParams({
     query: queryTexts[0],
     nResults: nResults.toString(),
   });
-  const response = await fetch(`https://mcp-o1js.onrender.com/${source}?${queryParams}`);
-
+  const response = await fetch(`${gatewayURL}/${source}?${queryParams}`);
   if (!response.ok) throw new Error(`Error: ${response.status}`);
-
   const raw = await response.json();
-  let list = (raw as any).results;
-  let structuredList: SearchResult[] = (list as any[]).map((e) => {
-    return { score: e.score, content: e.content } as SearchResult;
-  });
-  let normalizedList = formatSearchResults(structuredList);
-  return normalizedList;
+  return raw.results;
 }
 
-function formatSearchResults(results: SearchResult[]): SearchResult[] {
-  return results.map((result) => ({
-    ...result,
-    content: formatContent(result.content),
-  }));
-}
-
-function formatContent(content: string): string {
-  let formatted = content.trim();
-
-  formatted = formatted
-    .replace(/\s*;\s*}/g, ';\n}')
-    .replace(/{\s*/g, '{\n  ')
-    .replace(/}\s*;/g, '\n};')
-    .replace(/;(?!\s*[)}]|\s*$)/g, ';\n')
-    .replace(/(function\s+\w+)/g, '\n$1')
-    .replace(/(const\s+|let\s+)/g, '\n$1')
-    .replace(/\n\s*\n\s*\n/g, '\n\n')
-    .replace(/^\n+/, '');
-
-  const lines = formatted.split('\n');
-  let indentLevel = 0;
-  const indentSize = 2;
-
-  return lines
-    .map((line) => {
-      const trimmedLine = line.trim();
-      if (!trimmedLine) return '';
-
-      if (trimmedLine.includes('}')) {
-        indentLevel = Math.max(0, indentLevel - 1);
-      }
-
-      const indentedLine = ' '.repeat(indentLevel * indentSize) + trimmedLine;
-
-      if (trimmedLine.includes('{')) {
-        indentLevel++;
-      }
-
-      return indentedLine;
-    })
-    .join('\n');
+function processSearchResults(searchResults: SearchResult[]): string {
+    const formattedItems = searchResults.map(result => {
+        const cleanedContent = result.content;
+        return `SIMILARITY: ${result.score} ${cleanedContent}`;
+    });
+    return formattedItems.join('\n\n');
 }
 
 async function main() {

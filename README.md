@@ -36,27 +36,27 @@ npm build
 ### Project Structure
 
 ```
-/packages
-  /ingestion - Data ingestion package
-    /src
-      /index.ts - Entry point
-      /config.ts - Configuration file
-      /embeddings/ - Embeddings generation
-        /openai.ts
-      /ingestors/ - Data ingestors
-        /discord.ts
-        /markdown.ts
-        /typescript.ts
-      /storage/ - Vector storage
-        /qdrant.ts
-  /mcp-server-o1js - MCP server package for o1js
-    /src
-      /index.ts - Entry point
-  /vector-middleware - API Gateway for vector search
-    /src
-      /index.ts
-      /qdrant.ts
-      /embedding.ts
-      /ratelimit.ts
-      /config.ts
+packages/
+├── ingestion/                    # Data ingestion package
+│   └── src/
+│       ├── index.ts              # Entry point
+│       ├── config.ts             # Configuration
+│       ├── ingestors/            # Data ingestors
+│       │   ├── discord.ts        # Discord chat ingestion
+│       │   ├── markdown.ts       # Markdown ingestion
+│       │   └── typescript.ts     # TypeScript code ingestion
+│       ├── embeddings/           # Embeddings generation
+│       │   └── openai.ts         # OpenAI embedding service
+│       └── storage/              # Vector storage
+│           └── qdrant.ts         # Qdrant vector database adapter
+├── mcp-server-o1js/              # MCP server package for o1js
+│   └── src/
+│       └── index.ts              # Entry point
+└── vector-middleware/            # API Gateway for vector search
+    └── src/
+        ├── index.ts              # Entry point
+        ├── qdrant.ts             # Qdrant integration
+        ├── embedding.ts          # Embedding service
+        ├── ratelimit.ts          # Rate limiting middleware
+        └── config.ts             # Configuration 
 ```
