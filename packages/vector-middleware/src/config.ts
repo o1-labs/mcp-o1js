@@ -20,4 +20,8 @@ export const config = {
   docsCollectionName: process.env.DOCS_COLLECTION_NAME || 'docs2_documents',
   discordCollectionName: process.env.DISCORD_COLLECTION_NAME || 'discord_messages',
   o1jsCollectionName: process.env.O1JS_COLLECTION_NAME || 'o1js_codebase',
+
+  windowAsMs: process.env.WINDOW_AS_MS ? parseInt(process.env.WINDOW_AS_MS) : 60000,
+  maxRequestsPerWindow: process.env.MAX_REQUESTS_PER_WINDOW ? parseInt(process.env.MAX_REQUESTS_PER_WINDOW) : 10,
+
 };

@@ -1,8 +1,9 @@
 import rateLimit from 'express-rate-limit';
+import { config } from './config.js';
 
 export const globalLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 10,
+  windowMs: config.windowAsMs,
+  max: config.maxRequestsPerWindow,
   handler: (_req, res) => {
     res.status(429).json({ error: 'Rate limit exceeded' });
   },
