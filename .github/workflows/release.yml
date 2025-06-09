@@ -1,0 +1,49 @@
+name: Release mcp-server-o1js on npm
+
+on:
+  push:
+    branches: [main]                       
+    paths:                                 # run only when the version file changes
+      - 'packages/mcp-server-o1js/package.json'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: publish-mcp-server-o1js
+      cancel-in-progress: true             
+
+    defaults:
+      run:
+        working-directory: packages/mcp-server-o1js
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node and auth
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Detect duplicate version
+        id: guard
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view mcp-server-o1js@$VERSION > /dev/null 2>&1; then
+            echo "Version $VERSION already exists on npm – skip." 
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true"  >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to npm
+        if: steps.guard.outputs.publish == 'true'
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish
