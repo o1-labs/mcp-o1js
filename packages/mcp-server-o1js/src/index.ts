@@ -4,7 +4,13 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
-const gatewayURL = 'https://mcp-o1js.onrender.com';
+const gatewayArgIndex = process.argv.findIndex(arg => arg === '-g' || arg === '--gateway-url');
+if (gatewayArgIndex === -1 || !process.argv[gatewayArgIndex + 1]) {
+  console.error('Error: Gateway URL is required. Please provide it using -g or --gateway-url');
+  process.exit(1);
+}
+
+const gatewayURL = process.argv[gatewayArgIndex + 1];
 
 type SearchResult = {
   score: number;
