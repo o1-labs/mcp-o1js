@@ -47,17 +47,3 @@ app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`REST API listening on :${PORT}`);
 });
-
-// ===========================
-// Usage (minimal)
-// ===========================
-// 1. Install dependencies:
-//      npm install
-// 2. Configure environment variables (example .env):
-//      QDRANT_URL=http://localhost:6333
-//      QDRANT_API_KEY=<key if needed>
-// 3. Run in dev mode:
-//      npm run dev
-// 4. Example request:
-//      curl "http://localhost:3000/discord?query=search%20text&nResults=5"
-// ===========================
