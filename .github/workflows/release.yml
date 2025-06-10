@@ -9,6 +9,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     concurrency: 
       group: publish-mcp-server-o1js
       cancel-in-progress: true             
@@ -43,7 +45,4 @@ jobs:
 
       - name: Publish to npm
         if: steps.guard.outputs.publish == 'true'
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm publish
+        run: npm publish
