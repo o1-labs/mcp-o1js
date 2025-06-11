@@ -45,7 +45,7 @@ The server offers three tools:
         "-y",
         "mcp-server-o1js",
         "-g",
-        "mcp-o1js.gcp.o1test.net"
+        "https://mcp-o1js.gcp.o1test.net"
       ]
   }
 }
@@ -65,7 +65,7 @@ The server offers three tools:
         "-y",
         "mcp-server-o1js",
         "-g",
-        "mcp-o1js.gcp.o1test.net"
+        "https://mcp-o1js.gcp.o1test.net"
       ]
   }
 }
